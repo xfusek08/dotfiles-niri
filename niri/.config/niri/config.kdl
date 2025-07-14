@@ -62,17 +62,19 @@ input {
     }
 
     // Uncomment this to make the mouse warp to the center of newly focused windows.
-    // warp-mouse-to-focus
+    warp-mouse-to-focus
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    // focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="0%"
 }
 
 environment {
     QT_QPA_PLATFORM "wayland"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
+    GDK_BACKEND "wayland"
     EDITOR "code"
+    // DISPLAY ":1"
 }
 
 // You can configure outputs by their name, which you can find
@@ -290,7 +292,7 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
-// spawn-at-startup "xwayland-satelite"
+spawn-at-startup "xwayland-satellite"
 spawn-at-startup "/bin/zsh" "-c" "source ~/.zshrc; rclone-gdrive-start"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
@@ -396,7 +398,7 @@ binds {
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
     // or do a four-finger swipe up on a touchpad.
-    Mod+A repeat=false { toggle-overview; }
+    Mod+Space repeat=false { toggle-overview; }
 
     Mod+Q { close-window; }
 
