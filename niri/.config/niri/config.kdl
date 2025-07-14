@@ -72,6 +72,7 @@ input {
 environment {
     QT_QPA_PLATFORM "wayland"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
+    EDITOR "code"
 }
 
 // You can configure outputs by their name, which you can find
@@ -282,7 +283,7 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
 // spawn-at-startup "xwayland-satelite"
-spawn-at-startup "rclone" "sync" "gdrive:" "/home/petr/GoogleDrive/" "--log-level" "INFO" "--log-file" "/home/petr/.log/rclone/gdrive.log" "--drive-acknowledge-abuse"
+spawn-at-startup "/bin/zsh" "-c" "source ~/.zshrc; rclone-gdrive-start"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
