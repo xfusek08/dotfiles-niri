@@ -111,6 +111,20 @@ environment {
     position x=1280 y=0
 }
 
+output "HDMI-A-1" {
+    mode "3440x1440@59.973"
+    scale 1
+    transform "normal"
+    position x=0 y=0
+}
+
+output "eDP-1" {
+    mode "1920x1200@60.001"
+    scale 1.25
+    transform "normal"
+    position x=-1536 y=240
+}
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
@@ -268,7 +282,7 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
 // spawn-at-startup "xwayland-satelite"
-spawn-at-startup "rclone" "sync" "gdrive:" "/home/petr/GoogleDrive/" "--log-level" "INFO" "--log-file" "/home/petr/.log/rclone/gdrive.log"
+spawn-at-startup "rclone" "sync" "gdrive:" "/home/petr/GoogleDrive/" "--log-level" "INFO" "--log-file" "/home/petr/.log/rclone/gdrive.log" "--drive-acknowledge-abuse"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
