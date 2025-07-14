@@ -295,7 +295,6 @@ spawn-at-startup "waybar"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "foot" "--server"
 spawn-at-startup "mako"
-spawn-at-startup "/bin/zsh" "-c" "source ~/.zshrc; rclone-gdrive-start"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
@@ -320,7 +319,7 @@ animations {
     // off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    slowdown 1.5
+    // slowdown 1.5
 }
 
 // Window rules let you adjust behavior for individual windows.
