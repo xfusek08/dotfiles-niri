@@ -247,37 +247,37 @@
   <Fonts>
     <Main>
       <Name>FiraCode Nerd Font</Name>
-      <Size>12</Size>
+      <Size>10</Size>
       <Style>0</Style>
       <Quality>0</Quality>
     </Main>
     <Editor>
       <Name>FiraCode Nerd Font</Name>
-      <Size>14</Size>
+      <Size>12</Size>
       <Style>0</Style>
       <Quality>0</Quality>
     </Editor>
     <Viewer>
       <Name>FiraCode Nerd Font</Name>
-      <Size>14</Size>
+      <Size>12</Size>
       <Style>0</Style>
       <Quality>0</Quality>
     </Viewer>
     <ViewerBook>
       <Name>Inter Display</Name>
-      <Size>16</Size>
+      <Size>14</Size>
       <Style>0</Style>
       <Quality>0</Quality>
     </ViewerBook>
     <Log>
       <Name>Inter Display</Name>
-      <Size>12</Size>
+      <Size>10</Size>
       <Style>0</Style>
       <Quality>0</Quality>
     </Log>
     <Console>
       <Name>Inter Display</Name>
-      <Size>12</Size>
+      <Size>10</Size>
       <Style>0</Style>
       <Quality>0</Quality>
     </Console>
