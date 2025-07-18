@@ -80,6 +80,7 @@ environment {
     CLUTTER_BACKEND "wayland"
     DISPLAY ":0"
     TERMINAL "ghostty"
+    QT_QPA_PLATFORMTHEME "qt6ct"
 }
 
 // You can configure outputs by their name, which you can find

@@ -59,7 +59,10 @@ paru -S --noconfirm --needed \
     libcdio \
     kitty \
     ghostty \
-    ttf-firacode-nerd
+    ttf-firacode-nerd \
+    doublecmd \
+    qt6ct \
+    inter-font
     
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
 
@@ -67,3 +70,5 @@ cargo install --locked \
     eza \
     zoxide \
     starship
+
+# ~~~~~~~~~~~~~~ Enable systemctl services ~~~~~~~~~~~~~~~
