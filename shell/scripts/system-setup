@@ -58,7 +58,8 @@ paru -S --noconfirm --needed \
     openssl \
     libcdio \
     kitty \
-    ghostty
+    ghostty \
+    ttf-firacode-nerd
     
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
 
