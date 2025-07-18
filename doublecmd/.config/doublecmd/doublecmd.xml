@@ -197,7 +197,7 @@
     <PersonalizedTera>TB</PersonalizedTera>
     <ConfirmQuit>False</ConfirmQuit>
     <MinimizeToTray>False</MinimizeToTray>
-    <AlwaysShowTrayIcon>True</AlwaysShowTrayIcon>
+    <AlwaysShowTrayIcon>False</AlwaysShowTrayIcon>
     <Mouse>
       <Selection Enabled="True">
         <Button>0</Button>
@@ -247,7 +247,7 @@
   <Fonts>
     <Main>
       <Name>FiraCode Nerd Font</Name>
-      <Size>10</Size>
+      <Size>12</Size>
       <Style>0</Style>
       <Quality>0</Quality>
     </Main>
@@ -307,7 +307,7 @@
     </TreeViewMenu>
     <StatusBar>
       <Name>FiraCode Nerd Font</Name>
-      <Size>0</Size>
+      <Size>10</Size>
       <Style>0</Style>
       <Quality>0</Quality>
     </StatusBar>
@@ -366,13 +366,13 @@
     <LogWindow>False</LogWindow>
     <TermWindow>False</TermWindow>
     <KeyButtons>True</KeyButtons>
-    <InterfaceFlat>True</InterfaceFlat>
-    <DriveFreeSpace>True</DriveFreeSpace>
+    <InterfaceFlat>False</InterfaceFlat>
+    <DriveFreeSpace>False</DriveFreeSpace>
     <DriveIndicator>False</DriveIndicator>
-    <ProgressInMenuBar>False</ProgressInMenuBar>
+    <ProgressInMenuBar>True</ProgressInMenuBar>
     <PanelOfOperationsInBackground>True</PanelOfOperationsInBackground>
     <HorizontalFilePanels>False</HorizontalFilePanels>
-    <ShortFormatDriveInfo>True</ShortFormatDriveInfo>
+    <ShortFormatDriveInfo>False</ShortFormatDriveInfo>
     <UppercaseDriveLetter>False</UppercaseDriveLetter>
     <ShowColonAfterDrive>False</ShowColonAfterDrive>
   </Layout>
@@ -563,7 +563,10 @@
   <IgnoreList Enabled="False">
     <IgnoreListFile>%DC_CONFIG_PATH%/ignorelist.txt</IgnoreListFile>
   </IgnoreList>
-  <DirectoryHotList/>
+  <DirectoryHotList>
+    <HotDir Name="petr" Path="/home/petr/"/>
+    <HotDir Name="GoogleDrive" Path="/home/petr/GoogleDrive/"/>
+  </DirectoryHotList>
   <Viewer>
     <PreviewVisible>False</PreviewVisible>
     <ImageStretch>False</ImageStretch>

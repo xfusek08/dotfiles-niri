@@ -1867,7 +1867,7 @@
         BackgroundColor : -2147483617,
         ShortcutColor : 255,
         NormalTextColor : -2147483640,
-        SecondaryTextColor : -2147483642,
+        SecondaryTextColor : -2147483632,
         FoundTextColor : -2147483635,
         UnselectableTextColor : -2147483631,
         CursorColor : -2147483635,
