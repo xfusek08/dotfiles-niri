@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+source "$SH_FUNCTIONS/run-bunner.zsh"
+
+run-bunner dcd "$@"

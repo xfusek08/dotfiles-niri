@@ -4,7 +4,7 @@ set -e  # Exit on any command failure
 
 # ~~~~~~~~~~~~~~~ Load helper functions ~~~~~~~~~~~~~~~
 
-source "$SH_FUNCTIONS/utils/log.zsh"
+source "$SH_FUNCTIONS/log.zsh"
 
 # ~~~~~~~~~~~~~~ Ensure ZSH is the default shell ~~~~~~~~~~~~~~~
 
