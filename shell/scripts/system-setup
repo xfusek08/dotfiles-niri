@@ -25,3 +25,7 @@ if [ ! -d $ZINIT_HOME ]; then
     git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
     log -f "Zinit cloned successfully."
 fi
+
+# ~~~~~~~~~~~~~~ Packages installation ~~~~~~~~~~~~~~~
+
+paru -S --noconfirm --needed wl-clipboard clipse-bin

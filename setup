@@ -17,13 +17,13 @@ fi
 # ~~~~~~~~~~~~~~~ Set all scripts as executable ~~~~~~~~~~~~~~~~
 
 echo "Setting all scripts in $SCRIPTS_DIR as executable..."
-find "$SCRIPTS_DIR" -type f -name "*.zsh" -exec chmod +x {} \;
+find "$SCRIPTS_DIR" -type f -exec chmod +x {} \;
 
 # ~~~~~~~~~~~~~~~ Install needed SW ~~~~~~~~~~~~~~~~
 # Execute the system setup script with zsh (we are in sh now)
 
 echo "Running system setup script..."
-zsh "$SCRIPTS_DIR/system-setup"
+"$SCRIPTS_DIR/system-setup"
 
 # ~~~~~~~~~~~~~~~ Stow the config ~~~~~~~~~~~~~~~~
 
@@ -33,13 +33,19 @@ stow \
         brave \
         colors \
         hyprlock \
+        mako \
         niri \
         profile \
         shell \
         waybar \
         yazi \
+        paru \
     -t ~ \
     $@
+    
+# ~~~~~~~~~~~~~~~ Restart services that may be affected by config changes ~~~~~~~~~~~~~~~~
+
+makoctl reload
 
 # ~~~~~~~~~~~~~~~ Launch the shell ~~~~~~~~~~~~~~~~
 

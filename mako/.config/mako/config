@@ -1,0 +1,25 @@
+# Positioning
+anchor=top-center
+output=DP-12
+layer=top
+width=400
+
+# Appearance
+font=sans-serif 11
+background-color=#1e1e2eee
+text-color=#cdd6f4
+margin=10
+padding=15
+border-size=2
+border-color=#89b4fa
+border-radius=12
+progress-color=over #89b4fa
+
+# Icons
+icons=1
+max-icon-size=48
+icon-location=left
+
+# Behavior
+# default-timeout=5000
+markup=1

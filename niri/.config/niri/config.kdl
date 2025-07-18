@@ -116,18 +116,25 @@ environment {
     position x=1280 y=0
 }
 
-output "HDMI-A-1" {
-    mode "3440x1440@59.973"
-    scale 1
-    transform "normal"
-    position x=0 y=0
-}
-
+// Acer - right monitor
 output "eDP-1" {
     mode "1920x1200@60.001"
     scale 1.25
-    transform "normal"
-    position x=-1536 y=240
+    position x=0 y=480
+}
+
+// Asus main middle ultra-wide monitor
+output "DP-12" {
+    mode "3440x1440@164.999"
+    scale 1
+    position x=1536 y=0
+}
+
+// Laptop internal monitor - left
+output "DP-9" {
+    mode "1920x1080@60.000"
+    scale 1
+    position x=4976 y=360
 }
 
 // Settings that influence how windows are positioned and sized.
