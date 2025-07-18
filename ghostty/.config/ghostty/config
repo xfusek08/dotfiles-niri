@@ -34,3 +34,5 @@ shell-integration = zsh
 unfocused-split-opacity = 0.9
 
 unfocused-split-fill = "#ffCCCC"
+
+confirm-close-surface = false
