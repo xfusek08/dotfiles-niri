@@ -1,0 +1,27 @@
+#!/usr/bin/env zsh
+
+set -e  # Exit on any command failure
+
+# ~~~~~~~~~~~~~~~ Load helper functions ~~~~~~~~~~~~~~~
+
+source "$SH_FUNCTIONS/utils/log.zsh"
+
+# ~~~~~~~~~~~~~~ Ensure ZSH is the default shell ~~~~~~~~~~~~~~~
+
+ZSH_PATH=$(which zsh)
+if [[ "$SHELL" == "$ZSH_PATH" ]]; then
+    log -f "ZSH is already the default shell. Skipping..."
+else
+    log -f "Setting up ZSH as default shell."
+    chsh -s "$ZSH_PATH"
+fi
+
+# ~~~~~~~~~~~~~~ Ensure that zinit is installed ~~~~~~~~~~~~~~~
+
+ZINIT_HOME="${ZINIT_HOME:-$HOME/.local/share}/zinit/zinit.git"
+if [ ! -d $ZINIT_HOME ]; then
+    log -f "Zinit not found. Cloning into $ZINIT_HOME..."
+    mkdir -p "$(dirname $ZINIT_HOME)"
+    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+    log -f "Zinit cloned successfully."
+fi

@@ -1,0 +1,46 @@
+#!sh
+
+SCRIPTS_DIR='./shell/scripts'
+
+# ~~~~~~~~~~~~~~~ Ensure zsh ~~~~~~~~~~~~~~~~
+# Check if zsh is installed and if not, install it.
+# This is only sw that is needed to be installed before running the setup script, that will install the rest of the software.
+
+echo "Checking if zsh is installed..."
+if ! command -v zsh &> /dev/null; then
+    echo "Zsh is not installed. Installing..."
+    paru -S zsh
+else
+    echo "Zsh is already installed."
+fi
+
+# ~~~~~~~~~~~~~~~ Set all scripts as executable ~~~~~~~~~~~~~~~~
+
+echo "Setting all scripts in $SCRIPTS_DIR as executable..."
+find "$SCRIPTS_DIR" -type f -name "*.zsh" -exec chmod +x {} \;
+
+# ~~~~~~~~~~~~~~~ Install needed SW ~~~~~~~~~~~~~~~~
+# Execute the system setup script with zsh (we are in sh now)
+
+echo "Running system setup script..."
+zsh "$SCRIPTS_DIR/system-setup"
+
+# ~~~~~~~~~~~~~~~ Stow the config ~~~~~~~~~~~~~~~~
+
+echo "Stowing the configuration files..."
+stow \
+        bash \
+        brave \
+        colors \
+        hyprlock \
+        niri \
+        profile \
+        shell \
+        waybar \
+        yazi \
+    -t ~ \
+    $@
+
+# ~~~~~~~~~~~~~~~ Launch the shell ~~~~~~~~~~~~~~~~
+
+zsh
