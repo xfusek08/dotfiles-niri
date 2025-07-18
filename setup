@@ -31,6 +31,7 @@ echo "Stowing the configuration files..."
 stow \
         bash \
         brave \
+        clipse \
         colors \
         ghostty \
         hyprlock \

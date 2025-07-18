@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Define window title
+WINDOW_TITLE="Clipse TUI"
+
+# Check if Clipse TUI window is already open
+if pgrep -f "ghostty --title=\"?$WINDOW_TITLE\"?" > /dev/null; then
+    # Window is open, close it
+    pkill -f "ghostty --title=\"?$WINDOW_TITLE\"?"
+else
+    # Launch Clipse TUI in ghostty
+    ghostty --title="$WINDOW_TITLE" -e clipse
+fi

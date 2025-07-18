@@ -77,6 +77,7 @@ environment {
     GDK_BACKEND "wayland"
     EDITOR "code"
     GIT_EDITOR "code --wait"
+    CLUTTER_BACKEND "wayland"
     DISPLAY ":0"
     TERMINAL "ghostty"
 }
@@ -306,6 +307,7 @@ spawn-at-startup "waybar"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "foot" "--server"
 spawn-at-startup "mako"
+spawn-at-startup "clipse" "-listen"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
@@ -376,6 +378,11 @@ window-rule {
     draw-border-with-background false
 }
 
+window-rule {
+    match title="Clipse TUI"
+    open-floating true
+}
+
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
@@ -412,6 +419,11 @@ binds {
     // You can also move the mouse into the top-left hot corner,
     // or do a four-finger swipe up on a touchpad.
     Mod+Space repeat=false { toggle-overview; }
+
+    // Clipse TUI in floating window
+    Mod+A hotkey-overlay-title="Toggle Clipse TUI" {
+        spawn "/home/petr/Repo/dotfiles/shell/scripts/clipboard-history"; // TODO: use Altered PATH?
+    }
 
     Mod+Q { close-window; }
 
@@ -581,6 +593,7 @@ binds {
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
     Mod+W { toggle-column-tabbed-display; }
+    
 
     // Actions to switch layouts.
     // Note: if you uncomment these, make sure you do NOT have

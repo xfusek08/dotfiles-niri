@@ -1,0 +1,24 @@
+#!/bin/bash
+
+options=("Shutdown" "Reboot" "Suspend" "Hibernate" "Cancel")
+
+choice=$(printf "%s\n" "${options[@]}" | fuzzel -d -p "Power Menu")
+
+case $choice in
+    Shutdown)
+        shutdown now
+        ;;
+    Reboot)
+        reboot
+        ;;
+    Suspend)
+        systemctl suspend
+        ;;
+    Hibernate)
+        systemctl hibernate
+        ;;
+    *)
+        # Cancel or no selection
+        exit 0
+        ;;
+esac

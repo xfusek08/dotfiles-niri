@@ -1,0 +1,220 @@
+/* Modern Waybar Theme */
+
+* {
+    margin: 0;
+    padding: 2 5;
+    border: none;
+    font-family: 'JetBrainsMono Nerd Font', 'Font Awesome 6 Free', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    transition-property: background-color;
+    transition-duration: 0.3s;
+    border-radius: 0;
+    min-height: 0;
+}
+
+window#waybar {
+    color: #cdd6f4;
+    background: rgba(30, 30, 46, 0.95);
+    border-bottom: 2px solid rgba(137, 180, 250, 0.3);
+}
+
+tooltip {
+    border: 1px solid rgba(137, 180, 250, 0.5);
+    background: rgba(30, 30, 46, 0.9);
+    border-radius: 8px;
+}
+
+tooltip label {
+    padding: 6px;
+    color: #cdd6f4;
+}
+
+#workspaces button {
+    margin: 4px 2px;
+    padding: 0 5px;
+    color: #a6adc8;
+    background: transparent;
+    border-radius: 4px;
+}
+
+#workspaces button:hover {
+    color: #cdd6f4;
+    background: rgba(137, 180, 250, 0.2);
+}
+
+#workspaces button.active {
+    color: #1e1e2e;
+    background: rgba(137, 180, 250, 0.4);
+}
+
+#workspaces button.urgent {
+    color: #1e1e2e;
+    background: rgba(243, 139, 168, 0.8);
+}
+
+#clock,
+#custom-clock,
+#battery,
+#cpu,
+#memory,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#power-profiles-daemon,
+#mpd,
+#custom-power,
+#custom-clipboard,
+#niri-window {
+    margin: 5px 3px;
+    padding: 0 10px;
+    color: #cdd6f4;
+    background: transparent;
+    border-radius: 8px;
+    min-width: 20px;
+}
+
+#clock,
+#custom-clock {
+    padding: 0 12px;
+    font-weight: bold;
+    color: #ffffff;
+    background: transparent;
+}
+
+#battery {
+    color: #a6e3a1;
+    background: transparent;
+}
+
+#battery.charging,
+#battery.plugged {
+    background: transparent;
+}
+
+#battery.warning:not(.charging) {
+    color: #fab387;
+    background: transparent;
+}
+
+#battery.critical:not(.charging) {
+    color: #f38ba8;
+    animation-name: battery-blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    background: transparent;
+}
+
+@keyframes battery-blink {
+    to {
+        background-color: transparent;
+        color: #f38ba8;
+    }
+}
+
+#cpu {
+    color: #fab387;
+    background: transparent;
+}
+
+#memory {
+    color: #fab387;
+    background: transparent;
+}
+
+#backlight {
+    color: #f5e0dc;
+    background: transparent;
+}
+
+#network {
+    color: #89b4fa;
+    background: transparent;
+}
+
+#network.disconnected {
+    color: #f38ba8;
+    background: transparent;
+}
+
+#pulseaudio {
+    color: #a6e3a1;
+    background: transparent;
+}
+
+#pulseaudio.muted {
+    color: #7f849c;
+    background: transparent;
+}
+
+#temperature {
+    color: #f9e2af;
+    background: transparent;
+}
+
+#temperature.critical {
+    color: #f38ba8;
+    background: transparent;
+}
+
+#tray {
+    padding: 0 10px;
+    background: transparent;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
+
+#idle_inhibitor {
+    background: transparent;
+}
+
+#idle_inhibitor.activated {
+    color: #ffffff;
+    background: transparent;
+}
+
+#power-profiles-daemon {
+    color: #cba6f7;
+    background: transparent;
+}
+
+#custom-media {
+    color: #cba6f7;
+    background: transparent;
+    min-width: 100px;
+}
+
+#custom-power,
+#custom-clipboard {
+    padding: 0 10px;
+    font-size: 16px;
+    color: #f38ba8;
+    background: transparent;
+    border-right: none;
+}
+
+#custom-power:hover,
+#custom-clipboard:hover {
+    background: rgba(243, 139, 168, 0.2);
+}
+
+#niri-window {
+    padding: 0 15px;
+    font-style: italic;
+    color: #cdd6f4;
+    background: transparent;
+    margin-left: 8px;
+}
