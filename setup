@@ -32,17 +32,20 @@ stow \
         bash \
         brave \
         colors \
+        ghostty \
         hyprlock \
         mako \
         niri \
+        paru \
         profile \
         shell \
+        starship \
         waybar \
         yazi \
-        paru \
     -t ~ \
     $@
     
+
 # ~~~~~~~~~~~~~~~ Restart services that may be affected by config changes ~~~~~~~~~~~~~~~~
 
 makoctl reload

@@ -26,6 +26,43 @@ if [ ! -d $ZINIT_HOME ]; then
     log -f "Zinit cloned successfully."
 fi
 
-# ~~~~~~~~~~~~~~ Packages installation ~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~ Ensure that cargo is installed ~~~~~~~~~~~~~~~
 
-paru -S --noconfirm --needed wl-clipboard clipse-bin
+if command -v cargo >/dev/null 2>&1; then
+    log -f "Rust SDK is already installed. Skipping installation."
+else
+    log -f "Installing Rust SDK."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+fi
+
+# ~~~~~~~~~~~~~~ Paru packages installation  ~~~~~~~~~~~~~~~
+
+paru -S --noconfirm --needed \
+    wl-clipboard \
+    clipse-bin \
+    bat \
+    fzf \
+    bfs \
+    jq \
+    mediainfo \
+    ffmpegthumbnailer \
+    perl-image-exiftool \
+    poppler \
+    odt2txt \
+    catdoc \
+    docx2txt \
+    gnumeric \
+    atool \
+    p7zip \
+    binutils \
+    openssl \
+    libcdio \
+    kitty \
+    ghostty
+    
+# ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
+
+cargo install --locked \
+    eza \
+    zoxide \
+    starship
