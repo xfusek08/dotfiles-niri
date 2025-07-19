@@ -11,6 +11,7 @@ typeset -F shell_start=$EPOCHREALTIME
 export DOTFILES="$HOME/Repo/dotfiles"
 export SH_SCRIPTS="$DOTFILES/shell/scripts"
 export SH_FUNCTIONS="$DOTFILES/shell/functions"
+export ZSH_COMPLETIONS_DIR="$DOTFILES/shell/completions"
 
 # ~~~~~~~~~~~~~~~ Path ~~~~~~~~~~~~~~~~
 # https://youtu.be/3rCljrDfZ3Y?t=180
@@ -76,6 +77,8 @@ alias lsl='ls -s modified -la'
 alias bat="bat --paging=always --italic-text=always --color=always --decorations=always --wrap=never"
 
 # ~~~~~~~~~~~~~~~ Completions ~~~~~~~~~~~~~~~
+
+fpath=($ZSH_COMPLETIONS_DIR $fpath)
 
 autoload -Uz compinit
 compinit

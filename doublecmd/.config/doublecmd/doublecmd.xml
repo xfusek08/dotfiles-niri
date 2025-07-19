@@ -158,9 +158,9 @@
   </Toolbars>
   <MainWindow>
     <Position Save="True">
-      <Left>2852</Left>
-      <Top>32</Top>
-      <Width>1707</Width>
+      <Left>1280</Left>
+      <Top>0</Top>
+      <Width>2050</Width>
       <Height>1370</Height>
       <PixelsPerInch>96</PixelsPerInch>
       <Maximized>False</Maximized>
@@ -564,8 +564,9 @@
     <IgnoreListFile>%DC_CONFIG_PATH%/ignorelist.txt</IgnoreListFile>
   </IgnoreList>
   <DirectoryHotList>
-    <HotDir Name="petr" Path="/home/petr/"/>
-    <HotDir Name="GoogleDrive" Path="/home/petr/GoogleDrive/"/>
+    <HotDir Name="petr" Path="/home/petr"/>
+    <HotDir Name="GoogleDrive" Path="/home/petr/GoogleDrive"/>
+    <HotDir Name="Repo" Path="/home/petr/Repo/"/>
   </DirectoryHotList>
   <Viewer>
     <PreviewVisible>False</PreviewVisible>

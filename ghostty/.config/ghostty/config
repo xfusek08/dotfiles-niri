@@ -13,9 +13,8 @@ keybind = ctrl+v=paste_from_clipboard
 
 font-family = "FiraCode Nerd Font"
 theme = ayu
-# selection-background = "#ececec"
-# cursor-color = "#ececec"
-# window-decoration = false
+
+window-decoration = false
 gtk-titlebar = false
 
 background-opacity = 0.85
@@ -27,12 +26,7 @@ palette = 8=#8A8A8A
 
 window-padding-x = 10
 window-padding-y = 10
-# window-decoration = server
 
 shell-integration = zsh
-
-unfocused-split-opacity = 0.9
-
-unfocused-split-fill = "#ffCCCC"
 
 confirm-close-surface = false

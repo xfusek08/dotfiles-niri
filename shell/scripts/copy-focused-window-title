@@ -3,10 +3,10 @@
 set -e  # Exit on any command failure
 
 # Get focused window information from niri
-window_info=$(niri msg focused-window)
+local window_info=$(niri msg focused-window)
 
 # Extract App ID and Title using awk
-formatted_text=$(awk -F': ' '
+local formatted_text=$(awk -F': ' '
     /App ID/ { appid = $2 }
     /Title/  { title = $2 }
     END {
