@@ -8,7 +8,7 @@ source "$SH_FUNCTIONS/log.zsh"
 
 # ~~~~~~~~~~~~~~ Ensure ZSH is the default shell ~~~~~~~~~~~~~~~
 
-ZSH_PATH=$(which zsh)
+local ZSH_PATH=$(which zsh)
 if [[ "$SHELL" == "$ZSH_PATH" ]]; then
     log -f "ZSH is already the default shell. Skipping..."
 else
@@ -18,7 +18,7 @@ fi
 
 # ~~~~~~~~~~~~~~ Ensure that zinit is installed ~~~~~~~~~~~~~~~
 
-ZINIT_HOME="${ZINIT_HOME:-$HOME/.local/share}/zinit/zinit.git"
+local ZINIT_HOME="${ZINIT_HOME:-$HOME/.local/share}/zinit/zinit.git"
 if [ ! -d $ZINIT_HOME ]; then
     log -f "Zinit not found. Cloning into $ZINIT_HOME..."
     mkdir -p "$(dirname $ZINIT_HOME)"
