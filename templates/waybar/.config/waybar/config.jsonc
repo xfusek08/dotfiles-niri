@@ -211,7 +211,7 @@
     },
     "custom/power": {
         "format": "󰐥",
-        "on-click": "power_menu",
+        "on-click": "<%$SCRIPTS%>/power_menu",
         "return-type": "string",
         "text-align": "center",
         "tooltip": false
@@ -219,7 +219,7 @@
     "custom/clipboard": {
         "format": " 󰅌 ",
         "tooltip": false,
-        "on-click": "clipboard-history",
+        "on-click": "<%$SCRIPTS%>/clipboard-history",
         "return-type": "string",
         "text-align": "center"
     }

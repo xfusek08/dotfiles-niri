@@ -423,7 +423,7 @@ binds {
 
     // Clipse TUI in floating window
     Mod+A hotkey-overlay-title="Toggle Clipse TUI" {
-        spawn "/home/petr/Repo/dotfiles/shell/scripts/clipboard-history"; // TODO: use Altered PATH?
+        spawn "<%$SCRIPTS%>/clipboard-history";
     }
 
     Mod+Q { close-window; }

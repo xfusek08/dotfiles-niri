@@ -7,8 +7,7 @@ zmodload zsh/datetime
 typeset -F shell_start=$EPOCHREALTIME
 
 # ~~~~~~~~~~~~~~~ Environment ~~~~~~~~~~~~~~~~
-
-source "$GENERATED_DIR/environment"
+source "<%$GENERATED_DIR%>/environment"
 
 # ~~~~~~~~~~~~~~~ Path ~~~~~~~~~~~~~~~~
 # https://youtu.be/3rCljrDfZ3Y?t=180
