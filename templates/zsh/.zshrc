@@ -8,10 +8,7 @@ typeset -F shell_start=$EPOCHREALTIME
 
 # ~~~~~~~~~~~~~~~ Environment ~~~~~~~~~~~~~~~~
 
-export DOTFILES="$HOME/Repo/dotfiles"
-export SH_SCRIPTS="$DOTFILES/shell/scripts"
-export SH_FUNCTIONS="$DOTFILES/shell/functions"
-export ZSH_COMPLETIONS_DIR="$DOTFILES/shell/completions"
+source "$GENERATED_DIR/environment"
 
 # ~~~~~~~~~~~~~~~ Path ~~~~~~~~~~~~~~~~
 # https://youtu.be/3rCljrDfZ3Y?t=180
@@ -21,7 +18,7 @@ path=("${(@s/:/)PATH}")
 path+=(
     $HOME/bin
     $HOME/.local/bin
-    $SH_SCRIPTS
+    $SCRIPTS
 )
 typeset -U path
 path=($^path(N-/))

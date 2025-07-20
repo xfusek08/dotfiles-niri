@@ -1,6 +1,6 @@
 #!sh
 
-SCRIPTS_DIR='./shell/scripts'
+set -e # Exit on any command failure
 
 # ~~~~~~~~~~~~~~~ Ensure zsh ~~~~~~~~~~~~~~~~
 # Check if zsh is installed and if not, install it.
@@ -14,45 +14,50 @@ else
     echo "Zsh is already installed."
 fi
 
+# ~~~~~~~~~~~~~~~ Set up environment by generating the environment file first ~~~~~~~~~~~~~~~~
+
+source "$(pwd)/functions/run_bash_tpl.zsh"
+
+export DOTFILES=$(pwd)
+export ENVIRONMENT_FILE="$DOTFILES/generated/environment"
+export RUN_TEMPLATE_COMMAND="$(pwd)/vendor/bash-tpl/bash-tpl"
+
+echo "Generating environment file at $ENVIRONMENT_FILE..."
+run_bash_tpl "$(pwd)/templates/environment" "$ENVIRONMENT_FILE"
+
+echo "Environment file generated at $ENVIRONMENT_FILE"
+source "$ENVIRONMENT_FILE"
+
+# ~~~~~~~~~~~~~~~ Generate templated files ~~~~~~~~~~~~~~~~
+
+echo "Generating templated files..."
+run_bash_tpl "$TEMPLATE_DIR" "$GENERATED_DIR"
+
 # ~~~~~~~~~~~~~~~ Set all scripts as executable ~~~~~~~~~~~~~~~~
 
-echo "Setting all scripts in $SCRIPTS_DIR as executable..."
-find "$SCRIPTS_DIR" -type f -exec chmod +x {} \;
+echo "Setting all scripts in $SCRIPTS as executable..."
+find "$SCRIPTS" -type f -exec chmod +x {} \;
+
+echo "Setting all scripts in $SETUP_SCRIPTS as executable..."
+find "$SETUP_SCRIPTS" -type f -exec chmod +x {} \;
+
 
 # ~~~~~~~~~~~~~~~ Install needed SW ~~~~~~~~~~~~~~~~
 # Execute the system setup script with zsh (we are in sh now)
 
 echo "Running system setup script..."
-"$SCRIPTS_DIR/system-setup"
+"$SETUP_SCRIPTS/system-setup"
 
 # ~~~~~~~~~~~~~~~ Stow the config ~~~~~~~~~~~~~~~~
 
-echo "Stowing the configuration files..."
-stow \
-        bash \
-        brave \
-        clipse \
-        colors \
-        doublecmd \
-        ghostty \
-        hyprlock \
-        mako \
-        niri \
-        paru \
-        profile \
-        qt6ct\
-        shell \
-        starship \
-        waybar \
-        yazi \
-    -t ~ \
-    $@
-    
+cd "$GENERATED_DIR"
 
-# ~~~~~~~~~~~~~~~ Restart services that may be affected by config changes ~~~~~~~~~~~~~~~~
+dirs_in_generated=$(find "$GENERATED_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+echo stowing directories in "$GENERATED_DIR": $dirs_in_generated
+stow -v -t ~ $dirs_in_generated $@
 
-makoctl reload
+cd "$DOTFILES"
 
-# ~~~~~~~~~~~~~~~ Launch the shell ~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~ Reload ~~~~~~~~~~~~~~~~
 
-zsh
+"$SCRIPTS/reload"

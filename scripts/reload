@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -e
+
+source "$SCRIPT_FNS/run_bash_tpl.zsh"
+
+echo "Regenerating dotfiles..."
+run_bash_tpl "$TEMPLATE_DIR" "$GENERATED_DIR"
+
+echo "Reloading mako..."
+makoctl reload
+
+echo "Reloading waybar..."
+killall -SIGUSR2 waybar
+
+echo "Entering new shell..."
+zsh

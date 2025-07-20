@@ -1,3 +1,13 @@
 {
-    "cSpell.words": ["bunner", "Clipse", "ghostty", "pkill", "ZINIT"]
+    "cSpell.words": [
+        "bunner",
+        "Clipse",
+        "ghostty",
+        "killall",
+        "makoctl",
+        "pkill",
+        "SIGUSR",
+        "waybar",
+        "ZINIT"
+    ]
 }

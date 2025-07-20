@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+
+export DOTFILES=${DOTFILES:-"<%$DOTFILES%>"}
+export SCRIPTS="$DOTFILES/scripts"
+export SETUP_SCRIPTS="$DOTFILES/setup-scripts"
+export SCRIPT_FNS="$DOTFILES/functions"
+export COMPLETIONS_DIR="$DOTFILES/completions"
+export TEMPLATE_DIR="$DOTFILES/templates"
+export GENERATED_DIR="$DOTFILES/generated"
+export BUNNER_COMMANDS_DIR="$DOTFILES/bunner-commands"
+export BUNNER_COMMAND="$DOTFILES/vendor/bunner/run"
