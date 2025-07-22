@@ -69,6 +69,11 @@ paru -S --noconfirm --needed \
 cargo install --locked \
     eza \
     zoxide \
-    starship
+    starship \
+    fnm
+
+# ~~~~~~~~~~~~~~ Generate completions ~~~~~~~~~~~~~~~
+
+fnm completions --shell zsh > "$COMPLETIONS_DIR/generated/_fnm"
 
 # ~~~~~~~~~~~~~~ Enable systemctl services ~~~~~~~~~~~~~~~

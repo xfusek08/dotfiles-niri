@@ -38,6 +38,7 @@ source "$ZINIT_HOME/zinit.zsh"
 
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
+eval "$(fnm env --use-on-cd --shell zsh)"
 source <(fzf --zsh)
 
 # ~~~~~~~~~~~~~~~ Basic Shell interaction Plugins ~~~~~~~~~~~~~~~
@@ -74,7 +75,8 @@ alias bat="bat --paging=always --italic-text=always --color=always --decorations
 
 # ~~~~~~~~~~~~~~~ Completions ~~~~~~~~~~~~~~~
 
-fpath=($ZSH_COMPLETIONS_DIR $fpath)
+fpath=($COMPLETIONS_DIR/generated $fpath)
+fpath=($COMPLETIONS_DIR/manual $fpath)
 
 autoload -Uz compinit
 compinit
