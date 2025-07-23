@@ -6,6 +6,11 @@ command_timeout = 2000
 
 format = """
 $directory\
+$git_branch\
+$git_commit\
+$git_status\
+$git_metrics\
+$git_state\
 $fill\
 $c\
 $rust\
@@ -17,11 +22,6 @@ $kotlin\
 $haskell\
 $python\
 $package\
-$git_branch\
-$git_commit\
-$git_status\
-$git_metrics\
-$git_state\
 $docker_context\
 $kubernetes\
 $container\
@@ -180,21 +180,21 @@ tag_disabled = false
 disabled = false
 
 [git_status]
-style = "fg:color_git"
-format = '[($ahead_behind )($all_status )]($style)'
-stashed = "*${count}"
-ahead = "⇡${count}"
-behind = "⇣${count}"
-up_to_date = ""
-diverged = "⇡${ahead_count}⇣${behind_count}"
-conflicted = "=${count}"
-deleted = "×${count}"
-renamed = "»${count}"
-modified = "!${count}"
-staged = "+${count}"
-untracked = "?${count}"
-ignore_submodules = false
+ahead = "⇡ ${count}"
+behind = "⇣ ${count}"
+conflicted = "🏳 ${count}"
+deleted = '󰗨 ${count} '
 disabled = false
+diverged = '⇕⇡${ahead_count}⇣${behind_count} '
+format = "[[($all_status)](218)($ahead_behind$stashed)]($style)"
+ignore_submodules = false
+modified = '[ ${count}](peach) '
+renamed = '👅'
+staged = "+${count}"
+stashed = " ${count} "
+style = "fg:color_git"
+untracked = "[ ${count}](sapphire) "
+up_to_date = ""
 
 [git_metrics]
 format = '[(([+$added]($added_style))([-$deleted]($deleted_style)) )](fg:color_git)'
@@ -204,16 +204,16 @@ only_nonzero_diffs = true
 disabled = false
 
 [git_state]
-style = "fg:color_danger"
-format = '[($state( $progress_current/$progress_total) )]($style bold)'
-rebase = "REBASING"
-merge = "MERGING"
-revert = "REVERTING"
-cherry_pick = "CHERRY-PICKING"
-bisect = "BISECTING"
 am = "AM"
 am_or_rebase = "AM/REBASE"
+bisect = "BISECTING"
 disabled = false
+format = '[($state( $progress_current/$progress_total) )]($style bold)'
+cherry_pick = '[🍒PICKING](color_danger)'
+merge = "MERGING"
+rebase = "REBASING"
+revert = "REVERTING"
+style = "fg:color_danger"
 
 [nodejs]
 symbol = ""
