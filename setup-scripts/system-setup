@@ -62,7 +62,10 @@ paru -S --noconfirm --needed \
     ttf-firacode-nerd \
     doublecmd \
     qt6ct \
-    inter-font
+    inter-font \
+    libqalculate \
+    walker-bin
+    
     
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
 

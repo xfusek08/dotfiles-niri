@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+
+source "$SCRIPT_FNS/log.zsh"
+
+log -i "Setting up git user configuration to: Petr Fusek | petr.fusek97@gmail.com"
+
+git config user.name "Petr Fusek"
+git config user.email petr.fusek97@gmail.com
+
+log -i "Completed git user configuration setup."

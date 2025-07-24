@@ -8,7 +8,12 @@
         "makoctl",
         "pkill",
         "SIGUSR",
+        "wakapi",
         "waybar",
+        "xfusek",
         "ZINIT"
-    ]
+    ],
+    "files.associations": {
+        "*.css": "less"
+    }
 }

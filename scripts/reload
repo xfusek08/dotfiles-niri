@@ -15,3 +15,6 @@ killall -SIGUSR2 waybar
 
 echo "Entering new shell..."
 zsh
+
+echo "Setting all scripts in $SCRIPTS as executable..."
+find "$SCRIPTS" -type f -exec chmod +x {} \;
