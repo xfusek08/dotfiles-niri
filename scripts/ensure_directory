@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+
+source "$SCRIPT_FNS/log.zsh"
+
+dir="$1"
+log -i "Ensuring directory exists: \"$dir\""
+if [[ ! -d "$dir" ]]; then
+    log -w "Directory \"$dir\" does not exist, creating it."
+    mkdir -p "$dir"
+    local error_code=$?
+    if [[ ! -d "$dir" ]]; then
+        log -e "Directory \"$dir\" could not be created."
+        exit $error_code
+    fi
+fi
