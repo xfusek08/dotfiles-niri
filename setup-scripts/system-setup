@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-set -e  # Exit on any command failure
+set -e # Exit on any command failure
 
 # ~~~~~~~~~~~~~~~ Load helper functions ~~~~~~~~~~~~~~~
 
@@ -28,7 +28,7 @@ fi
 
 # ~~~~~~~~~~~~~~ Ensure that cargo is installed ~~~~~~~~~~~~~~~
 
-if command -v cargo >/dev/null 2>&1; then
+if command -v cargo > /dev/null 2>&1; then
     log -f "Rust SDK is already installed. Skipping installation."
 else
     log -f "Installing Rust SDK."
@@ -65,8 +65,7 @@ paru -S --noconfirm --needed \
     inter-font \
     libqalculate \
     walker-bin
-    
-    
+
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
 
 cargo install --locked \

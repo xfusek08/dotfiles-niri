@@ -66,47 +66,47 @@ handle_image() {
 handle_mime() {
     # Handles file/folder type via MIME_TYPE
     case "$MIME_TYPE" in
-    text/*) handle_text ;;
-    application/json) bat "$LOCATION" | jq ;;
-    inode/directory) eza -T -L 2 "$LOCATION" ;;
-    inode/symlink) resolve_symlink ;;
-    application/x-executable | application/x-pie-executable | application/x-sharedlib) readelf --wide --demangle=auto --all "$LOCATION" ;;
-    application/x-x509-ca-cert) openssl x509 -text -noout -in "$LOCATION" ;;
-    image/*) handle_image ;;
-    video/*)
-        ffmpegthumbnailer -i "$LOCATION" -o "${CACHE_FILE}.jpg" -s 1200
-        handle_image "${CACHE_FILE}.jpg"
-        ;;
-    application/pdf)
-        pdftoppm -jpeg -f 1 -singlefile "$LOCATION" "$CACHE_FILE"
-        handle_image "${CACHE_FILE}.jpg"
-        ;;
-    *) handle_extension ;;
+        text/*) handle_text ;;
+        application/json) bat "$LOCATION" | jq ;;
+        inode/directory) eza -T -L 2 "$LOCATION" ;;
+        inode/symlink) resolve_symlink ;;
+        application/x-executable | application/x-pie-executable | application/x-sharedlib) readelf --wide --demangle=auto --all "$LOCATION" ;;
+        application/x-x509-ca-cert) openssl x509 -text -noout -in "$LOCATION" ;;
+        image/*) handle_image ;;
+        video/*)
+            ffmpegthumbnailer -i "$LOCATION" -o "${CACHE_FILE}.jpg" -s 1200
+            handle_image "${CACHE_FILE}.jpg"
+            ;;
+        application/pdf)
+            pdftoppm -jpeg -f 1 -singlefile "$LOCATION" "$CACHE_FILE"
+            handle_image "${CACHE_FILE}.jpg"
+            ;;
+        *) handle_extension ;;
     esac
 }
 
 handle_extension() {
     case "$EXTENSION" in
-    a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | \
-        rpm | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip | rar)
-        atool --list -- "$LOCATION" && exit 0
-        exit 1
-        ;;
-    7z)
-        7z l -p -- "$LOCATION" && exit 0
-        exit 1
-        ;;
-    o) nm "$LOCATION" ;;
-    iso) iso-info --no-header -l "$LOCATION" ;;
-    odt | ods | odp | sxw) odt2txt "$LOCATION" ;;
-    doc) catdoc "$LOCATION" ;;
-    docx) docx2txt "$LOCATION" - ;;
-    xls | xlsx)
-        ssconvert --export-type=Gnumeric_stf:stf_csv "$LOCATION" "fd://1" | bat --language=csv
-        ;;
-    wav | mp3 | flac | m4a | wma | ape | ac3 | og[agx] | spx | opus | as[fx] | mka)
-        exiftool "$LOCATION"
-        ;;
+        a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | \
+            rpm | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip | rar)
+            atool --list -- "$LOCATION" && exit 0
+            exit 1
+            ;;
+        7z)
+            7z l -p -- "$LOCATION" && exit 0
+            exit 1
+            ;;
+        o) nm "$LOCATION" ;;
+        iso) iso-info --no-header -l "$LOCATION" ;;
+        odt | ods | odp | sxw) odt2txt "$LOCATION" ;;
+        doc) catdoc "$LOCATION" ;;
+        docx) docx2txt "$LOCATION" - ;;
+        xls | xlsx)
+            ssconvert --export-type=Gnumeric_stf:stf_csv "$LOCATION" "fd://1" | bat --language=csv
+            ;;
+        wav | mp3 | flac | m4a | wma | ape | ac3 | og[agx] | spx | opus | as[fx] | mka)
+            exiftool "$LOCATION"
+            ;;
     esac
 }
 

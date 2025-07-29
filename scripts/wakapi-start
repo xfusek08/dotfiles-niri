@@ -9,12 +9,12 @@ start_script="$wakapi_dir/wakapi-start.zsh"
 # Check if directory exists
 if [[ ! -d "$wakapi_dir" ]]; then
     echo "Directory ~/.wakapi does not exist, cloning repository..."
-    git clone  "$expected_repo" "$wakapi_dir" --recursive
+    git clone "$expected_repo" "$wakapi_dir" --recursive
     if [[ $? -ne 0 ]]; then
         echo "Error: Failed to clone wakapi repository"
         return 1
     fi
-elif [[ -z "$(ls -A "$wakapi_dir" 2>/dev/null)" ]]; then
+elif [[ -z "$(ls -A "$wakapi_dir" 2> /dev/null)" ]]; then
     # Directory exists but is empty
     echo "Directory ~/.wakapi is empty, removing and cloning repository..."
     rmdir "$wakapi_dir"
@@ -30,9 +30,9 @@ else
         echo "Please remove or backup the contents of ~/.wakapi and try again"
         return 1
     fi
-    
+
     # Check if it has the correct remote origin
-    local current_origin=$(cd "$wakapi_dir" && git remote get-url origin 2>/dev/null)
+    local current_origin=$(cd "$wakapi_dir" && git remote get-url origin 2> /dev/null)
     if [[ "$current_origin" != "$expected_repo" ]]; then
         echo "Error: ~/.wakapi is a git repository but not connected to the correct origin"
         echo "Expected: $expected_repo"

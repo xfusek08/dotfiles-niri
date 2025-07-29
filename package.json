@@ -1,0 +1,11 @@
+{
+    "scripts": {
+        "format": "prettier --write .",
+        "check-format": "prettier --check ."
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "prettier": "^3.6.2",
+        "prettier-plugin-sh": "^0.18.0"
+    }
+}

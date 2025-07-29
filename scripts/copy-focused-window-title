@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-set -e  # Exit on any command failure
+set -e # Exit on any command failure
 
 # Get focused window information from niri
 local window_info=$(niri msg focused-window)

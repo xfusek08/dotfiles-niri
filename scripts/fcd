@@ -81,7 +81,7 @@ searchDirectory="${1:-$PWD}"
 # Show help message if -h option is specified
 if [[ $help == "true" ]]; then
     echo -e "$(
-        cat <<EOF
+        cat << EOF
 \033[1mUsage:\033[0m fcd [OPTIONS] [DIRECTORY]
 
 Changes the current directory to the specified directory or to a directory selected interactively using \033[1;36mfzf\033[0m.
@@ -119,8 +119,8 @@ local bfs_args=""
 
 # Use the preview script directly without sourcing
 local findResult="$(
-    bfs "$searchDirectory" $bfs_args |
-        fzf --preview "fzf-preview {}"
+    bfs "$searchDirectory" $bfs_args \
+        | fzf --preview "fzf-preview {}"
 )"
 
 # If no result found (user cancelled), exit quietly
@@ -139,5 +139,5 @@ if [[ $prt == "true" ]]; then
     print -r -- "$findResult"
 else
     print -r -- "cd ${findResult}" >&2
-    echo "$findResult"  # Output the directory so the calling script can use it
+    echo "$findResult" # Output the directory so the calling script can use it
 fi

@@ -6,29 +6,29 @@
 function get_github_release_asset_url() {
     local repo="$1"
     local pattern="$2"
-    
+
     if [[ -z "$repo" || -z "$pattern" ]]; then
         return 1
     fi
-    
+
     # Download latest release info
     local temp_json=$(mktemp "/tmp/github-release.XXXXXX.json")
     curl -s "https://api.github.com/repos/$repo/releases/latest" > "$temp_json"
-    
+
     if [[ $? -ne 0 ]] || [[ ! -s "$temp_json" ]]; then
         rm -f "$temp_json"
         return 1
     fi
-    
+
     # Extract asset URL using regex pattern
     local asset_url=$(cat "$temp_json" | jq -r ".assets[] | select(.name | test(\"${pattern}\")) | .browser_download_url")
-    
+
     rm -f "$temp_json"
-    
+
     if [[ -z "$asset_url" || "$asset_url" == "null" ]]; then
         return 1
     fi
-    
+
     echo "$asset_url"
     return 0
 }
