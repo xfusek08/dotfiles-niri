@@ -228,6 +228,23 @@ tooltip label {
     margin-left: 8px;
 }
 
+/* Style for hardware group */
+#hardware {
+    padding: 0;
+    margin: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    
+    border-left: 2px solid @accent;
+    border-right: 2px solid @accent;
+    min-width: 250px;
+}
+
+#hardware > * {
+    padding: 0;
+    margin: 0;
+}
+
 /* Battery animation color should use the urgent color */
 
 @keyframes battery-blink {

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 source "$SCRIPT_FNS/run_bash_tpl.zsh"
 
 echo "Regenerating dotfiles..."
@@ -11,10 +9,11 @@ echo "Reloading mako..."
 makoctl reload
 
 echo "Reloading waybar..."
-killall -SIGUSR2 waybar
-
-echo "Entering new shell..."
-zsh
+killall  waybar;
+waybar >/dev/null 2>&1 & disown;
 
 echo "Setting all scripts in $SCRIPTS as executable..."
 find "$SCRIPTS" -type f -exec chmod +x {} \;
+
+echo "Entering new shell..."
+zsh
