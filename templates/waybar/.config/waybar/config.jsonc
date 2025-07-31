@@ -15,8 +15,9 @@
     ],
     "modules-center": ["custom/clock"],
     "modules-right": [
-        "custom/clipboard",
         "tray",
+        "custom/colorpicker",
+        "custom/clipboard",
         "mpd",
         "idle_inhibitor",
         "pulseaudio",
@@ -217,6 +218,13 @@
         "format": " 󰅌 ",
         "tooltip": false,
         "on-click": "<%$SCRIPTS%>/clipboard-history",
+        "return-type": "string",
+        "text-align": "center"
+    },
+    "custom/colorpicker": {
+        "format": "󰈊",
+        "tooltip": false,
+        "on-click": "hyprpicker -a | wl-copy",
         "return-type": "string",
         "text-align": "center"
     },

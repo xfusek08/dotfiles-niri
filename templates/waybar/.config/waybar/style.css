@@ -86,6 +86,7 @@ tooltip label {
 #mpd,
 #custom-power,
 #custom-clipboard,
+#custom-colorpicker,
 #niri-window {
     margin: 5px 3px;
     padding: 0 10px;
@@ -207,7 +208,8 @@ tooltip label {
 }
 
 #custom-power,
-#custom-clipboard {
+#custom-clipboard,
+#custom-colorpicker {
     padding: 0 10px;
     font-size: 16px;
     color: @text;
@@ -216,8 +218,9 @@ tooltip label {
 }
 
 #custom-power:hover,
-#custom-clipboard:hover {
-    background: @urgent-hover;
+#custom-clipboard:hover,
+#custom-colorpicker:hover {
+    background: @accent-hover;
 }
 
 #niri-window {

@@ -64,7 +64,8 @@ paru -S --noconfirm --needed \
     qt6ct \
     inter-font \
     libqalculate \
-    walker-bin
+    walker-bin \
+    hyprpicker
 
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
 
