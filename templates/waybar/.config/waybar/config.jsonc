@@ -19,7 +19,7 @@
         "custom/colorpicker",
         "custom/clipboard",
         "mpd",
-        "idle_inhibitor",
+        // "idle_inhibitor",
         "pulseaudio",
         "power-profiles-daemon",
         "backlight",
@@ -152,7 +152,7 @@
         "format-alt": "{icon} {time}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": ["  ", "  ", "  ", "  ", "  "]
     },
     "battery#bat2": {
         "bat": "BAT2"
@@ -164,21 +164,21 @@
         "format-icons": {
             "default": "",
             "performance": "",
-            "balanced": "",
+            "balanced": " ",
             "power-saver": ""
         }
     },
     "network": {
         "format-wifi": "{icon}",
         "format-ethernet": "󰈀",
-        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "format-icons": ["󰤯 ", "󰤟 ", "󰤢 ", "󰤥 ", "󰤨 "],
         "tooltip-format": " \u00A0\u00A0\u00A0\u00A0{signalStrength}%\n\u00A0\u00A0\u00A0\u00A0{essid}\n󰩟\u00A0\u00A0\u00A0\u00A0{ipaddr}",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected 󰖪"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
+        "format": "{volume}% {icon}\u00A0\u00A0\u00A0{format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
         "format-muted": " {format_source}",
