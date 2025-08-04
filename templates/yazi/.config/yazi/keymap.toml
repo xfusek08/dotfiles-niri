@@ -1,0 +1,24 @@
+[[mgr.prepend_keymap]]
+on   = [ "c", "t" ]
+desc = "📋 Copy full text-file contents via wl‑copy"
+# run = "shell -- notify-send \"Yazi: file content Copy $0\""
+run  = [
+    """
+    shell --block -- bash -c '
+    fileName="$1"
+    fileType=$(file -b "$fileName")
+    if echo "$fileType" | grep -qi "text\\|json\\|xml\\|script\\|source\\|program\\|ascii\\|utf-8\\|html\\|stylesheet"; then
+        cat "$fileName" | wl-copy --type text/plain
+        notify-send "✓ Text Copied" "$fileName\n$fileType"
+    else
+        notify-send --urgency=critical "❌ Copy Failed" "Not a text file: $fileType"
+        exit 1
+    fi
+    ' -- "$0"
+    """
+]
+
+[[mgr.prepend_keymap]]
+on = "T"
+run = "shell --confirm --orphan 'ghostty --working-directory=\"$(pwd)\"'"
+desc = "Open the current directory in Ghostty"

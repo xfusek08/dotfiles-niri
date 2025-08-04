@@ -3,7 +3,7 @@
 source "$SCRIPT_FNS/log.zsh"
 
 function _parse_arguments() {
-    log -f "Parsing arguments"
+    log "Parsing arguments"
     local prefix=$1
 
     shift # Remove the prefix argument
@@ -74,7 +74,7 @@ function _parse_arguments() {
 
 # Setup backup variables
 function _setup_backup_variables() {
-    log -f "Setting up variables"
+    log "Setting up variables"
     local backup_all="$1"
     local custom_backup_dir="$2"
     local custom_backup_name="$3"
@@ -94,8 +94,17 @@ function _setup_backup_variables() {
         backup_suffix="${backup_suffix}-${timestamp}"
     fi
 
-    # Set backup directory
-    local _backup_dir="${custom_backup_dir:-$ZSH_BACKUP_DIR}"
+    # Determine backup directory - fail if neither custom nor environment directory is available
+    if [[ -n "$custom_backup_dir" ]]; then
+        local _backup_dir="$custom_backup_dir"
+    elif [[ -n "$SYNCED_BACKUP_DIR" ]]; then
+        local _backup_dir="$SYNCED_BACKUP_DIR"
+    else
+        log -e "Error: No backup directory specified. Either set SYNCED_BACKUP_DIR environment variable or use -f|--file-dir option."
+        return 1
+    fi
+    
+    log "Using backup directory: $_backup_dir"
     ensure_directory "$_backup_dir"
     if [ $? -ne 0 ]; then
         log -e "Failed to ensure backup directory exists: $_backup_dir"
@@ -115,7 +124,7 @@ function _setup_backup_variables() {
 function _list_available_backups() {
     local backup_dir="$1"
 
-    log -f "Available backups in $backup_dir:"
+    log "Available backups in $backup_dir:"
 
     # Check if backup directory exists
     if [[ ! -d "$backup_dir" ]]; then
@@ -131,7 +140,7 @@ function _list_available_backups() {
         return 1
     fi
 
-    log -f "Found ${#backup_files[@]} backup files:"
+    log "Found ${#backup_files[@]} backup files:"
     for file in "${backup_files[@]}"; do
         echo "  $(basename "$file")"
     done
@@ -146,7 +155,7 @@ function _handle_restore_operation() {
     local backup_dir="$2"
     local target_dir="$3"
 
-    log -f "Restore mode: checking for backup"
+    log "Restore mode: checking for backup"
 
     # Check if backup exists
     if [[ ! -f "$backup_file_name" ]]; then
@@ -155,7 +164,7 @@ function _handle_restore_operation() {
         return 1
     fi
 
-    log -f "Restoring zen browser from $backup_file_name to $target_dir"
+    log "Restoring zen browser from $backup_file_name to $target_dir"
 
     # Restore the backup
     ensure_directory "$target_dir"
@@ -165,14 +174,14 @@ function _handle_restore_operation() {
     fi
 
     # Extract the backup to the target directory
-    log -f "Extracting backup archive to $target_dir"
+    log "Extracting backup archive to $target_dir"
     unzip -q "$backup_file_name" -d "$target_dir"
     if [ $? -ne 0 ]; then
         log -e "Failed to restore zen browser from \"$backup_file_name\""
         return 1
     fi
 
-    log -f "Restore completed"
+    log "Restore completed"
     echo "$backup_file_name"
     return 0
 }
@@ -183,7 +192,7 @@ function _handle_backup_operation() {
     local backup_all="$2"
     local target_directory="$3"
 
-    log -f "Starting backup operation"
+    log "Starting backup operation"
 
     # Save original directory before changing it
     local original_dir="$(pwd)"
@@ -194,16 +203,16 @@ function _handle_backup_operation() {
     }
 
     local temp_backup_file="/tmp/$(basename "$backup_file_name")"
-    log -f "Backing up zen browser from $(pwd) to $temp_backup_file"
+    log "Backing up zen browser from $(pwd) to $temp_backup_file"
 
     # Create backup archive
     if [[ "$backup_all" == true ]]; then
         # Backup everything with no exclusions
-        log -f "Creating complete backup (no exclusions)"
+        log "Creating complete backup (no exclusions)"
         zip -qr "$temp_backup_file" .
     else
         # Regular backup with exclusions
-        log -f "Creating regular backup (with exclusions)"
+        log "Creating regular backup (with exclusions)"
         zip -qr "$temp_backup_file" . -x "zen/*" -x "*.tar.gz" -x "*.zip" -x "*/storage/**"
     fi
 
@@ -215,20 +224,20 @@ function _handle_backup_operation() {
     fi
 
     # Finalize backup file
-    log -f "Moving temporary backup file to final location: $temp_backup_file -> $backup_file_name"
+    log "Moving temporary backup file to final location: $temp_backup_file -> $backup_file_name"
     [ -f "$backup_file_name" ] && rm "$backup_file_name"
     mv "$temp_backup_file" "$backup_file_name"
 
     # Restore original directory
     cd "$original_dir"
 
-    log -f "Backup completed"
+    log "Backup completed"
     echo "$backup_file_name"
     return 0
 }
 
 # Main function
-function main() {
+function _main() {
     # Variables for command line options
     local opts_restore=false
     local opts_backup_all=false

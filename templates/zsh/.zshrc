@@ -34,12 +34,16 @@ if [ ! -d $ZINIT_HOME ]; then
 fi
 source "$ZINIT_HOME/zinit.zsh"
 
+# ~~~~~~~~~~~~~~~ Zinit - fix conflicting aliases ~~~~~~~~~~~~~~~
+
+zinit ice atload'unalias zi'
+
 # ~~~~~~~~~~~~~~~ External Shell Mods ~~~~~~~~~~~~~~~
 
-eval "$(zoxide init --cmd cd zsh)"
+source <(fzf --zsh)
 eval "$(starship init zsh)"
 eval "$(fnm env --use-on-cd --shell zsh)"
-source <(fzf --zsh)
+eval "$(zoxide init zsh)"
 
 # ~~~~~~~~~~~~~~~ Basic Shell interaction Plugins ~~~~~~~~~~~~~~~
 
@@ -70,8 +74,10 @@ setopt hist_find_no_dups    # do not display duplicate commands
 
 alias ls='eza -lga --icons=auto --color=auto --group-directories-first'
 alias lsl='ls -s modified -la'
-
 alias bat="bat --paging=always --italic-text=always --color=always --decorations=always --wrap=never"
+alias cd='z'
+alias cdi='zi'
+alias y='yazi'
 
 # ~~~~~~~~~~~~~~~ Completions ~~~~~~~~~~~~~~~
 
