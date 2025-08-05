@@ -308,7 +308,7 @@ spawn-at-startup "waybar"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "mako"
 spawn-at-startup "clipse" "-listen"
-spawn-at-startup "walker" "--gapplication-service"
+spawn-at-startup "sherlock"
 spawn-at-startup "wakapi-start" "|" "stripcol" ">" "~/.log/wakapi.log" "2>&1"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
@@ -402,7 +402,7 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
-    Mod+D hotkey-overlay-title="Run an Application: walker" { spawn "walker" "-m" "applications,calc"; }
+    Mod+D hotkey-overlay-title="Run an Application: sherlock" { spawn "sherlock"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument in the end.

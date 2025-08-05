@@ -44,7 +44,10 @@ paru -S --noconfirm --needed \
     fzf \
     bfs \
     jq \
+    dbus \
     mediainfo \
+    gdk-pixbuf2 \
+    librsvg \
     ffmpegthumbnailer \
     perl-image-exiftool \
     poppler \
@@ -64,7 +67,7 @@ paru -S --noconfirm --needed \
     qt6ct \
     inter-font \
     libqalculate \
-    walker-bin \
+    sherlock-launcher-bin \
     hyprpicker
 
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
