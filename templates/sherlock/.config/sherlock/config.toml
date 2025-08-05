@@ -9,7 +9,7 @@ lengths = "meters"
 weights = "kg"
 volumes = "l"
 temperatures = "C"
-currency = "eur"
+currency = "czk"
 
 [debug]
 try_suppress_errors = false
@@ -24,7 +24,7 @@ icon_paths = ["~/.config/sherlock/icons"]
 icon_size = 22
 use_base_css = true
 opacity = 1.0
-mod_key_ascii = ["⇧", "⇧", "⌘", "⌘", "⎇", "✦", "✦", "⌘"]
+mod_key_ascii = ["⇧", "⇧", "󰨡", "󰨡", "⎇", "✦", "✦", "󰨡"]
 
 [behavior]
 use_xdg_data_dir_icons = false
