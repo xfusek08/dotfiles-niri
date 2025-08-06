@@ -2,7 +2,7 @@
 
 options=("Shutdown" "Reboot" "Suspend" "Hibernate" "Logout" "Cancel")
 
-choice=$(printf "%s\n" "${options[@]}" | walker -d -p "Power Menu")
+choice=$(printf "%s\n" "${options[@]}" | sherlock)
 
 case $choice in
     Shutdown)

@@ -1,36 +1,5 @@
 [
     {
-        "name": "Weather",
-        "alias": null,
-        "tag_start": null,
-        "tag_end": null,
-        "display_name": null,
-        "on_return": null,
-        "next_content": null,
-        "type": "weather",
-        "priority": 1.0,
-        "exit": true,
-        "shortcut": false,
-        "spawn_focus": false,
-        "async": true,
-        "home": "OnlyHome",
-        "args": {
-            "location": "bremen",
-            "update_interval": 60
-        },
-        "binds": null,
-        "actions": [
-            {
-                "name": "Show in Web",
-                "exec": "https://www.wttr.in/bremen",
-                "icon": "sherlock-link",
-                "method": "web_launcher",
-                "exit": true
-            }
-        ],
-        "add_actions": null
-    },
-    {
         "name": "Spotify",
         "alias": null,
         "tag_start": null,
@@ -147,15 +116,107 @@
         "add_actions": null
     },
     {
+        "name": "DuckDuckGo Search",
+        "alias": "d:",
+        "tag_start": "{keyword}",
+        "tag_end": null,
+        "display_name": "DuckDuckGo",
+        "on_return": null,
+        "next_content": null,
+        "type": "web_launcher",
+        "priority": 90.0,
+        "exit": true,
+        "shortcut": true,
+        "spawn_focus": true,
+        "async": false,
+        "home": "Search",
+        "args": {
+            "icon": "duckduckgo",
+            "search_engine": "https://duckduckgo.com/?q={keyword}"
+        },
+        "binds": null,
+        "actions": null,
+        "add_actions": null
+    },
+    {
+        "name": "Reddit Search",
+        "alias": "r:",
+        "tag_start": "{keyword}",
+        "tag_end": null,
+        "display_name": "Reddit Search",
+        "on_return": null,
+        "next_content": null,
+        "type": "web_launcher",
+        "priority": 91.0,
+        "exit": true,
+        "shortcut": true,
+        "spawn_focus": true,
+        "async": false,
+        "home": "Search",
+        "args": {
+            "icon": "reddit",
+            "search_engine": "https://www.google.com/search?q=site:reddit.com+{keyword}&udm=14&tbm=web"
+        },
+        "binds": null,
+        "actions": null,
+        "add_actions": null
+    },
+    {
+        "name": "Perplexity Search",
+        "alias": "p:",
+        "tag_start": "{keyword}",
+        "tag_end": null,
+        "display_name": "Perplexity AI",
+        "on_return": null,
+        "next_content": null,
+        "type": "web_launcher",
+        "priority": 92.0,
+        "exit": true,
+        "shortcut": true,
+        "spawn_focus": true,
+        "async": false,
+        "home": "Search",
+        "args": {
+            "icon": "perplexity",
+            "search_engine": "https://www.perplexity.ai/search?focus=internet&q={keyword}"
+        },
+        "binds": null,
+        "actions": null,
+        "add_actions": null
+    },
+    {
+        "name": "YouTube Search",
+        "alias": "y:",
+        "tag_start": "{keyword}",
+        "tag_end": null,
+        "display_name": "YouTube",
+        "on_return": null,
+        "next_content": null,
+        "type": "web_launcher",
+        "priority": 93.0,
+        "exit": true,
+        "shortcut": true,
+        "spawn_focus": true,
+        "async": false,
+        "home": "Search",
+        "args": {
+            "icon": "youtube",
+            "search_engine": "https://www.youtube.com/results?search_query={keyword}"
+        },
+        "binds": null,
+        "actions": null,
+        "add_actions": null
+    },
+    {
         "name": "Web Search",
-        "alias": "gg",
+        "alias": "g:",
         "tag_start": "{keyword}",
         "tag_end": null,
         "display_name": "Google Search",
         "on_return": null,
         "next_content": null,
         "type": "web_launcher",
-        "priority": 100.0,
+        "priority": 94.0,
         "exit": true,
         "shortcut": true,
         "spawn_focus": true,
@@ -163,10 +224,21 @@
         "home": "Search",
         "args": {
             "icon": "google",
-            "search_engine": "google"
+            "search_engine": "https://www.google.com/search?q={keyword}&udm=14&tbm=web"
         },
         "binds": null,
         "actions": null,
         "add_actions": null
+    },
+    {
+        "alias": "em",
+        "tag_start": "{keyword}",
+        "name": "Emoji Picker",
+        "type": "emoji_picker",
+        "args": {
+            "default_skin_tone": "Simpsons"
+        },
+        "priority": 1.0,
+        "home": "Search"
     }
 ]
