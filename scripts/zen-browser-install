@@ -8,7 +8,7 @@ function _main() {
     # prepare directories
     # -------------------
 
-    log -f "prepare directories"
+    log "prepare directories"
     local main_directory="$HOME/.zen"
     local install_directory="$main_directory/zen"
 
@@ -18,69 +18,69 @@ function _main() {
     # Download latest Zen release tarball
     # -----------------------------------
 
-    log -f "Checking github metadata for latest Zen release"
+    log "Checking github metadata for latest Zen release"
     local tarball_url=$(get_github_release_asset_url "zen-browser/desktop" "linux-x86_64.tar.xz")
     if [[ -z "$tarball_url" ]]; then
-        log -f "Failed to find Zen tarball download URL"
+        log "Failed to find Zen tarball download URL"
         return 1
     fi
-    log -f "Found latest Zen tarball URL: $tarball_url"
+    log "Found latest Zen tarball URL: $tarball_url"
 
     # Create backup of existing zen installation
     # ------------------------------------------
 
-    log -f "Create backup of existing zen installation in: $install_directory"
+    log "Create backup of existing zen installation in: $install_directory"
     if [[ -n $(ls -A "$install_directory" 2> /dev/null) ]]; then
-        log -f "Backing up existing Zen installation"
+        log "Backing up existing Zen installation"
         local backup_file=$(zen-browser-backup -t -n "zen-browser-backup-before-installation")
         if [ $? -ne 0 ]; then
-            log -f "Backup failed, aborting installation"
+            log "Backup failed, aborting installation"
             return 1
         fi
-        log -f "Created backup at: $backup_file"
-        log -f "Clearing install directory"
+        log "Created backup at: $backup_file"
+        log "Clearing install directory"
         rm -rf "$install_directory"
         ensure_directory "$install_directory"
     else
-        log -f "No existing Zen installation found, proceeding with installation."
+        log "No existing Zen installation found, proceeding with installation."
     fi
 
     # Download and extract tarball
     # ----------------------------
 
-    log -f "Downloading and extracting Zen tarball from: $tarball_url"
+    log "Downloading and extracting Zen tarball from: $tarball_url"
     if ! download_and_extract "$tarball_url" "$install_directory"; then
-        log -f "Failed to download and extract Zen tarball"
+        log "Failed to download and extract Zen tarball"
         return 1
     fi
 
     # Check if extraction was successful
     # -----------------------------------
 
-    log -f "Checking if extraction was successful"
+    log "Checking if extraction was successful"
     if [[ -z $(ls -A "$install_directory" 2> /dev/null) ]]; then
         # There is content in install directory...
-        log -f "Extraction failed, reverting installation"
+        log "Extraction failed, reverting installation"
         local restored_file=$(zen-browser-backup -r)
         if [ $? -eq 0 ]; then
-            log -f "Successfully restored from backup: $restored_file"
+            log "Successfully restored from backup: $restored_file"
         else
             log -e "Failed to restore from backup"
         fi
         return 1
     fi
-    log -f "Extraction completed"
+    log "Extraction completed"
 
     # Cleanup temporary tarball
     # -------------------------
 
-    log -f "Cleaning up temporary tarball: $temp_tarball"
+    log "Cleaning up temporary tarball: $temp_tarball"
     rm -f "$temp_tarball"
 
     # Register zen executable
     # -----------------------
 
-    log -f "Registering Zen executable"
+    log "Registering Zen executable"
     local local_bin_dir="$HOME/.local/bin"
     ensure_directory "$local_bin_dir"
     [[ -L "$local_bin_dir/zen" ]] && rm -f "$local_bin_dir/zen"
@@ -89,7 +89,7 @@ function _main() {
     # Create desktop icon
     # -------------------
 
-    log -f "Creating desktop icon for Zen Browser"
+    log "Creating desktop icon for Zen Browser"
     ensure_directory "$HOME/.local/share/applications"
     tee "$HOME/.local/share/applications/zen.desktop" > /dev/null << EOF
 [Desktop Entry]
@@ -111,35 +111,35 @@ EOF
     # Install Sine
     # ------------
 
-    log -f "Preparing to install Sine for Zen Browser"
+    log "Preparing to install Sine for Zen Browser"
 
     # Create backup before Sine installation
-    log -f "Creating backup before Sine installation"
+    log "Creating backup before Sine installation"
     local sine_backup_file=$(zen-browser-backup -t -n "zen-browser-backup-before-sine-installation")
     if [ $? -ne 0 ]; then
-        log -f "Sine pre-installation backup failed, aborting Sine installation"
+        log "Sine pre-installation backup failed, aborting Sine installation"
         return 1
     else
-        log -f "Created pre-Sine backup at: $sine_backup_file"
+        log "Created pre-Sine backup at: $sine_backup_file"
     fi
 
     # Download Sine installer
-    log -f "Downloading Sine installer"
+    log "Downloading Sine installer"
     local temp_dir=$(mktemp -d)
     local sine_installer_path="$temp_dir/sine-linux-x64"
     local sine_url=$(get_github_release_asset_url "CosmoCreeper/Sine" "sine-linux-x64")
 
     if [[ -z "$sine_url" ]]; then
-        log -f "Failed to find Sine installer download URL, skipping Sine installation"
+        log "Failed to find Sine installer download URL, skipping Sine installation"
     else
-        log -f "Found Sine installer URL: $sine_url"
-        log -f "Downloading Sine installer to $sine_installer_path"
+        log "Found Sine installer URL: $sine_url"
+        log "Downloading Sine installer to $sine_installer_path"
 
         if curl -L -s "$sine_url" -o "$sine_installer_path"; then
-            log -f "Sine installer downloaded successfully"
+            log "Sine installer downloaded successfully"
 
             # Make installer executable
-            log -f "Making Sine installer executable"
+            log "Making Sine installer executable"
             chmod +x "$sine_installer_path"
 
             # Create a folder in main_directory for the last prompt
@@ -147,7 +147,7 @@ EOF
             ensure_directory "$sine_folder"
 
             # Run installer with automated inputs
-            log -f "Running Sine installer with automated inputs"
+            log "Running Sine installer with automated inputs"
             {
                 echo "2"
                 echo "1"
@@ -156,20 +156,20 @@ EOF
                 echo "$main_directory"
                 echo "3" # 3 should be read by user from the profiles ini file.
                 echo "no"
-            } | "$sine_installer_path"
+            } | sudo "$sine_installer_path"
 
             local sine_exit_code=$?
             if [ $sine_exit_code -eq 0 ]; then
-                log -f "Sine installation completed successfully"
+                log "Sine installation completed successfully"
             else
-                log -f "Sine installation exited with code $sine_exit_code"
+                log "Sine installation exited with code $sine_exit_code"
             fi
         else
-            log -f "Failed to download Sine installer"
+            log "Failed to download Sine installer"
         fi
 
         # Clean up
-        log -f "Cleaning up Sine installer"
+        log "Cleaning up Sine installer"
         rm -f "$sine_installer_path"
         rmdir "$temp_dir"
     fi
@@ -177,7 +177,7 @@ EOF
     # Finalize installation
     # ---------------------
 
-    log -f "Zen installation process completed"
+    log "Zen installation process completed"
 }
 
 _main "$@"

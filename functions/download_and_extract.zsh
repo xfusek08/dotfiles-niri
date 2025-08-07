@@ -74,14 +74,14 @@ function download_and_extract() {
     # Check if there's a single root directory
     local root_dirs=$(find "$temp_extract" -maxdepth 1 -type d -not -path "$temp_extract" | wc -l)
     if [[ $root_dirs -eq 1 ]]; then
-        log -f "Single root directory detected, moving contents to target directory" >&2
+        log "Single root directory detected, moving contents to target directory" >&2
         # Move contents from the single root directory
         local extracted_dir=$(find "$temp_extract" -maxdepth 1 -type d -not -path "$temp_extract" | head -n 1)
         # Use cp and rm to avoid glob issues
         cp -r "$extracted_dir"/* "$target_directory/" 2> /dev/null || true
         cp -r "$extracted_dir"/.[^.]* "$target_directory/" 2> /dev/null || true
     else
-        log -f "Multiple root directories detected, moving all contents directly to target directory" >&2
+        log "Multiple root directories detected, moving all contents directly to target directory" >&2
         # Move everything directly
         cp -r "$temp_extract"/* "$target_directory/" 2> /dev/null || true
         cp -r "$temp_extract"/.[^.]* "$target_directory/" 2> /dev/null || true
