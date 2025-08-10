@@ -1,5 +1,3 @@
 #!/usr/bin/env zsh
 
-source "$SCRIPT_FNS/run-bunner.zsh"
-
-run-bunner dcu "$@"
+brun dcu "$@"

@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+
+$BUNNER_COMMAND "$BUNNER_COMMANDS_DIR" "$@"
