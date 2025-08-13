@@ -10,7 +10,7 @@ makoctl reload
 
 echo "Reloading waybar..."
 killall  waybar;
-waybar >/dev/null 2>&1 & disown;
+setsid waybar >/dev/null 2>&1 &
 
 echo "Setting all scripts in $SCRIPTS as executable..."
 find "$SCRIPTS" -type f -exec chmod +x {} \;
