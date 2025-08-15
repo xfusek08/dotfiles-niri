@@ -119,11 +119,13 @@
     },
     "cpu": {
         "format": "  {usage}%",
-        "tooltip": false
+        "tooltip": false,
+        "interval": 5
     },
     "memory": {
         "format": "  {used:0.2f}G",
-        "tooltip": false
+        "tooltip": false,
+        "interval": 5
     },
     "temperature": {
         // "thermal-zone": 2,
@@ -132,7 +134,8 @@
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",
         "format": "{icon} {temperatureC} 󰔄",
-        "format-icons": ["", "", ""]
+        "format-icons": ["", "", ""],
+        "interval": 5
     },
     "backlight": {
         // "device": "acpi_video1",
@@ -180,18 +183,18 @@
         // "scroll-step": 1, // %, can be a float
         "format": "{volume}% {icon}\u00A0\u00A0\u00A0{format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
         "format-source": "{volume}% ",
-        "format-source-muted": "",
+        "format-source-muted": " ",
         "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
+            "headphone": " ",
+            "hands-free": "󱡒 ",
+            "headset": " ",
+            "phone": " ",
+            "portable": " ",
+            "car": " ",
+            "default": [" ", " ", " "]
         },
         "on-click": "pavucontrol"
     },
