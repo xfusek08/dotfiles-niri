@@ -177,7 +177,8 @@
         "format-icons": ["󰤯 ", "󰤟 ", "󰤢 ", "󰤥 ", "󰤨 "],
         "tooltip-format": " \u00A0\u00A0\u00A0\u00A0{signalStrength}%\n\u00A0\u00A0\u00A0\u00A0{essid}\n󰩟\u00A0\u00A0\u00A0\u00A0{ipaddr}",
         "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected 󰖪"
+        "format-disconnected": "Disconnected 󰤮 ",
+        "on-click": "copy-current-ip-to-clipboard"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
