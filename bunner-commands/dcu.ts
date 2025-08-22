@@ -4,7 +4,7 @@ import { DockerComposeTool } from 'bunner/modules/docker';
 export default defineCommand({
     command: 'dcu',
     description:
-        'Runts the docker compose up command. It cleans up any existing containers managed by local docker-compose.yml file and starts up the containers defined in the docker-compose.yml file.',
+        'Docker Compose Up - Runs the docker compose up command. It cleans up any existing containers managed by local docker-compose.yml file and starts up the containers defined in the docker-compose.yml file.',
     options: [
         {
             short: 'd',
