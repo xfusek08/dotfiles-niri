@@ -10,9 +10,9 @@ source "$SCRIPT_FNS/log.zsh"
 
 local ZSH_PATH=$(which zsh)
 if [[ "$SHELL" == "$ZSH_PATH" ]]; then
-    log -f "ZSH is already the default shell. Skipping..."
+    log "ZSH is already the default shell. Skipping..."
 else
-    log -f "Setting up ZSH as default shell."
+    log "Setting up ZSH as default shell."
     chsh -s "$ZSH_PATH"
 fi
 
@@ -20,18 +20,18 @@ fi
 
 local ZINIT_HOME="${ZINIT_HOME:-$HOME/.local/share}/zinit/zinit.git"
 if [ ! -d $ZINIT_HOME ]; then
-    log -f "Zinit not found. Cloning into $ZINIT_HOME..."
+    log "Zinit not found. Cloning into $ZINIT_HOME..."
     mkdir -p "$(dirname $ZINIT_HOME)"
     git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-    log -f "Zinit cloned successfully."
+    log "Zinit cloned successfully."
 fi
 
 # ~~~~~~~~~~~~~~ Ensure that cargo is installed ~~~~~~~~~~~~~~~
 
 if command -v cargo > /dev/null 2>&1; then
-    log -f "Rust SDK is already installed. Skipping installation."
+    log "Rust SDK is already installed. Skipping installation."
 else
-    log -f "Installing Rust SDK."
+    log "Installing Rust SDK."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
@@ -75,8 +75,19 @@ paru -S --noconfirm --needed \
 cargo install --locked \
     eza \
     zoxide \
-    starship \
-    fnm
+    starship
+    
+# ~~~~~~~~~~~~~~ Install Bun ~~~~~~~~~~~~~~~
+
+# Run bun install script if bun is not installed
+
+if command -v bun > /dev/null 2>&1; then
+    log "Bun is already installed. Checking for updates..."
+    bun upgrade
+else
+    log "Installing Bun."
+    curl -fsSL https://bun.sh/install | bash
+fi
 
 # ~~~~~~~~~~~~~~ Generate completions ~~~~~~~~~~~~~~~
 

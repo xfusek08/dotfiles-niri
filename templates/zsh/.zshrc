@@ -15,8 +15,9 @@ source "<%$GENERATED_DIR%>/environment"
 
 path=("${(@s/:/)PATH}")
 path+=(
-    $HOME/bin
+    $HOME/.bun/bin
     $HOME/.local/bin
+    $HOME/bin
     $SCRIPTS
 )
 typeset -U path
@@ -42,7 +43,6 @@ zinit ice atload'unalias zi'
 
 source <(fzf --zsh)
 eval "$(starship init zsh)"
-eval "$(fnm env --use-on-cd --shell zsh)"
 eval "$(zoxide init zsh)"
 
 # ~~~~~~~~~~~~~~~ Basic Shell interaction Plugins ~~~~~~~~~~~~~~~
