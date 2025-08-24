@@ -4,6 +4,8 @@
 
 # Load the zsh/datetime module for EPOCHREALTIME variable
 zmodload zsh/datetime
+# Load terminfo for portable key sequences (Home/End/Delete, etc.)
+zmodload zsh/terminfo
 typeset -F shell_start=$EPOCHREALTIME
 
 # ~~~~~~~~~~~~~~~ Environment ~~~~~~~~~~~~~~~~
@@ -78,6 +80,11 @@ alias bat="bat --paging=always --italic-text=always --color=always --decorations
 alias cd='z'
 alias cdi='zi'
 alias y='yazi'
+
+# ~~~~~~~~~~~~~~~ Keybindings ~~~~~~~~~~~~~~~
+
+# Load keybindings via zinit snippet for speed (compiled and cached)
+zinit snippet "$DOTFILES/zinit-snippets/keybindings.zsh"
 
 # ~~~~~~~~~~~~~~~ Completions ~~~~~~~~~~~~~~~
 

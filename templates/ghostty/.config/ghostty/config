@@ -6,6 +6,8 @@ keybind = ctrl+shift+z>ctrl+shift+up=new_split:up
 keybind = ctrl+shift+z>ctrl+shift+down=new_split:down
 keybind = ctrl+shift+right=unbind
 keybind = ctrl+shift+left=unbind
+keybind = shift+home=unbind
+keybind = shift+end=unbind
 
 # Works only after right clicking to terminal
 keybind = performable:ctrl+c=copy_to_clipboard
