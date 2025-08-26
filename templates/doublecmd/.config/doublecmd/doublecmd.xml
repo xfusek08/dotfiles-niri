@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<doublecmd DCVersion="1.1.26 gamma" ConfigVersion="15">
+<doublecmd DCVersion="1.1.28 gamma" ConfigVersion="15">
   <Toolbars>
     <MainToolbar>
       <Row>
@@ -564,9 +564,11 @@
     <IgnoreListFile>%DC_CONFIG_PATH%/ignorelist.txt</IgnoreListFile>
   </IgnoreList>
   <DirectoryHotList>
-    <HotDir Name="petr" Path="/home/petr"/>
-    <HotDir Name="GoogleDrive" Path="/home/petr/GoogleDrive"/>
-    <HotDir Name="Repo" Path="/home/petr/Repo/"/>
+    <HotDir Name="petr" Path="/home/petr/" PathSort="1"/>
+    <HotDir Name="GoogleDrive" Path="/home/petr/GoogleDrive" PathSort="1"/>
+    <HotDir Name="Stažené" Path="/home/petr/Stažené/" PathSort="7"/>
+    <HotDir Name="Repo" Path="/home/petr/Repo" PathSort="1"/>
+    <HotDir Name="tmp" Path="/tmp" PathSort="1"/>
   </DirectoryHotList>
   <Viewer>
     <PreviewVisible>False</PreviewVisible>
