@@ -76,7 +76,7 @@ cargo install --locked \
     eza \
     zoxide \
     starship
-    
+
 # ~~~~~~~~~~~~~~ Install Bun ~~~~~~~~~~~~~~~
 
 # Run bun install script if bun is not installed
@@ -90,7 +90,5 @@ else
 fi
 
 # ~~~~~~~~~~~~~~ Generate completions ~~~~~~~~~~~~~~~
-
-fnm completions --shell zsh > "$COMPLETIONS_DIR/generated/_fnm"
 
 # ~~~~~~~~~~~~~~ Enable systemctl services ~~~~~~~~~~~~~~~
