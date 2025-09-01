@@ -111,68 +111,8 @@ EOF
     # Install Sine
     # ------------
     
-    log "Preparing to install Sine for Zen Browser"
-    
-    # Create backup before Sine installation
-    log "Creating backup before Sine installation"
-    local sine_backup_file=$(zen-browser-backup -t -n "zen-browser-backup-before-sine-installation")
-    if [ $? -ne 0 ]; then
-        log "Sine pre-installation backup failed, aborting Sine installation"
-        return 1
-    else
-        log "Created pre-Sine backup at: $sine_backup_file"
-    fi
-    
-    # Download Sine installer
-    log "Downloading Sine installer"
-    local temp_dir=$(mktemp -d)
-    local sine_installer_path="$temp_dir/sine-linux-x64"
-    local sine_url=$(get_github_release_asset_url "CosmoCreeper/Sine" "sine-linux-x64")
-    
-    if [[ -z "$sine_url" ]]; then
-        log "Failed to find Sine installer download URL, skipping Sine installation"
-    else
-        log "Found Sine installer URL: $sine_url"
-        log "Downloading Sine installer to $sine_installer_path"
-        
-        if curl -L -s "$sine_url" -o "$sine_installer_path"; then
-            log "Sine installer downloaded successfully"
-            
-            # Make installer executable
-            log "Making Sine installer executable"
-            chmod +x "$sine_installer_path"
-            
-            # Create a folder in main_directory for the last prompt
-            local sine_folder="$main_directory/sine_data"
-            ensure_directory "$sine_folder"
-            
-            # Run installer with automated inputs
-            log "Running Sine installer with automated inputs"
-            {
-                echo "2"
-                echo "1"
-                echo "$install_directory"
-                echo "asd"
-                echo "$main_directory"
-                echo "3" # 3 should be read by user from the profiles ini file.
-                echo "no"
-            } | sudo "$sine_installer_path"
-            
-            local sine_exit_code=$?
-            if [ $sine_exit_code -eq 0 ]; then
-                log "Sine installation completed successfully"
-            else
-                log "Sine installation exited with code $sine_exit_code"
-            fi
-        else
-            log "Failed to download Sine installer"
-        fi
-        
-        # Clean up
-        log "Cleaning up Sine installer"
-        rm -f "$sine_installer_path"
-        rmdir "$temp_dir"
-    fi
+    # log "Delegating Sine installation to helper script"
+    # "$(dirname "$0")/zen-browser-sine" install --main-dir "$main_directory" --install-dir "$install_directory"
     
     # Finalize installation
     # ---------------------
