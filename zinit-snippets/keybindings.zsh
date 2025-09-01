@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 #
 # Enhanced ZSH Line Editor (ZLE) Keybindings
-# Provides VS Code-like editing experience in ZSH terminal
+# Provides VS Code-like editing experience with clipboard support
 # Features: Visual selection, smart word navigation, and consistent deletion behavior
 
 # =============================================================================
@@ -20,6 +20,46 @@ WORDCHARS='*?[]~=&;!#$%^(){}<>,"'"'"
 # Enable visual selection highlighting
 typeset -ga zle_highlight
 zle_highlight+=(region:standout)
+
+# Clipboard command (Wayland)
+: ${COPY_CMD:=wl-copy}
+
+# =============================================================================
+# UTILITY FUNCTIONS
+# =============================================================================
+
+# Get selected text from buffer
+get-selection() {
+    if (( !REGION_ACTIVE )); then
+        return 1
+    fi
+    
+    local start end
+    if (( MARK < CURSOR )); then
+        start=$MARK
+        end=$CURSOR
+    else
+        start=$CURSOR
+        end=$MARK
+    fi
+    
+    echo -n "${BUFFER[start+1, end]}"
+}
+
+# Show notification with formatted text
+show-notification() {
+    local title="$1"
+    local content="$2"
+    
+    # Format content for notification (HTML entities)
+    local formatted_content="${content//&/&amp;}"
+    formatted_content="${formatted_content//</&lt;}"
+    formatted_content="${formatted_content//>/&gt;}"
+    
+    # Show notification (silently ignore if notify-send isn't available)
+    command -v notify-send >/dev/null 2>&1 && \
+    notify-send -t 3000 "$title" "$(printf "%b" "\n<tt>$formatted_content</tt>")" 2>/dev/null
+}
 
 # =============================================================================
 # SELECTION WIDGETS
@@ -49,29 +89,63 @@ zle -N select-all
 
 # Character-wise selection extension
 select-backward-char() {
-    (( ! REGION_ACTIVE )) && zle set-mark-command
+    (( !REGION_ACTIVE )) && zle set-mark-command
     zle backward-char
 }
 zle -N select-backward-char
 
 select-forward-char() {
-    (( ! REGION_ACTIVE )) && zle set-mark-command
+    (( !REGION_ACTIVE )) && zle set-mark-command
     zle forward-char
 }
 zle -N select-forward-char
 
 # Word-wise selection extension
 select-backward-word() {
-    (( ! REGION_ACTIVE )) && zle set-mark-command
+    (( !REGION_ACTIVE )) && zle set-mark-command
     zle backward-word
 }
 zle -N select-backward-word
 
 select-forward-word() {
-    (( ! REGION_ACTIVE )) && zle set-mark-command
+    (( !REGION_ACTIVE )) && zle set-mark-command
     zle forward-word
 }
 zle -N select-forward-word
+
+# =============================================================================
+# CLIPBOARD WIDGETS
+# =============================================================================
+
+# Copy selection to clipboard (Shift+Ctrl+C)
+copy-to-clipboard() {
+    local selected_text
+    if selected_text=$(get-selection); then
+        echo -n "$selected_text" | $COPY_CMD
+        show-notification "Copied to clipboard" "$selected_text"
+    else
+        # If no selection, copy the entire line
+        echo -n "$BUFFER" | $COPY_CMD
+        show-notification "Copied line to clipboard" "$BUFFER"
+    fi
+}
+zle -N copy-to-clipboard
+
+# Cut selection to clipboard (Shift+Ctrl+X)
+cut-to-clipboard() {
+    local selected_text
+    if selected_text=$(get-selection); then
+        echo -n "$selected_text" | $COPY_CMD
+        show-notification "Cut to clipboard" "$selected_text"
+        delete-selection-silent
+    else
+        # If no selection, cut the entire line
+        echo -n "$BUFFER" | $COPY_CMD
+        show-notification "Cut line to clipboard" "$BUFFER"
+        zle kill-whole-line
+    fi
+}
+zle -N cut-to-clipboard
 
 # =============================================================================
 # DELETION & EDITING WIDGETS
@@ -79,7 +153,7 @@ zle -N select-forward-word
 
 # Delete active selection without affecting kill ring (VS Code behavior)
 delete-selection-silent() {
-    (( ! REGION_ACTIVE )) && return 1
+    (( !REGION_ACTIVE )) && return 1
     
     if (( MARK <= CURSOR )); then
         LBUFFER=${LBUFFER[1, $(( ${#LBUFFER} - (CURSOR - MARK) ))]}
@@ -139,7 +213,7 @@ bindkey $'\e[1;5D' backward-word         # Ctrl+Left
 bindkey $'\e[1;5C' forward-word          # Ctrl+Right
 
 # Selection keys
-bindkey '^A'       select-all            # Ctrl+A (select all)
+bindkey '^A'     select-all              # Ctrl+A (select all)
 bindkey $'\e[1;2H' select-to-bol         # Shift+Home (select to beginning)
 bindkey $'\e[1;2F' select-to-eol         # Shift+End (select to end)
 
@@ -151,10 +225,15 @@ bindkey $'\e[1;2C' select-forward-char   # Shift+Right
 bindkey $'\e[1;6D' select-backward-word  # Ctrl+Shift+Left
 bindkey $'\e[1;6C' select-forward-word   # Ctrl+Shift+Right
 
+# Clipboard operations (Shift+Ctrl+C/X)
+# Note: These escape sequences might need adjustment for your terminal
+bindkey $'\e[99;6u'  copy-to-clipboard   # Shift+Ctrl+C (Escape + C)
+bindkey $'\e[120;6u' cut-to-clipboard    # Shift+Ctrl+X (Escape + X)
+
 # Deletion keys
-bindkey $'\e[3~' delete-or-kill-region           # Delete key
-bindkey '^?'     backward-delete-or-kill-region  # Backspace
-bindkey '^H'     backward-delete-or-kill-region  # Alternative Backspace
+bindkey $'\e[3~'  delete-or-kill-region           # Delete key
+bindkey '^?'      backward-delete-or-kill-region  # Backspace
+bindkey '^H'      backward-delete-or-kill-region  # Alternative Backspace
 
 # Special deletion (Ctrl+Delete)
 bindkey $'\e[3;5~' kill-word              # Ctrl+Delete (delete word right)
