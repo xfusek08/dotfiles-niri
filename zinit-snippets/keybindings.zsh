@@ -21,9 +21,19 @@ zle -N select-to-bol
 select-to-eol() { zle set-mark-command; zle end-of-line }
 zle -N select-to-eol
 
+# Select all (Ctrl+A): mark whole buffer as active region with immediate highlight
+function select-all() {
+    zle beginning-of-line     # Move to start using a widget (activates selection logic)
+    zle set-mark-command      # Start selection
+    zle end-of-line           # Extend to end using a widget (ensures REGION_ACTIVE)
+    zle -R                    # Force redraw so highlight shows immediately
+}
+zle -N select-all
+
 # Explicit keybindings
-bindkey $'\e[H'    beginning-of-line  # Home
-bindkey $'\e[F'    end-of-line        # End
+bindkey $'\e[H' beginning-of-line  # Home
+bindkey $'\e[F' end-of-line        # End
+bindkey '^A' select-all
 bindkey $'\e[1;5D' backward-word      # Ctrl+Left
 bindkey $'\e[1;5C' forward-word       # Ctrl+Right
 bindkey $'\e[1;2H' select-to-bol      # Shift+Home (select to BOL)
