@@ -80,9 +80,10 @@ zle -N select-to-eol
 
 # Select entire buffer (Ctrl+A)
 select-all() {
-    zle beginning-of-line
-    zle set-mark-command
-    zle end-of-line
+    # Select the whole multi-line buffer
+    MARK=0
+    CURSOR=${#BUFFER}
+    REGION_ACTIVE=1
     zle -R  # Force redraw for immediate visual feedback
 }
 zle -N select-all
