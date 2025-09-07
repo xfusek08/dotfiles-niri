@@ -7,13 +7,15 @@
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
+        "custom/clock",
         "sway/workspaces",
         "sway/mode",
         "sway/scratchpad",
         "custom/media",
+        "custom/separator",
         "niri/window"
     ],
-    "modules-center": ["custom/clock"],
+    "modules-center": [],
     "modules-right": [
         "tray",
         "custom/colorpicker",
@@ -231,6 +233,11 @@
         "on-click": "hyprpicker -a | wl-copy",
         "return-type": "string",
         "text-align": "center"
+    },
+    "custom/separator": {
+        "format": " | ",
+        "return-type": "string",
+        "tooltip": false
     },
     "group/hardware": {
         "orientation": "horizontal",

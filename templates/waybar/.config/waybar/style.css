@@ -216,6 +216,12 @@ tooltip label {
     background: transparent;
 }
 
+#custom-separator {
+    padding: 0 6px;
+    color: @text-muted;
+    background: transparent;
+}
+
 #custom-power:hover,
 #custom-clipboard:hover,
 #custom-colorpicker:hover {
