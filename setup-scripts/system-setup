@@ -72,7 +72,7 @@ paru -S --noconfirm --needed \
 
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
 
-cargo install --locked \
+cargo install \
     eza \
     zoxide \
     starship
