@@ -21,7 +21,7 @@ gtk-titlebar = false
 
 background-opacity = 0.85
 background-blur-radius = 10
-background = "#000000"
+background = "#020103"
 
 # hint color
 palette = 8=#8A8A8A
