@@ -1,4 +1,3 @@
-keybind = ctrl+w=close_surface
 keybind = ctrl+shift+z=ignore
 keybind = ctrl+shift+z>ctrl+shift+left=new_split:left
 keybind = ctrl+shift+z>ctrl+shift+right=new_split:right
