@@ -11,9 +11,9 @@ function get_github_release_asset_url() {
         return 1
     fi
 
-    # Download latest release info
+    # Download latest release info (via gh)
     local temp_json=$(mktemp "/tmp/github-release.XXXXXX.json")
-    curl -s "https://api.github.com/repos/$repo/releases/latest" > "$temp_json"
+    gh api "repos/$repo/releases/latest" > "$temp_json"
 
     if [[ $? -ne 0 ]] || [[ ! -s "$temp_json" ]]; then
         rm -f "$temp_json"
