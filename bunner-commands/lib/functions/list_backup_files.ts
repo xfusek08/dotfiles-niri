@@ -2,7 +2,7 @@ import { $ } from 'bun';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import path_exists from '../path_exists';
+import path_exists from './path_exists';
 
 export type ListBackupFilesOptions = {
     directory: string;
@@ -19,11 +19,8 @@ export default async function list_backup_files({
         return [];
     }
 
-    const normalized_extension = extension.startsWith('.')
-        ? extension
-        : `.${extension}`;
-    const pattern =
-        normalized_extension.length > 0 ? `*${normalized_extension}` : '*';
+    const normalized_extension = extension.startsWith('.') ? extension : `.${extension}`;
+    const pattern = normalized_extension.length > 0 ? `*${normalized_extension}` : '*';
 
     if (!recursive) {
         const entries = await readdir(directory);

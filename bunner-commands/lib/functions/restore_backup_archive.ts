@@ -1,5 +1,5 @@
-import ensure_directory from '../ensure_directory';
-import extract_archive from '../extract_archive';
+import ensure_directory from './ensure_directory';
+import extract_archive from './extract_archive';
 
 export type RestoreBackupArchiveOptions = {
     archive_path: string;

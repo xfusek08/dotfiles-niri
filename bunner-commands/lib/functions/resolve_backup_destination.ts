@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-import ensure_directory from '../ensure_directory';
+import ensure_directory from './ensure_directory';
 
 export type ResolveBackupDestinationOptions = {
     base_name: string;
@@ -36,16 +36,9 @@ export default async function resolve_backup_destination({
     directory: string;
     file_path: string;
 }> {
-    const env_directory = environment_variable
-        ? process.env[environment_variable]
-        : undefined;
-    const candidate_directories = [
-        custom_directory,
-        fallback_directory,
-        env_directory,
-    ].filter(
-        (value): value is string =>
-            typeof value === 'string' && value.length > 0,
+    const env_directory = environment_variable ? process.env[environment_variable] : undefined;
+    const candidate_directories = [custom_directory, fallback_directory, env_directory].filter(
+        (value): value is string => typeof value === 'string' && value.length > 0,
     );
 
     const directory = candidate_directories[0];

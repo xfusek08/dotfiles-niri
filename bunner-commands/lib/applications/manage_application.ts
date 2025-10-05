@@ -5,10 +5,10 @@ import { basename, dirname } from 'node:path';
 import { isEmpty, log } from 'bunner/framework';
 
 import attempt_restore_installation from '../functions/attempt_restore_installation';
-import create_zip_backup from '../functions/backup/create_zip_backup';
-import resolve_backup_destination from '../functions/backup/resolve_backup_destination';
-import resolve_restore_file from '../functions/backup/resolve_restore_file';
-import restore_backup_archive from '../functions/backup/restore_backup_archive';
+import create_zip_backup from '../functions/create_zip_backup';
+import resolve_backup_destination from '../functions/resolve_backup_destination';
+import resolve_restore_file from '../functions/resolve_restore_file';
+import restore_backup_archive from '../functions/restore_backup_archive';
 import delete_recursively from '../functions/delete_recursively';
 import directory_is_empty from '../functions/directory_is_empty';
 import ensure_directory from '../functions/ensure_directory';
@@ -137,6 +137,7 @@ async function execute_backup({
     });
 
     log.info(`Creating backup from ${paths.main_directory}`);
+
     const created_backup = await create_zip_backup({
         source_directory: paths.main_directory,
         destination_file: file_path,

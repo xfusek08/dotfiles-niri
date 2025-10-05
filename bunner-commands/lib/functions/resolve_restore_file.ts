@@ -1,6 +1,6 @@
 import { isAbsolute, join } from 'node:path';
 
-import path_exists from '../path_exists';
+import path_exists from './path_exists';
 import list_backup_files from './list_backup_files';
 
 export type ResolveRestoreFileOptions = {

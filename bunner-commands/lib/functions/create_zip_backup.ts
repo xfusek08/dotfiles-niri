@@ -1,7 +1,7 @@
 import { rename, rm } from 'node:fs/promises';
 
-import create_temporary_file from '../create_temporary_file';
-import path_exists from '../path_exists';
+import create_temporary_file from './create_temporary_file';
+import path_exists from './path_exists';
 import { ProcessRunner } from 'bunner/modules/process/ProcessRunner';
 
 export type CreateZipBackupOptions = {
@@ -15,9 +15,7 @@ export default async function create_zip_backup({
     destination_file,
     exclude_patterns,
 }: CreateZipBackupOptions): Promise<string> {
-    const temporaryBackupPath = (
-        await create_temporary_file('backup.XXXXXX.zip').text()
-    ).trim();
+    const temporaryBackupPath = (await create_temporary_file('backup.XXXXXX.zip').text()).trim();
 
     const command = ['zip', '-qr', temporaryBackupPath, '.'];
 
