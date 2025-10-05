@@ -1,6 +1,6 @@
-import { app_config } from '../app_manager';
+import { AppConfig } from '../app_manager';
 
-export const zen_browser_config: app_config = {
+export const zen_browser_config: AppConfig = {
     id: 'zen-browser',
     name: 'Zen Browser',
     repository: 'zen-browser/desktop',

@@ -8,7 +8,7 @@ import download_and_extract_archive from './functions/download_and_extract_archi
 import ensure_directory from './functions/ensure_directory';
 import get_latest_github_release_asset_url from './functions/get_latest_github_release_asset_url';
 
-export type desktop_entry_config = {
+export type DesktopEntryConfig = {
     version: string;
     name: string;
     comment: string;
@@ -24,7 +24,7 @@ export type desktop_entry_config = {
     additional_fields?: Record<string, string>;
 };
 
-export type app_paths_config = {
+export type AppPathsConfig = {
     main_directory: string;
     install_directory: string;
     executable_link: string;
@@ -35,7 +35,7 @@ export type app_paths_config = {
     profile_directories: string[];
 };
 
-export type backup_config = {
+export type BackupConfig = {
     default_base_name: string;
     pre_install_backup_name: string;
     environment_variable?: string;
@@ -43,43 +43,43 @@ export type backup_config = {
     include_all_suffix?: string;
 };
 
-export type app_config = {
+export type AppConfig = {
     id: string;
     name: string;
     repository: string;
     asset_pattern: string;
     backup_command: string;
-    paths: app_paths_config;
-    backup: backup_config;
-    desktop_entry: desktop_entry_config;
+    paths: AppPathsConfig;
+    backup: BackupConfig;
+    desktop_entry: DesktopEntryConfig;
 };
 
-type run_command_params = {
+type RunCommandParams = {
     command: string;
     args: string[];
     env?: Record<string, string | undefined>;
 };
 
-type backup_params = {
-    config: app_config;
+type BackupParams = {
+    config: AppConfig;
     backup_name?: string;
     use_timestamp?: boolean;
 };
 
-type restore_params = {
-    config: app_config;
+type RestoreParams = {
+    config: AppConfig;
     backup_file?: string;
 };
 
-type uninstall_params = {
-    config: app_config;
+type UninstallParams = {
+    config: AppConfig;
 };
 
-type install_params = {
-    config: app_config;
+type InstallParams = {
+    config: AppConfig;
 };
 
-async function run_command_capture({ command, args, env }: run_command_params): Promise<string> {
+async function run_command_capture({ command, args, env }: RunCommandParams): Promise<string> {
     const merged_env = env ? { ...process.env, ...env } : undefined;
     const spawned_process = spawn({
         cmd: [command, ...args],
@@ -151,7 +151,7 @@ async function write_desktop_entry({
     config,
     desktop_file_path,
 }: {
-    config: desktop_entry_config;
+    config: DesktopEntryConfig;
     desktop_file_path: string;
 }): Promise<void> {
     await ensure_parent_directory(desktop_file_path);
@@ -189,7 +189,7 @@ async function create_symlink({ source, link }: { source: string; link: string }
     await symlink(source, link);
 }
 
-function collect_command_env(config: app_config): Record<string, string | undefined> | undefined {
+function collect_command_env(config: AppConfig): Record<string, string | undefined> | undefined {
     if (!config.backup.environment_variable) {
         return undefined;
     }
@@ -203,7 +203,7 @@ export async function backup({
     config,
     backup_name,
     use_timestamp = false,
-}: backup_params): Promise<string> {
+}: BackupParams): Promise<string> {
     log.info(`Creating backup for ${config.name}`);
     const args: string[] = [];
 
@@ -225,7 +225,7 @@ export async function backup({
     return output;
 }
 
-export async function restore({ config, backup_file }: restore_params): Promise<string> {
+export async function restore({ config, backup_file }: RestoreParams): Promise<string> {
     log.info(`Restoring backup for ${config.name}`);
     const args = ['-r'];
     if (backup_file) {
@@ -242,7 +242,7 @@ export async function restore({ config, backup_file }: restore_params): Promise<
     return output;
 }
 
-export async function uninstall({ config }: uninstall_params): Promise<void> {
+export async function uninstall({ config }: UninstallParams): Promise<void> {
     log.info(`Uninstalling ${config.name}`);
 
     const install_directory = resolve_path_value(config.paths.install_directory);
@@ -271,7 +271,7 @@ export async function uninstall({ config }: uninstall_params): Promise<void> {
     log.success(`${config.name} uninstalled`);
 }
 
-export async function install({ config }: install_params): Promise<void> {
+export async function install({ config }: InstallParams): Promise<void> {
     log.info(`Installing ${config.name}`);
 
     const main_directory = resolve_path_value(config.paths.main_directory);
