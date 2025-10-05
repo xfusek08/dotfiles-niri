@@ -18,5 +18,8 @@ export default async function register_executable_link({
     const label = binary_name ?? 'executable';
     log.info(`Registering ${label}`);
     await ensure_directory(directory);
-    await ensure_symlink(target_path, link_path);
+    await ensure_symlink({
+        target: target_path,
+        link_path,
+    });
 }

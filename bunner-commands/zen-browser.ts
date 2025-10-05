@@ -9,21 +9,16 @@ import type {
 } from './lib/applications/types';
 import type { DesktopEntryOptions } from './lib/functions/create_desktop_entry';
 
-function build_desktop_entry_options(
-    paths: ApplicationPaths,
-): DesktopEntryOptions {
+function build_desktop_entry_options(paths: ApplicationPaths): DesktopEntryOptions {
     const exec_path = paths.executable_link;
     if (!exec_path) {
-        throw new Error(
-            'Executable link path is not defined for the application.',
-        );
+        throw new Error('Executable link path is not defined for the application.');
     }
 
     return {
         version: '1.0',
         name: 'Zen Browser',
-        comment:
-            'Experience tranquillity while browsing the web without people tracking you!',
+        comment: 'Experience tranquillity while browsing the web without people tracking you!',
         genericName: 'Web Browser',
         keywords: ['Internet', 'WWW', 'Browser', 'Web', 'Explorer'],
         exec: exec_path,
@@ -108,9 +103,7 @@ function uninstall_files(paths: ApplicationPaths): UninstallTarget[] {
     ];
 }
 
-function uninstall_empty_directories(
-    paths: ApplicationPaths,
-): UninstallTarget[] {
+function uninstall_empty_directories(paths: ApplicationPaths): UninstallTarget[] {
     return [
         {
             path: paths.main_directory,
@@ -130,15 +123,9 @@ export const zen_browser_definition: ApplicationDefinition = {
         const install_directory = join(main_directory, 'zen');
         const executable_link = join(home_directory, '.local/bin/zen');
         const executable_target = join(install_directory, 'zen');
-        const desktop_directory = join(
-            home_directory,
-            '.local/share/applications',
-        );
+        const desktop_directory = join(home_directory, '.local/share/applications');
         const desktop_file = join(desktop_directory, 'zen.desktop');
-        const icon_path = join(
-            install_directory,
-            'browser/chrome/icons/default/default128.png',
-        );
+        const icon_path = join(install_directory, 'browser/chrome/icons/default/default128.png');
         const cache_directories = [join(home_directory, '.cache/zen')];
         const profile_directories = [
             join(main_directory, 'zen-browser/profile'),
@@ -178,15 +165,13 @@ export const zen_browser_definition: ApplicationDefinition = {
 
 export default defineCommand({
     command: 'zen-browser',
-    description:
-        'Manage Zen Browser installation, backups, restores, and uninstallation.',
+    description: 'Manage Zen Browser installation, backups, restores, and uninstallation.',
     options: [
         {
             short: 'i',
             long: 'install',
             type: 'boolean',
-            description:
-                'Install or update the application from the latest release.',
+            description: 'Install or update the application from the latest release.',
         },
         {
             short: 'b',
@@ -211,8 +196,7 @@ export default defineCommand({
             short: 'a',
             long: 'all',
             type: 'boolean',
-            description:
-                'Include all files in backups (disables default exclusions).',
+            description: 'Include all files in backups (disables default exclusions).',
         },
         {
             short: 't',
@@ -236,9 +220,7 @@ export default defineCommand({
         },
     ] as const,
     action: async ({ args, options }) => {
-        const selected_modes: Array<
-            'install' | 'backup' | 'restore' | 'uninstall'
-        > = [];
+        const selected_modes: Array<'install' | 'backup' | 'restore' | 'uninstall'> = [];
 
         if (options.install) {
             selected_modes.push('install');
@@ -268,7 +250,8 @@ export default defineCommand({
 
         log.info(`Executing ${mode} for ${zen_browser_definition.name}`);
 
-        await manage_application(zen_browser_definition, {
+        await manage_application({
+            definition: zen_browser_definition,
             mode,
             include_all: options.all ?? false,
             include_timestamp: options.timestamp ?? false,

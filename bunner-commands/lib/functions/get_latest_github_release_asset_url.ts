@@ -3,10 +3,13 @@ import { $ } from 'bunner/framework';
 // Get download URL for a specific asset from latest GitHub release
 // repo format: "owner/repo"
 // pattern: substring or regex supported by jq's test()
-export default async function get_latest_github_release_asset_url(
-    repo: string,
-    pattern: string,
-): Promise<string> {
+export default async function get_latest_github_release_asset_url({
+    repo,
+    pattern,
+}: {
+    repo: string;
+    pattern: string;
+}): Promise<string> {
     if (!repo || !pattern) {
         throw new Error('repo and pattern are required');
     }

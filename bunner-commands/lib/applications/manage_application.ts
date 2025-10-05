@@ -37,32 +37,17 @@ type BackupExecutionResult = {
     directory: string;
 };
 
-type BackupOptions = {
-    include_all: boolean;
-    include_timestamp: boolean;
-    custom_name?: string;
-    custom_directory?: string;
-};
-
-type RestoreOptions = {
-    include_all: boolean;
-    include_timestamp: boolean;
-    custom_name?: string;
-    custom_directory?: string;
-    provided_path?: string | null;
-};
-
-export async function manage_application(
-    definition: ApplicationDefinition,
-    {
-        mode,
-        include_all = false,
-        include_timestamp = false,
-        custom_name,
-        custom_directory,
-        restore_file,
-    }: ApplicationCommandParameters,
-): Promise<void> {
+export async function manage_application({
+    definition,
+    mode,
+    include_all = false,
+    include_timestamp = false,
+    custom_name,
+    custom_directory,
+    restore_file,
+}: {
+    definition: ApplicationDefinition;
+} & ApplicationCommandParameters): Promise<void> {
     const home_directory = process.env.HOME ?? homedir();
     const paths = definition.resolve_paths(home_directory);
 
@@ -72,7 +57,7 @@ export async function manage_application(
                 paths,
                 backup_config: definition.backup,
                 options: {
-                    include_all: include_all ?? false,
+                    include_all,
                     include_timestamp,
                     custom_name,
                     custom_directory,
@@ -80,23 +65,34 @@ export async function manage_application(
             });
             return;
         case 'restore':
-            await execute_restore(definition, paths, {
-                include_all,
-                include_timestamp,
-                custom_name,
-                custom_directory,
-                provided_path: restore_file,
+            await execute_restore({
+                definition,
+                paths,
+                options: {
+                    include_all,
+                    include_timestamp,
+                    custom_name,
+                    custom_directory,
+                    provided_path: restore_file,
+                },
             });
             return;
         case 'install':
-            await execute_install(definition, paths, {
-                include_all,
-                custom_name,
-                custom_directory,
+            await execute_install({
+                definition,
+                paths,
+                options: {
+                    include_all,
+                    custom_name,
+                    custom_directory,
+                },
             });
             return;
         case 'uninstall':
-            await execute_uninstall(definition, paths);
+            await execute_uninstall({
+                definition,
+                paths,
+            });
             return;
     }
 }
@@ -114,7 +110,12 @@ async function execute_backup({
 }: {
     paths: ApplicationPaths;
     backup_config: ApplicationBackupConfig;
-    options: BackupOptions;
+    options: {
+        include_all: boolean;
+        include_timestamp: boolean;
+        custom_name?: string;
+        custom_directory?: string;
+    };
 }): Promise<BackupExecutionResult> {
     await ensure_directory(paths.main_directory);
 
@@ -147,31 +148,43 @@ async function execute_backup({
     return { file_path: created_backup, directory };
 }
 
-async function execute_restore(
-    definition: ApplicationDefinition,
-    paths: ApplicationPaths,
-    options: RestoreOptions,
-): Promise<string> {
+async function execute_restore({
+    definition,
+    paths,
+    options,
+}: {
+    definition: ApplicationDefinition;
+    paths: ApplicationPaths;
+    options: {
+        include_all: boolean;
+        include_timestamp: boolean;
+        custom_name?: string;
+        custom_directory?: string;
+        provided_path?: string | null;
+    };
+}): Promise<string> {
     await ensure_directory(paths.main_directory);
 
     const fallback_directory = definition.backup.fallback_directory
         ? definition.backup.fallback_directory(paths)
         : undefined;
 
+    const { include_timestamp, custom_name, custom_directory, provided_path } = options;
+
     const { directory: backup_directory } = await resolve_backup_destination({
         base_name:
-            options.custom_name && options.custom_name.length > 0
-                ? options.custom_name
+            custom_name && custom_name.length > 0
+                ? custom_name
                 : definition.backup.default_base_name,
-        custom_directory: options.custom_directory,
+        custom_directory,
         fallback_directory,
         environment_variable: definition.backup.environment_variable,
         suffixes: [],
-        include_timestamp: options.include_timestamp,
+        include_timestamp,
     });
 
     const restore_result = await resolve_restore_file({
-        provided_path: options.provided_path,
+        provided_path,
         backup_directory,
     });
 
@@ -179,10 +192,12 @@ async function execute_restore(
         log.info(
             `Restoring ${definition.name} from ${restore_result.file_path} to ${paths.main_directory}`,
         );
+
         await restore_backup_archive({
             archive_path: restore_result.file_path,
             target_directory: paths.main_directory,
         });
+
         log.success('Restore completed');
 
         console.log(restore_result.file_path);
@@ -217,17 +232,19 @@ async function execute_restore(
     throw new Error('No backup file specified for restore.');
 }
 
-type InstallOptions = {
-    include_all: boolean;
-    custom_name?: string;
-    custom_directory?: string;
-};
-
-async function execute_install(
-    definition: ApplicationDefinition,
-    paths: ApplicationPaths,
-    options: InstallOptions,
-): Promise<void> {
+async function execute_install({
+    definition,
+    paths,
+    options,
+}: {
+    definition: ApplicationDefinition;
+    paths: ApplicationPaths;
+    options: {
+        include_all: boolean;
+        custom_name?: string;
+        custom_directory?: string;
+    };
+}): Promise<void> {
     await ensure_directory(paths.main_directory);
     await ensure_directory(paths.install_directory);
 
@@ -308,10 +325,13 @@ async function execute_install(
     }
 }
 
-async function execute_uninstall(
-    definition: ApplicationDefinition,
-    paths: ApplicationPaths,
-): Promise<void> {
+async function execute_uninstall({
+    definition,
+    paths,
+}: {
+    definition: ApplicationDefinition;
+    paths: ApplicationPaths;
+}): Promise<void> {
     const config = definition.uninstall;
 
     if (config?.directories) {
