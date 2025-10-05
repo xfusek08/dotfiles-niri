@@ -11,7 +11,6 @@ export default async function restore_backup_archive({
     target_directory,
 }: RestoreBackupArchiveOptions): Promise<void> {
     await ensure_directory(target_directory);
-
     await extract_archive({
         archive_path,
         output_directory: target_directory,

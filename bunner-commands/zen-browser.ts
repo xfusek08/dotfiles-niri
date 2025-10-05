@@ -8,6 +8,7 @@ import type {
     UninstallTarget,
 } from './lib/applications/types';
 import type { DesktopEntryOptions } from './lib/functions/create_desktop_entry';
+import { homedir } from 'node:os';
 
 function build_desktop_entry_options(paths: ApplicationPaths): DesktopEntryOptions {
     const exec_path = paths.executable_link;
@@ -250,9 +251,9 @@ export default defineCommand({
 
         log.info(`Executing ${mode} for ${zen_browser_definition.name}`);
 
-        await manage_application({
+        await manage_application(mode, {
             definition: zen_browser_definition,
-            mode,
+            paths: zen_browser_definition.resolve_paths(process.env.HOME ?? homedir()),
             include_all: options.all ?? false,
             include_timestamp: options.timestamp ?? false,
             custom_name: options.name,

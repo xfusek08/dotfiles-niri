@@ -1,13 +1,14 @@
 import { rm } from 'node:fs/promises';
 import { homedir } from 'node:os';
-import { basename, dirname } from 'node:path';
+import { basename, dirname, isAbsolute, join } from 'node:path';
 
-import { isEmpty, log } from 'bunner/framework';
+import { isEmpty, isNotNil, log } from 'bunner/framework';
 
 import attempt_restore_installation from '../functions/attempt_restore_installation';
 import create_zip_backup from '../functions/create_zip_backup';
-import resolve_backup_destination from '../functions/resolve_backup_destination';
-import resolve_restore_file from '../functions/resolve_restore_file';
+import resolve_backup_destination, {
+    ResolveBackupDestinationOptions,
+} from '../functions/resolve_backup_destination';
 import restore_backup_archive from '../functions/restore_backup_archive';
 import delete_recursively from '../functions/delete_recursively';
 import directory_is_empty from '../functions/directory_is_empty';
@@ -20,17 +21,13 @@ import prepare_installation_directory from '../functions/prepare_installation_di
 import register_executable_link from '../functions/register_executable_link';
 import setup_desktop_entry from '../functions/setup_desktop_entry';
 import type { ApplicationDefinition, ApplicationPaths, UninstallTarget } from './types';
+import async_find from 'lib/functions/async_find';
+import list_backup_files from 'lib/functions/list_backup_files';
+import directory_has_contents from 'lib/functions/directory_has_contents';
+import backup_existing_directory from 'lib/functions/backup_existing_directory';
+import build_timestamp from 'lib/functions/build_timestamp';
 
 export type ApplicationCommandMode = 'install' | 'backup' | 'restore' | 'uninstall';
-
-export type ApplicationCommandParameters = {
-    mode: ApplicationCommandMode;
-    include_all?: boolean;
-    include_timestamp?: boolean;
-    custom_name?: string;
-    custom_directory?: string;
-    restore_file?: string | null;
-};
 
 type BackupExecutionResult = {
     file_path: string;
@@ -40,9 +37,6 @@ type BackupExecutionResult = {
 type ManageContext = {
     definition: ApplicationDefinition;
     paths: ApplicationPaths;
-};
-
-type NormalizedParameters = {
     include_all: boolean;
     include_timestamp: boolean;
     custom_name?: string;
@@ -50,123 +44,35 @@ type NormalizedParameters = {
     restore_file?: string | null;
 };
 
-type ModeHandlerArgs = {
-    context: ManageContext;
-    parameters: NormalizedParameters;
-};
-
-type ModeHandler = (args: ModeHandlerArgs) => Promise<void>;
-
-const modeHandlers: Record<ApplicationCommandMode, ModeHandler> = {
-    backup: async ({ context, parameters }) => {
-        const { include_all, include_timestamp, custom_name, custom_directory } = parameters;
-        await execute_backup({
-            context,
-            options: {
-                include_all,
-                include_timestamp,
-                custom_name,
-                custom_directory,
-            },
-        });
-    },
-    restore: async ({ context, parameters }) => {
-        const { include_all, include_timestamp, custom_name, custom_directory, restore_file } =
-            parameters;
-
-        await execute_restore({
-            context,
-            options: {
-                include_all,
-                include_timestamp,
-                custom_name,
-                custom_directory,
-                provided_path: restore_file,
-            },
-        });
-    },
-    install: async ({ context, parameters }) => {
-        const { include_all, custom_name, custom_directory } = parameters;
-        await execute_install({
-            context,
-            options: {
-                include_all,
-                custom_name,
-                custom_directory,
-            },
-        });
-    },
-    uninstall: async ({ context }) => {
-        await execute_uninstall({
-            context,
-        });
-    },
-};
-
-export async function manage_application({
-    definition,
-    mode,
-    include_all = false,
-    include_timestamp = false,
-    custom_name,
-    custom_directory,
-    restore_file,
-}: {
-    definition: ApplicationDefinition;
-} & ApplicationCommandParameters): Promise<void> {
-    const home_directory = process.env.HOME ?? homedir();
-    const paths = definition.resolve_paths(home_directory);
-    const handler = modeHandlers[mode];
-
-    const parameters: NormalizedParameters = {
-        include_all,
-        include_timestamp,
-        custom_name,
-        custom_directory,
-        restore_file,
-    };
-
-    await handler({
-        context: { definition, paths },
-        parameters,
-    });
+export async function manage_application(
+    mode: ApplicationCommandMode,
+    context: ManageContext,
+): Promise<void> {
+    switch (mode) {
+        case 'install':
+            await execute_install(context);
+            break;
+        case 'backup':
+            await execute_backup(context);
+            break;
+        case 'restore':
+            await execute_restore(context);
+            break;
+        case 'uninstall':
+            await execute_uninstall(context);
+            break;
+    }
 }
 
-async function execute_backup({
-    context: { definition, paths },
-    options: { include_all, custom_name, custom_directory, include_timestamp },
-}: {
-    context: ManageContext;
-    options: {
-        include_all: boolean;
-        include_timestamp: boolean;
-        custom_name?: string;
-        custom_directory?: string;
-    };
-}): Promise<BackupExecutionResult> {
-    await ensure_directory(paths.main_directory);
+async function execute_backup(context: ManageContext): Promise<BackupExecutionResult> {
+    const { definition, paths, include_all } = context;
+    const { exclude_patterns } = definition.backup;
 
-    const {
-        default_base_name,
-        include_all_suffix,
-        environment_variable,
-        exclude_patterns,
-        fallback_directory,
-    } = definition.backup;
-
-    const suffixes: string[] = [];
-    if (include_all && include_all_suffix) {
-        suffixes.push(include_all_suffix);
+    if (!(await is_directory(paths.main_directory))) {
+        throw new Error(`No installation found at ${paths.main_directory} to be backed up.`);
     }
 
-    const { file_path, directory } = await resolve_backup_destination({
-        base_name: !isEmpty(custom_name) ? custom_name : default_base_name,
-        custom_directory,
-        environment_variable,
-        suffixes,
-        include_timestamp,
-        fallback_directory: fallback_directory?.(paths),
-    });
+    const { file_path, directory } = await resolve_backup_directory_from_backup_definition(context);
 
     log.info(`Creating backup from ${paths.main_directory}`);
 
@@ -183,128 +89,74 @@ async function execute_backup({
     return { file_path: created_backup, directory };
 }
 
-async function execute_restore({
-    context: { definition, paths },
-    options,
-}: {
-    context: ManageContext;
-    options: {
-        include_all: boolean;
-        include_timestamp: boolean;
-        custom_name?: string;
-        custom_directory?: string;
-        provided_path?: string | null;
-    };
-}): Promise<string> {
+async function execute_restore(context: ManageContext): Promise<string> {
+    const { paths, definition, restore_file } = context;
+
     await ensure_directory(paths.main_directory);
 
-    const fallback_directory = definition.backup.fallback_directory
-        ? definition.backup.fallback_directory(paths)
-        : undefined;
+    const { directory: backup_directory } =
+        await resolve_backup_directory_from_backup_definition(context);
 
-    const { include_timestamp, custom_name, custom_directory, provided_path } = options;
-
-    const { directory: backup_directory } = await resolve_backup_destination({
-        base_name:
-            custom_name && custom_name.length > 0
-                ? custom_name
-                : definition.backup.default_base_name,
-        custom_directory,
-        fallback_directory,
-        environment_variable: definition.backup.environment_variable,
-        suffixes: [],
-        include_timestamp,
-    });
-
-    const restore_result = await resolve_restore_file({
-        provided_path,
-        backup_directory,
-    });
-
-    if (restore_result.status === 'found') {
-        log.info(
-            `Restoring ${definition.name} from ${restore_result.file_path} to ${paths.main_directory}`,
-        );
-
-        await restore_backup_archive({
-            archive_path: restore_result.file_path,
-            target_directory: paths.main_directory,
+    const pretty_fail = async () => {
+        const available_backups = await list_backup_files({
+            directory: backup_directory,
+            extension: '.zip',
         });
 
-        log.success('Restore completed');
-
-        console.log(restore_result.file_path);
-
-        return restore_result.file_path;
-    }
-
-    const { available_backups, requested_path, reason } = restore_result;
-
-    if (requested_path) {
-        log.error(`No backup file found at ${requested_path}`);
-    }
-
-    if (available_backups.length > 0) {
-        log.info(`Available backups in ${backup_directory}:`);
-        for (const backup of available_backups) {
-            log.info(`  ${basename(backup)}`);
+        if (!isEmpty(available_backups.length)) {
+            log.info(`Available backups in ${backup_directory}:`);
+            for (const backup of available_backups) {
+                log.info(`  ${basename(backup)}`);
+            }
+            log.info(`Use \`${definition.id} --restore <file>\` to restore a specific backup.`);
+        } else {
+            log.error('No backup files found. Create a backup before attempting a restore.');
         }
-        log.info(`Use \`${definition.id} --restore <file>\` to restore a specific backup.`);
-    } else if (reason === 'no-backups') {
-        log.error('No backup files found. Create a backup before attempting a restore.');
+
+        return new Error(
+            `No valid backup file specified for restore. Requested: "${restore_file}"`,
+        );
+    };
+
+    const trimmed_restore_path = restore_file?.trim();
+    if (isEmpty(trimmed_restore_path)) {
+        throw await pretty_fail();
     }
 
-    if (reason === 'missing') {
-        throw new Error(`Cannot restore because backup file ${requested_path} does not exist.`);
+    const candidates = [trimmed_restore_path];
+
+    if (!isAbsolute(trimmed_restore_path)) {
+        candidates.push(join(backup_directory, trimmed_restore_path));
     }
 
-    if (reason === 'no-backups') {
-        throw new Error('No backup files available to restore.');
+    const restore_file_path = await async_find(candidates, (c) => path_exists(c));
+    if (isEmpty(restore_file_path)) {
+        throw await pretty_fail();
     }
 
-    throw new Error('No backup file specified for restore.');
+    log.info(`Restoring ${definition.name} from ${restore_file_path} to ${paths.main_directory}`);
+
+    await restore_backup_archive({
+        archive_path: restore_file_path,
+        target_directory: paths.main_directory,
+    });
+
+    log.success(`Restore completed: ${restore_file_path}`);
+
+    return restore_file_path;
 }
 
-async function execute_install({
-    context,
-    options,
-}: {
-    context: ManageContext;
-    options: {
-        include_all: boolean;
-        custom_name?: string;
-        custom_directory?: string;
-    };
-}): Promise<void> {
+async function execute_install(context: ManageContext): Promise<void> {
     const { definition, paths } = context;
     await ensure_directory(paths.main_directory);
     await ensure_directory(paths.install_directory);
 
     let last_backup: BackupExecutionResult | undefined;
 
-    const backup_result = await prepare_installation_directory({
-        directory: paths.install_directory,
-        product_name: `${definition.name} installation`,
-        create_backup: async () => {
-            const backup_name =
-                options.custom_name && options.custom_name.length > 0
-                    ? options.custom_name
-                    : (definition.install?.pre_install_backup_name ??
-                      definition.backup.default_base_name);
-
-            last_backup = await execute_backup({
-                context,
-                options: {
-                    include_all: options.include_all,
-                    include_timestamp: true,
-                    custom_name: backup_name,
-                    custom_directory: options.custom_directory,
-                },
-            });
-
-            return last_backup.file_path;
-        },
-    });
+    let backup_result: BackupExecutionResult | undefined;
+    if (await directory_has_contents(paths.main_directory)) {
+        backup_result = await execute_backup(context);
+    }
 
     try {
         await install_release_from_github({
@@ -363,64 +215,101 @@ async function execute_uninstall({
 }): Promise<void> {
     const config = definition.uninstall;
 
-    await processUninstallTargets({
-        targets: config?.directories?.(paths),
-        exists: is_directory,
-        remove: async (path) => {
-            await delete_recursively(path);
+    const uninstall_tasks: Array<{
+        targets?: UninstallTarget[];
+        exists: (path: string) => Promise<boolean>;
+        remove: (path: string) => Promise<void>;
+        message: (path: string) => string;
+    }> = [
+        {
+            targets: config?.directories?.(paths),
+            exists: is_directory,
+            remove: async (path: string) => {
+                await delete_recursively(path);
+            },
+            message: (path: string) => `Removing directory ${path}`,
         },
-        defaultMessage: (path) => `Removing directory ${path}`,
-    });
+        {
+            targets: config?.symlinks?.(paths),
+            exists: is_symlink,
+            remove: async (path: string) => {
+                await rm(path, { force: true });
+            },
+            message: (path: string) => `Removing symlink ${path}`,
+        },
+        {
+            targets: config?.files?.(paths),
+            exists: path_exists,
+            remove: async (path: string) => {
+                await rm(path, { force: true });
+            },
+            message: (path: string) => `Removing file ${path}`,
+        },
+        {
+            targets: config?.empty_directories?.(paths),
+            exists: async (path: string) =>
+                (await is_directory(path)) && (await directory_is_empty(path)),
+            remove: async (path: string) => {
+                await delete_recursively(path);
+            },
+            message: (path: string) => `Removing empty directory ${path}`,
+        },
+    ];
 
-    await processUninstallTargets({
-        targets: config?.symlinks?.(paths),
-        exists: is_symlink,
-        remove: (path) => rm(path, { force: true }),
-        defaultMessage: (path) => `Removing symlink ${path}`,
-    });
+    for (const { targets, exists, remove, message } of uninstall_tasks) {
+        if (!targets) {
+            continue;
+        }
 
-    await processUninstallTargets({
-        targets: config?.files?.(paths),
-        exists: path_exists,
-        remove: (path) => rm(path, { force: true }),
-        defaultMessage: (path) => `Removing file ${path}`,
-    });
+        for (const target of targets) {
+            if (await exists(target.path)) {
+                log.info(target.description ?? message(target.path));
+                await remove(target.path);
+            }
+        }
+    }
 
     if (config?.extra_steps) {
         await config.extra_steps(paths);
     }
 
-    await processUninstallTargets({
-        targets: config?.empty_directories?.(paths),
-        exists: async (path) => (await is_directory(path)) && (await directory_is_empty(path)),
-        remove: async (path) => {
-            await delete_recursively(path);
-        },
-        defaultMessage: (path) => `Removing empty directory ${path}`,
-    });
-
     log.success(`${definition.name} uninstallation completed`);
 }
 
-async function processUninstallTargets({
-    targets,
-    exists,
-    remove,
-    defaultMessage,
-}: {
-    targets?: UninstallTarget[];
-    exists: (path: string) => Promise<boolean>;
-    remove: (path: string) => Promise<void>;
-    defaultMessage: (path: string) => string;
-}): Promise<void> {
-    if (!targets || targets.length === 0) {
-        return;
+async function resolve_backup_directory_from_backup_definition({
+    definition,
+    include_timestamp,
+    custom_name,
+    custom_directory,
+    include_all,
+}: ManageContext) {
+    const { include_all_suffix } = definition.backup;
+
+    const suffixes: string[] = [];
+
+    if (include_all && include_all_suffix) {
+        suffixes.push(include_all_suffix);
     }
 
-    for (const target of targets) {
-        if (await exists(target.path)) {
-            log.info(target.description ?? defaultMessage(target.path));
-            await remove(target.path);
-        }
+    const env_directory = definition.backup.environment_variable
+        ? process.env[definition.backup.environment_variable]
+        : undefined;
+
+    const directory = [custom_directory, env_directory].find((value) => isNotNil(value));
+    if (!directory) {
+        throw new Error('No backup directory specified or configured.');
     }
+
+    await ensure_directory(directory);
+
+    const suffix_list = [...suffixes];
+    if (include_timestamp) {
+        suffix_list.push(build_timestamp());
+    }
+
+    const base_name = !isEmpty(custom_name) ? custom_name : definition.backup.default_base_name;
+    const suffix = suffix_list.length > 0 ? `-${suffix_list.join('-')}` : '';
+    const file_path = join(directory, `${base_name}${suffix}.zip`);
+
+    return { directory, file_path };
 }

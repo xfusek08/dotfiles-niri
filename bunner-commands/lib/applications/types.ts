@@ -4,19 +4,16 @@ export type ApplicationPaths = {
     home_directory: string;
     main_directory: string;
     install_directory: string;
-    executable_link?: string;
-    executable_target?: string;
-    desktop_directory?: string;
-    desktop_file?: string;
-    icon_path?: string;
-    cache_directories?: string[];
-    profile_directories?: string[];
+    executable_link: string;
+    executable_target: string;
+    desktop_directory: string;
+    desktop_file: string;
+    icon_path: string;
 };
 
 export type ApplicationBackupConfig = {
     default_base_name: string;
     environment_variable?: string;
-    fallback_directory?: (paths: ApplicationPaths) => string | undefined;
     exclude_patterns?: string[];
     include_all_suffix?: string;
 };
@@ -44,9 +41,7 @@ export type ApplicationDefinition = {
     repo: string;
     asset_pattern: string;
     resolve_paths: (home_directory: string) => ApplicationPaths;
-    build_desktop_entry_options?: (
-        paths: ApplicationPaths,
-    ) => DesktopEntryOptions | undefined;
+    build_desktop_entry_options?: (paths: ApplicationPaths) => DesktopEntryOptions | undefined;
     backup: ApplicationBackupConfig;
     install?: ApplicationInstallConfig;
     uninstall?: ApplicationUninstallConfig;
