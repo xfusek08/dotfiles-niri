@@ -5,7 +5,6 @@ export const zen_browser_config: AppConfig = {
     name: 'Zen Browser',
     repository: 'zen-browser/desktop',
     asset_pattern: 'linux-x86_64.tar.xz',
-    backup_command: 'zen-browser-backup',
     paths: {
         main_directory: '$HOME/.zen',
         install_directory: '$HOME/.zen/zen',

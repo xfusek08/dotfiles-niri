@@ -1,12 +1,15 @@
-import { spawn } from 'bun';
+import { $ } from 'bunner/framework';
 import { log } from 'bunner/framework';
-import { dirname, resolve as resolve_path } from 'node:path';
+import { dirname, join, resolve as resolve_path } from 'node:path';
 import { readdir, symlink, unlink, writeFile } from 'node:fs/promises';
 
+import create_zip_archive from './functions/create_zip_archive';
 import delete_recursively from './functions/delete_recursively';
 import download_and_extract_archive from './functions/download_and_extract_archive';
 import ensure_directory from './functions/ensure_directory';
+import extract_archive from './functions/extract_archive';
 import get_latest_github_release_asset_url from './functions/get_latest_github_release_asset_url';
+import is_directory from './functions/is_directory';
 
 export type DesktopEntryConfig = {
     version: string;
@@ -48,27 +51,22 @@ export type AppConfig = {
     name: string;
     repository: string;
     asset_pattern: string;
-    backup_command: string;
     paths: AppPathsConfig;
     backup: BackupConfig;
     desktop_entry: DesktopEntryConfig;
-};
-
-type RunCommandParams = {
-    command: string;
-    args: string[];
-    env?: Record<string, string | undefined>;
 };
 
 type BackupParams = {
     config: AppConfig;
     backup_name?: string;
     use_timestamp?: boolean;
+    backup_all?: boolean;
+    custom_backup_dir?: string;
 };
 
 type RestoreParams = {
     config: AppConfig;
-    backup_file?: string;
+    backup_file: string;
 };
 
 type UninstallParams = {
@@ -78,32 +76,6 @@ type UninstallParams = {
 type InstallParams = {
     config: AppConfig;
 };
-
-async function run_command_capture({ command, args, env }: RunCommandParams): Promise<string> {
-    const merged_env = env ? { ...process.env, ...env } : undefined;
-    const spawned_process = spawn({
-        cmd: [command, ...args],
-        env: merged_env,
-        stdout: 'pipe',
-        stderr: 'pipe',
-        stdin: 'inherit',
-    });
-
-    const stdout_response = new Response(spawned_process.stdout);
-    const stderr_response = new Response(spawned_process.stderr);
-    const [stdout_text, stderr_text, exit_code] = await Promise.all([
-        stdout_response.text(),
-        stderr_response.text(),
-        spawned_process.exited,
-    ]);
-
-    if (exit_code !== 0) {
-        log.error(stderr_text.trim());
-        throw new Error(`Command failed (${command}): exit code ${exit_code}`);
-    }
-
-    return stdout_text.trim();
-}
 
 function expand_env_variables(value: string): string {
     const home_resolved = value.startsWith('~')
@@ -189,6 +161,137 @@ async function create_symlink({ source, link }: { source: string; link: string }
     await symlink(source, link);
 }
 
+function get_backup_directory(config: AppConfig, custom_backup_dir?: string): string {
+    if (custom_backup_dir) {
+        return resolve_path_value(custom_backup_dir);
+    }
+
+    const env_var = config.backup.environment_variable;
+    if (env_var && process.env[env_var]) {
+        return resolve_path_value(process.env[env_var]!);
+    }
+
+    throw new Error(
+        `No backup directory specified. Either set ${env_var ?? 'backup environment variable'} or provide custom_backup_dir`,
+    );
+}
+
+function generate_backup_filename({
+    config,
+    backup_name,
+    use_timestamp,
+    backup_all,
+}: {
+    config: AppConfig;
+    backup_name?: string;
+    use_timestamp?: boolean;
+    backup_all?: boolean;
+}): string {
+    const base_name = backup_name ?? config.backup.default_base_name;
+    const parts: string[] = [base_name];
+
+    if (backup_all && config.backup.include_all_suffix) {
+        parts.push(config.backup.include_all_suffix);
+    }
+
+    if (use_timestamp) {
+        const now = new Date();
+        const timestamp = now
+            .toISOString()
+            .replace('T', ':')
+            .replace(/\.\d+Z$/, '')
+            .replace(/[-:]/g, ':');
+        parts.push(timestamp);
+    }
+
+    return `${parts.join('-')}.zip`;
+}
+
+async function list_backup_files(backup_dir: string): Promise<string[]> {
+    if (!(await is_directory(backup_dir))) {
+        return [];
+    }
+
+    const entries = await readdir(backup_dir, { withFileTypes: true });
+    return entries
+        .filter((entry) => entry.isFile() && entry.name.endsWith('.zip'))
+        .map((entry) => join(backup_dir, entry.name));
+}
+
+export async function backup({
+    config,
+    backup_name,
+    use_timestamp = false,
+    backup_all = false,
+    custom_backup_dir,
+}: BackupParams): Promise<string> {
+    log.info(`Creating backup for ${config.name}`);
+
+    const backup_dir = get_backup_directory(config, custom_backup_dir);
+    await ensure_directory(backup_dir);
+
+    const filename = generate_backup_filename({
+        config,
+        backup_name,
+        use_timestamp,
+        backup_all,
+    });
+
+    const backup_file = join(backup_dir, filename);
+    const main_directory = resolve_path_value(config.paths.main_directory);
+
+    log.info(`Backing up ${main_directory} to ${backup_file}`);
+
+    const exclude_patterns = backup_all ? [] : config.backup.exclude_patterns;
+
+    await create_zip_archive({
+        source_directory: main_directory,
+        output_file: backup_file,
+        exclude_patterns,
+    });
+
+    log.success(`Backup completed: ${backup_file}`);
+    return backup_file;
+}
+
+export async function restore({ config, backup_file }: RestoreParams): Promise<void> {
+    log.info(`Restoring backup for ${config.name}`);
+
+    const resolved_backup_file = resolve_path_value(backup_file);
+    const main_directory = resolve_path_value(config.paths.main_directory);
+
+    // Check if backup file exists
+    const file_exists = await Bun.file(resolved_backup_file).exists();
+    if (!file_exists) {
+        // Try to find available backups
+        const backup_dir = get_backup_directory(config);
+        const available_backups = await list_backup_files(backup_dir);
+
+        if (available_backups.length === 0) {
+            throw new Error(
+                `No backup file found at ${resolved_backup_file} and no backups available in ${backup_dir}`,
+            );
+        }
+
+        log.error(`Backup file not found: ${resolved_backup_file}`);
+        log.info(`Available backups in ${backup_dir}:`);
+        available_backups.forEach((file) => log.info(`  ${file}`));
+
+        throw new Error(`Backup file not found: ${resolved_backup_file}`);
+    }
+
+    log.info(`Restoring from ${resolved_backup_file} to ${main_directory}`);
+
+    await ensure_directory(main_directory);
+
+    await extract_archive({
+        archive_path: resolved_backup_file,
+        output_directory: main_directory,
+    });
+
+    log.success(`Restore completed from ${resolved_backup_file}`);
+}
+
 function collect_command_env(config: AppConfig): Record<string, string | undefined> | undefined {
     if (!config.backup.environment_variable) {
         return undefined;
@@ -197,49 +300,6 @@ function collect_command_env(config: AppConfig): Record<string, string | undefin
     return {
         [config.backup.environment_variable]: process.env[config.backup.environment_variable],
     };
-}
-
-export async function backup({
-    config,
-    backup_name,
-    use_timestamp = false,
-}: BackupParams): Promise<string> {
-    log.info(`Creating backup for ${config.name}`);
-    const args: string[] = [];
-
-    if (use_timestamp) {
-        args.push('-t');
-    }
-
-    if (backup_name) {
-        args.push('-n', backup_name);
-    }
-
-    const output = await run_command_capture({
-        command: config.backup_command,
-        args,
-        env: collect_command_env(config),
-    });
-
-    log.success(`Backup completed: ${output}`);
-    return output;
-}
-
-export async function restore({ config, backup_file }: RestoreParams): Promise<string> {
-    log.info(`Restoring backup for ${config.name}`);
-    const args = ['-r'];
-    if (backup_file) {
-        args.push(backup_file);
-    }
-
-    const output = await run_command_capture({
-        command: config.backup_command,
-        args,
-        env: collect_command_env(config),
-    });
-
-    log.success(`Restore completed`);
-    return output;
 }
 
 export async function uninstall({ config }: UninstallParams): Promise<void> {
