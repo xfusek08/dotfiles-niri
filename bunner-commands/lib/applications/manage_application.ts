@@ -19,17 +19,9 @@ import path_exists from '../functions/path_exists';
 import prepare_installation_directory from '../functions/prepare_installation_directory';
 import register_executable_link from '../functions/register_executable_link';
 import setup_desktop_entry from '../functions/setup_desktop_entry';
-import type {
-    ApplicationBackupConfig,
-    ApplicationDefinition,
-    ApplicationPaths,
-} from './types';
+import type { ApplicationBackupConfig, ApplicationDefinition, ApplicationPaths } from './types';
 
-export type ApplicationCommandMode =
-    | 'install'
-    | 'backup'
-    | 'restore'
-    | 'uninstall';
+export type ApplicationCommandMode = 'install' | 'backup' | 'restore' | 'uninstall';
 
 export type ApplicationCommandParameters = {
     mode: ApplicationCommandMode;
@@ -78,12 +70,16 @@ export async function manage_application(
 
     switch (mode) {
         case 'backup':
-            await execute_backup(definition.backup, paths, {
-                include_all: include_all ?? false,
-                include_timestamp,
-                custom_name,
-                custom_directory,
-                emit_console_output: true,
+            await execute_backup({
+                paths,
+                backup_config: definition.backup,
+                options: {
+                    include_all: include_all ?? false,
+                    include_timestamp,
+                    custom_name,
+                    custom_directory,
+                    emit_console_output: true,
+                },
             });
             return;
         case 'restore':
@@ -109,22 +105,21 @@ export async function manage_application(
     }
 }
 
-async function execute_backup(
-    {
+async function execute_backup({
+    backup_config: {
         default_base_name,
         include_all_suffix,
         environment_variable,
         exclude_patterns,
         fallback_directory,
-    }: ApplicationBackupConfig,
-    paths: ApplicationPaths,
-    {
-        include_all,
-        custom_name,
-        custom_directory,
-        include_timestamp,
-    }: BackupOptions,
-): Promise<BackupExecutionResult> {
+    },
+    options: { include_all, custom_name, custom_directory, include_timestamp },
+    paths,
+}: {
+    paths: ApplicationPaths;
+    backup_config: ApplicationBackupConfig;
+    options: BackupOptions;
+}): Promise<BackupExecutionResult> {
     await ensure_directory(paths.main_directory);
 
     const suffixes: string[] = [];
@@ -209,19 +204,13 @@ async function execute_restore(
         for (const backup of available_backups) {
             log.info(`  ${basename(backup)}`);
         }
-        log.info(
-            `Use \`${definition.id} --restore <file>\` to restore a specific backup.`,
-        );
+        log.info(`Use \`${definition.id} --restore <file>\` to restore a specific backup.`);
     } else if (reason === 'no-backups') {
-        log.error(
-            'No backup files found. Create a backup before attempting a restore.',
-        );
+        log.error('No backup files found. Create a backup before attempting a restore.');
     }
 
     if (reason === 'missing') {
-        throw new Error(
-            `Cannot restore because backup file ${requested_path} does not exist.`,
-        );
+        throw new Error(`Cannot restore because backup file ${requested_path} does not exist.`);
     }
 
     if (reason === 'no-backups') {
@@ -257,12 +246,16 @@ async function execute_install(
                     : (definition.install?.pre_install_backup_name ??
                       definition.backup.default_base_name);
 
-            last_backup = await execute_backup(definition.backup, paths, {
-                include_all: options.include_all,
-                include_timestamp: true,
-                custom_name: backup_name,
-                custom_directory: options.custom_directory,
-                emit_console_output: false,
+            last_backup = await execute_backup({
+                backup_config: definition.backup,
+                paths,
+                options: {
+                    include_all: options.include_all,
+                    include_timestamp: true,
+                    custom_name: backup_name,
+                    custom_directory: options.custom_directory,
+                    emit_console_output: false,
+                },
             });
 
             return last_backup.file_path;
@@ -282,14 +275,12 @@ async function execute_install(
                 directory: dirname(paths.executable_link),
                 link_path: paths.executable_link,
                 target_path: paths.executable_target,
-                binary_name:
-                    definition.binary_name ?? `${definition.name} executable`,
+                binary_name: definition.binary_name ?? `${definition.name} executable`,
             });
         }
 
         if (definition.build_desktop_entry_options && paths.desktop_file) {
-            const options_descriptor =
-                definition.build_desktop_entry_options(paths);
+            const options_descriptor = definition.build_desktop_entry_options(paths);
             if (options_descriptor && paths.desktop_directory) {
                 await setup_desktop_entry({
                     directory: paths.desktop_directory,
@@ -372,10 +363,7 @@ async function execute_uninstall(
 
     if (config?.empty_directories) {
         for (const target of config.empty_directories(paths)) {
-            if (
-                (await is_directory(target.path)) &&
-                (await directory_is_empty(target.path))
-            ) {
+            if ((await is_directory(target.path)) && (await directory_is_empty(target.path))) {
                 if (target.description) {
                     log.info(target.description);
                 } else {
