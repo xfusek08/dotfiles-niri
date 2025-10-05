@@ -6,7 +6,7 @@ import log from '../../../vendor/bunner/framework/log';
 
 export type PrepareInstallationOptions = {
     directory: string;
-    create_backup: () => Promise<string>;
+    create_backup: () => Promise<string | void>;
     product_name?: string;
 };
 

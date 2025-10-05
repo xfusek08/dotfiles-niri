@@ -1,4 +1,4 @@
-import { defineCommand, $ } from 'bunner/framework';
+import { defineCommand } from 'bunner/framework';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import ensure_directory from './lib/functions/ensure_directory';
@@ -57,7 +57,7 @@ export default defineCommand({
     command: 'zen-browser-install',
     description:
         'Install or update the Zen Browser from the latest GitHub release',
-    action: async () => {
+    action: async ({ runCommand }) => {
         const homeDirectory = process.env.HOME ?? homedir();
         const mainDirectory = join(homeDirectory, '.zen');
         const installDirectory = join(mainDirectory, 'zen');
@@ -80,8 +80,13 @@ export default defineCommand({
 
         const backupResult = await prepare_installation_directory({
             directory: installDirectory,
-            create_backup: () =>
-                $`zen-browser-backup -t -n ${BACKUP_NAME}`.text(),
+            create_backup: async () => {
+                await runCommand('zen-browser-backup', [
+                    '-t',
+                    '-n',
+                    BACKUP_NAME,
+                ]);
+            },
             product_name: 'Zen installation',
         });
 
@@ -112,7 +117,9 @@ export default defineCommand({
             log.error((error as Error).message);
             await attempt_restore_installation({
                 should_restore: backupResult.created,
-                restore: () => $`zen-browser-backup -r`.text(),
+                restore: async () => {
+                    await runCommand('zen-browser-backup', ['-r']);
+                },
                 product_name: 'Zen installation',
             });
             throw error;

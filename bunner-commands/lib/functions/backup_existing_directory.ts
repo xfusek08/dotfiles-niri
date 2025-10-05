@@ -12,20 +12,24 @@ export default async function backup_existing_directory({
     create_backup,
 }: {
     directory: string;
-    create_backup: () => Promise<string>;
+    create_backup: () => Promise<string | void>;
 }): Promise<BackupResult> {
     if (!(await directory_has_contents(directory))) {
         return { created: false };
     }
 
     const rawOutput = await create_backup();
-    const trimmedOutput = rawOutput.trim();
+    const trimmedOutput =
+        typeof rawOutput === 'string' ? rawOutput.trim() : undefined;
 
     await delete_recursively(directory);
     await ensure_directory(directory);
 
     return {
         created: true,
-        output: trimmedOutput.length > 0 ? trimmedOutput : undefined,
+        output:
+            trimmedOutput && trimmedOutput.length > 0
+                ? trimmedOutput
+                : undefined,
     };
 }

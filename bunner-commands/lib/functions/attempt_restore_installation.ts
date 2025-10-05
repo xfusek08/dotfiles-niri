@@ -3,7 +3,7 @@ import log from '../../../vendor/bunner/framework/log';
 
 export type AttemptRestoreOptions = {
     should_restore: boolean;
-    restore: () => Promise<string>;
+    restore: () => Promise<string | void>;
     product_name?: string;
 };
 
