@@ -42,7 +42,6 @@ type BackupOptions = {
     include_timestamp: boolean;
     custom_name?: string;
     custom_directory?: string;
-    emit_console_output: boolean;
 };
 
 type RestoreOptions = {
@@ -51,7 +50,6 @@ type RestoreOptions = {
     custom_name?: string;
     custom_directory?: string;
     provided_path?: string | null;
-    emit_console_output: boolean;
 };
 
 export async function manage_application(
@@ -78,7 +76,6 @@ export async function manage_application(
                     include_timestamp,
                     custom_name,
                     custom_directory,
-                    emit_console_output: true,
                 },
             });
             return;
@@ -89,7 +86,6 @@ export async function manage_application(
                 custom_name,
                 custom_directory,
                 provided_path: restore_file,
-                emit_console_output: true,
             });
             return;
         case 'install':
@@ -188,9 +184,9 @@ async function execute_restore(
             target_directory: paths.main_directory,
         });
         log.success('Restore completed');
-        if (options.emit_console_output) {
-            console.log(restore_result.file_path);
-        }
+
+        console.log(restore_result.file_path);
+
         return restore_result.file_path;
     }
 
@@ -255,7 +251,6 @@ async function execute_install(
                     include_timestamp: true,
                     custom_name: backup_name,
                     custom_directory: options.custom_directory,
-                    emit_console_output: false,
                 },
             });
 
