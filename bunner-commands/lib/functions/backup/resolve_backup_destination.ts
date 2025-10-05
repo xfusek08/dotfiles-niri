@@ -3,15 +3,15 @@ import { join } from 'node:path';
 import ensure_directory from '../ensure_directory';
 
 export type ResolveBackupDestinationOptions = {
-    baseName: string;
-    customDirectory?: string;
-    fallbackDirectory?: string;
-    environmentVariable?: string;
+    base_name: string;
+    custom_directory?: string;
+    fallback_directory?: string;
+    environment_variable?: string;
     suffixes?: string[];
-    includeTimestamp?: boolean;
+    include_timestamp?: boolean;
 };
 
-function buildTimestamp(): string {
+function build_timestamp(): string {
     const now = new Date();
     const pad = (value: number) => String(value).padStart(2, '0');
 
@@ -26,29 +26,29 @@ function buildTimestamp(): string {
 }
 
 export default async function resolve_backup_destination({
-    baseName,
-    customDirectory,
-    fallbackDirectory,
-    environmentVariable,
+    base_name,
+    custom_directory,
+    fallback_directory,
+    environment_variable,
     suffixes = [],
-    includeTimestamp = false,
+    include_timestamp = false,
 }: ResolveBackupDestinationOptions): Promise<{
     directory: string;
-    filePath: string;
+    file_path: string;
 }> {
-    const envDirectory = environmentVariable
-        ? process.env[environmentVariable]
+    const env_directory = environment_variable
+        ? process.env[environment_variable]
         : undefined;
-    const candidateDirectories = [
-        customDirectory,
-        fallbackDirectory,
-        envDirectory,
+    const candidate_directories = [
+        custom_directory,
+        fallback_directory,
+        env_directory,
     ].filter(
         (value): value is string =>
             typeof value === 'string' && value.length > 0,
     );
 
-    const directory = candidateDirectories[0];
+    const directory = candidate_directories[0];
 
     if (!directory) {
         throw new Error(
@@ -58,13 +58,13 @@ export default async function resolve_backup_destination({
 
     await ensure_directory(directory);
 
-    const suffixList = [...suffixes];
-    if (includeTimestamp) {
-        suffixList.push(buildTimestamp());
+    const suffix_list = [...suffixes];
+    if (include_timestamp) {
+        suffix_list.push(build_timestamp());
     }
 
-    const suffix = suffixList.length > 0 ? `-${suffixList.join('-')}` : '';
-    const filePath = join(directory, `${baseName}${suffix}.zip`);
+    const suffix = suffix_list.length > 0 ? `-${suffix_list.join('-')}` : '';
+    const file_path = join(directory, `${base_name}${suffix}.zip`);
 
-    return { directory, filePath };
+    return { directory, file_path };
 }

@@ -5,15 +5,15 @@ import path_exists from '../path_exists';
 import { ProcessRunner } from 'bunner/modules/process/ProcessRunner';
 
 export type CreateZipBackupOptions = {
-    sourceDirectory: string;
-    destinationFile: string;
-    excludePatterns?: string[];
+    source_directory: string;
+    destination_file: string;
+    exclude_patterns?: string[];
 };
 
 export default async function create_zip_backup({
-    sourceDirectory,
-    destinationFile,
-    excludePatterns,
+    source_directory,
+    destination_file,
+    exclude_patterns,
 }: CreateZipBackupOptions): Promise<string> {
     const temporaryBackupPath = (
         await create_temporary_file('backup.XXXXXX.zip').text()
@@ -21,8 +21,8 @@ export default async function create_zip_backup({
 
     const command = ['zip', '-qr', temporaryBackupPath, '.'];
 
-    if (excludePatterns && excludePatterns.length > 0) {
-        for (const pattern of excludePatterns) {
+    if (exclude_patterns && exclude_patterns.length > 0) {
+        for (const pattern of exclude_patterns) {
             command.push('-x', pattern);
         }
     }
@@ -31,7 +31,7 @@ export default async function create_zip_backup({
         await ProcessRunner.run({
             cmd: command,
             spawnOptions: {
-                cwd: sourceDirectory,
+                cwd: source_directory,
             },
         });
     } catch (error) {
@@ -39,10 +39,10 @@ export default async function create_zip_backup({
         throw error;
     }
 
-    if (await path_exists(destinationFile)) {
-        await rm(destinationFile, { force: true });
+    if (await path_exists(destination_file)) {
+        await rm(destination_file, { force: true });
     }
 
-    await rename(temporaryBackupPath, destinationFile);
-    return destinationFile;
+    await rename(temporaryBackupPath, destination_file);
+    return destination_file;
 }

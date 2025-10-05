@@ -19,16 +19,16 @@ export default async function list_backup_files({
         return [];
     }
 
-    const normalizedExtension = extension.startsWith('.')
+    const normalized_extension = extension.startsWith('.')
         ? extension
         : `.${extension}`;
     const pattern =
-        normalizedExtension.length > 0 ? `*${normalizedExtension}` : '*';
+        normalized_extension.length > 0 ? `*${normalized_extension}` : '*';
 
     if (!recursive) {
         const entries = await readdir(directory);
         return entries
-            .filter((entry) => entry.endsWith(normalizedExtension))
+            .filter((entry) => entry.endsWith(normalized_extension))
             .map((entry) => join(directory, entry));
     }
 

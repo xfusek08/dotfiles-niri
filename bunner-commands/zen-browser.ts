@@ -1,7 +1,7 @@
 import { defineCommand, log } from 'bunner/framework';
 import { join } from 'node:path';
 
-import { manageApplication } from './lib/applications/manage_application';
+import { manage_application } from './lib/applications/manage_application';
 import type {
     ApplicationDefinition,
     ApplicationPaths,
@@ -9,11 +9,11 @@ import type {
 } from './lib/applications/types';
 import type { DesktopEntryOptions } from './lib/functions/create_desktop_entry';
 
-function buildDesktopEntryOptions(
+function build_desktop_entry_options(
     paths: ApplicationPaths,
 ): DesktopEntryOptions {
-    const execPath = paths.executableLink;
-    if (!execPath) {
+    const exec_path = paths.executable_link;
+    if (!exec_path) {
         throw new Error(
             'Executable link path is not defined for the application.',
         );
@@ -26,8 +26,8 @@ function buildDesktopEntryOptions(
             'Experience tranquillity while browsing the web without people tracking you!',
         genericName: 'Web Browser',
         keywords: ['Internet', 'WWW', 'Browser', 'Web', 'Explorer'],
-        exec: execPath,
-        icon: paths.iconPath,
+        exec: exec_path,
+        icon: paths.icon_path,
         terminal: false,
         type: 'Application',
         categories: ['GNOME', 'GTK', 'Network', 'WebBrowser'],
@@ -54,29 +54,29 @@ function buildDesktopEntryOptions(
     };
 }
 
-function uninstallDirectories(paths: ApplicationPaths): UninstallTarget[] {
+function uninstall_directories(paths: ApplicationPaths): UninstallTarget[] {
     const targets: UninstallTarget[] = [];
 
     targets.push({
-        path: paths.installDirectory,
+        path: paths.install_directory,
         description: 'Removing Zen installation directory',
     });
 
-    if (paths.cacheDirectories) {
-        for (const cacheDir of paths.cacheDirectories) {
+    if (paths.cache_directories) {
+        for (const cache_dir of paths.cache_directories) {
             targets.push({
-                path: cacheDir,
+                path: cache_dir,
                 description: 'Removing Zen cache directory',
             });
         }
     }
 
-    if (paths.profileDirectories) {
-        for (const profileDir of paths.profileDirectories) {
-            const sineConfigPath = join(profileDir, 'chrome/utils');
+    if (paths.profile_directories) {
+        for (const profile_dir of paths.profile_directories) {
+            const sine_config_path = join(profile_dir, 'chrome/utils');
             targets.push({
-                path: sineConfigPath,
-                description: `Removing Sine configuration from ${profileDir}`,
+                path: sine_config_path,
+                description: `Removing Sine configuration from ${profile_dir}`,
             });
         }
     }
@@ -84,93 +84,95 @@ function uninstallDirectories(paths: ApplicationPaths): UninstallTarget[] {
     return targets;
 }
 
-function uninstallSymlinks(paths: ApplicationPaths): UninstallTarget[] {
-    if (!paths.executableLink) {
+function uninstall_symlinks(paths: ApplicationPaths): UninstallTarget[] {
+    if (!paths.executable_link) {
         return [];
     }
     return [
         {
-            path: paths.executableLink,
+            path: paths.executable_link,
             description: 'Removing Zen executable link',
         },
     ];
 }
 
-function uninstallFiles(paths: ApplicationPaths): UninstallTarget[] {
-    if (!paths.desktopFile) {
+function uninstall_files(paths: ApplicationPaths): UninstallTarget[] {
+    if (!paths.desktop_file) {
         return [];
     }
     return [
         {
-            path: paths.desktopFile,
+            path: paths.desktop_file,
             description: 'Removing Zen desktop entry',
         },
     ];
 }
 
-function uninstallEmptyDirectories(paths: ApplicationPaths): UninstallTarget[] {
+function uninstall_empty_directories(
+    paths: ApplicationPaths,
+): UninstallTarget[] {
     return [
         {
-            path: paths.mainDirectory,
+            path: paths.main_directory,
             description: 'Removing empty Zen configuration directory',
         },
     ];
 }
 
-export const zenBrowserDefinition: ApplicationDefinition = {
+export const zen_browser_definition: ApplicationDefinition = {
     id: 'zen-browser',
     name: 'Zen Browser',
     repo: 'zen-browser/desktop',
-    assetPattern: 'linux-x86_64.tar.xz',
-    binaryName: 'Zen executable',
-    resolvePaths: (homeDirectory: string): ApplicationPaths => {
-        const mainDirectory = join(homeDirectory, '.zen');
-        const installDirectory = join(mainDirectory, 'zen');
-        const executableLink = join(homeDirectory, '.local/bin/zen');
-        const executableTarget = join(installDirectory, 'zen');
-        const desktopDirectory = join(
-            homeDirectory,
+    asset_pattern: 'linux-x86_64.tar.xz',
+    binary_name: 'Zen executable',
+    resolve_paths: (home_directory: string): ApplicationPaths => {
+        const main_directory = join(home_directory, '.zen');
+        const install_directory = join(main_directory, 'zen');
+        const executable_link = join(home_directory, '.local/bin/zen');
+        const executable_target = join(install_directory, 'zen');
+        const desktop_directory = join(
+            home_directory,
             '.local/share/applications',
         );
-        const desktopFile = join(desktopDirectory, 'zen.desktop');
-        const iconPath = join(
-            installDirectory,
+        const desktop_file = join(desktop_directory, 'zen.desktop');
+        const icon_path = join(
+            install_directory,
             'browser/chrome/icons/default/default128.png',
         );
-        const cacheDirectories = [join(homeDirectory, '.cache/zen')];
-        const profileDirectories = [
-            join(mainDirectory, 'zen-browser/profile'),
-            join(mainDirectory, 'profile'),
+        const cache_directories = [join(home_directory, '.cache/zen')];
+        const profile_directories = [
+            join(main_directory, 'zen-browser/profile'),
+            join(main_directory, 'profile'),
         ];
 
         return {
-            homeDirectory,
-            mainDirectory,
-            installDirectory,
-            executableLink,
-            executableTarget,
-            desktopDirectory,
-            desktopFile,
-            iconPath,
-            cacheDirectories,
-            profileDirectories,
+            home_directory,
+            main_directory,
+            install_directory,
+            executable_link,
+            executable_target,
+            desktop_directory,
+            desktop_file,
+            icon_path,
+            cache_directories,
+            profile_directories,
         };
     },
-    buildDesktopEntryOptions,
+    build_desktop_entry_options,
     backup: {
-        defaultBaseName: 'zen-browser-backup',
-        environmentVariable: 'SYNCED_BACKUP_DIR',
-        excludePatterns: ['zen/*', '*.tar.gz', '*.zip', '*/storage/**'],
-        includeAllSuffix: 'complete',
+        default_base_name: 'zen-browser-backup',
+        environment_variable: 'SYNCED_BACKUP_DIR',
+        exclude_patterns: ['zen/*', '*.tar.gz', '*.zip', '*/storage/**'],
+        include_all_suffix: 'complete',
     },
     install: {
-        preInstallBackupName: 'zen-browser-backup-before-installation',
+        pre_install_backup_name: 'zen-browser-backup-before-installation',
     },
     uninstall: {
-        directories: uninstallDirectories,
-        symlinks: uninstallSymlinks,
-        files: uninstallFiles,
-        emptyDirectories: uninstallEmptyDirectories,
+        directories: uninstall_directories,
+        symlinks: uninstall_symlinks,
+        files: uninstall_files,
+        empty_directories: uninstall_empty_directories,
     },
 };
 
@@ -234,45 +236,45 @@ export default defineCommand({
         },
     ] as const,
     action: async ({ args, options }) => {
-        const selectedModes: Array<
+        const selected_modes: Array<
             'install' | 'backup' | 'restore' | 'uninstall'
         > = [];
 
         if (options.install) {
-            selectedModes.push('install');
+            selected_modes.push('install');
         }
         if (options.backup) {
-            selectedModes.push('backup');
+            selected_modes.push('backup');
         }
         if (options.restore) {
-            selectedModes.push('restore');
+            selected_modes.push('restore');
         }
         if (options.uninstall) {
-            selectedModes.push('uninstall');
+            selected_modes.push('uninstall');
         }
 
-        if (selectedModes.length === 0) {
+        if (selected_modes.length === 0) {
             throw new Error(
                 'Specify an action: use --install, --backup, --restore, or --uninstall.',
             );
         }
 
-        if (selectedModes.length > 1) {
+        if (selected_modes.length > 1) {
             throw new Error('Please choose exactly one action at a time.');
         }
 
-        const mode = selectedModes[0];
-        const restorePath = args.getString(0);
+        const mode = selected_modes[0];
+        const restore_path = args.getString(0);
 
-        log.info(`Executing ${mode} for ${zenBrowserDefinition.name}`);
+        log.info(`Executing ${mode} for ${zen_browser_definition.name}`);
 
-        await manageApplication(zenBrowserDefinition, {
+        await manage_application(zen_browser_definition, {
             mode,
-            includeAll: options.all ?? false,
-            includeTimestamp: options.timestamp ?? false,
-            customName: options.name,
-            customDirectory: options['file-dir'],
-            restoreFile: restorePath,
+            include_all: options.all ?? false,
+            include_timestamp: options.timestamp ?? false,
+            custom_name: options.name,
+            custom_directory: options['file-dir'],
+            restore_file: restore_path,
         });
     },
 });

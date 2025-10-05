@@ -1,28 +1,28 @@
 import type { DesktopEntryOptions } from '../functions/create_desktop_entry';
 
 export type ApplicationPaths = {
-    homeDirectory: string;
-    mainDirectory: string;
-    installDirectory: string;
-    executableLink?: string;
-    executableTarget?: string;
-    desktopDirectory?: string;
-    desktopFile?: string;
-    iconPath?: string;
-    cacheDirectories?: string[];
-    profileDirectories?: string[];
+    home_directory: string;
+    main_directory: string;
+    install_directory: string;
+    executable_link?: string;
+    executable_target?: string;
+    desktop_directory?: string;
+    desktop_file?: string;
+    icon_path?: string;
+    cache_directories?: string[];
+    profile_directories?: string[];
 };
 
 export type ApplicationBackupConfig = {
-    defaultBaseName: string;
-    environmentVariable?: string;
-    fallbackDirectory?: (paths: ApplicationPaths) => string | undefined;
-    excludePatterns?: string[];
-    includeAllSuffix?: string;
+    default_base_name: string;
+    environment_variable?: string;
+    fallback_directory?: (paths: ApplicationPaths) => string | undefined;
+    exclude_patterns?: string[];
+    include_all_suffix?: string;
 };
 
 export type ApplicationInstallConfig = {
-    preInstallBackupName?: string;
+    pre_install_backup_name?: string;
 };
 
 export type UninstallTarget = {
@@ -34,21 +34,21 @@ export type ApplicationUninstallConfig = {
     directories?: (paths: ApplicationPaths) => UninstallTarget[];
     symlinks?: (paths: ApplicationPaths) => UninstallTarget[];
     files?: (paths: ApplicationPaths) => UninstallTarget[];
-    emptyDirectories?: (paths: ApplicationPaths) => UninstallTarget[];
-    extraSteps?: (paths: ApplicationPaths) => Promise<void>;
+    empty_directories?: (paths: ApplicationPaths) => UninstallTarget[];
+    extra_steps?: (paths: ApplicationPaths) => Promise<void>;
 };
 
 export type ApplicationDefinition = {
     id: string;
     name: string;
     repo: string;
-    assetPattern: string;
-    resolvePaths: (homeDirectory: string) => ApplicationPaths;
-    buildDesktopEntryOptions?: (
+    asset_pattern: string;
+    resolve_paths: (home_directory: string) => ApplicationPaths;
+    build_desktop_entry_options?: (
         paths: ApplicationPaths,
     ) => DesktopEntryOptions | undefined;
     backup: ApplicationBackupConfig;
     install?: ApplicationInstallConfig;
     uninstall?: ApplicationUninstallConfig;
-    binaryName?: string;
+    binary_name?: string;
 };
