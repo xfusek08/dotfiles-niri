@@ -19,7 +19,7 @@ import path_exists from '../functions/path_exists';
 import prepare_installation_directory from '../functions/prepare_installation_directory';
 import register_executable_link from '../functions/register_executable_link';
 import setup_desktop_entry from '../functions/setup_desktop_entry';
-import type { ApplicationBackupConfig, ApplicationDefinition, ApplicationPaths } from './types';
+import type { ApplicationDefinition, ApplicationPaths, UninstallTarget } from './types';
 
 export type ApplicationCommandMode = 'install' | 'backup' | 'restore' | 'uninstall';
 
@@ -37,6 +37,72 @@ type BackupExecutionResult = {
     directory: string;
 };
 
+type ManageContext = {
+    definition: ApplicationDefinition;
+    paths: ApplicationPaths;
+};
+
+type NormalizedParameters = {
+    include_all: boolean;
+    include_timestamp: boolean;
+    custom_name?: string;
+    custom_directory?: string;
+    restore_file?: string | null;
+};
+
+type ModeHandlerArgs = {
+    context: ManageContext;
+    parameters: NormalizedParameters;
+};
+
+type ModeHandler = (args: ModeHandlerArgs) => Promise<void>;
+
+const modeHandlers: Record<ApplicationCommandMode, ModeHandler> = {
+    backup: async ({ context, parameters }) => {
+        const { include_all, include_timestamp, custom_name, custom_directory } = parameters;
+        await execute_backup({
+            context,
+            options: {
+                include_all,
+                include_timestamp,
+                custom_name,
+                custom_directory,
+            },
+        });
+    },
+    restore: async ({ context, parameters }) => {
+        const { include_all, include_timestamp, custom_name, custom_directory, restore_file } =
+            parameters;
+
+        await execute_restore({
+            context,
+            options: {
+                include_all,
+                include_timestamp,
+                custom_name,
+                custom_directory,
+                provided_path: restore_file,
+            },
+        });
+    },
+    install: async ({ context, parameters }) => {
+        const { include_all, custom_name, custom_directory } = parameters;
+        await execute_install({
+            context,
+            options: {
+                include_all,
+                custom_name,
+                custom_directory,
+            },
+        });
+    },
+    uninstall: async ({ context }) => {
+        await execute_uninstall({
+            context,
+        });
+    },
+};
+
 export async function manage_application({
     definition,
     mode,
@@ -50,66 +116,27 @@ export async function manage_application({
 } & ApplicationCommandParameters): Promise<void> {
     const home_directory = process.env.HOME ?? homedir();
     const paths = definition.resolve_paths(home_directory);
+    const handler = modeHandlers[mode];
 
-    switch (mode) {
-        case 'backup':
-            await execute_backup({
-                paths,
-                backup_config: definition.backup,
-                options: {
-                    include_all,
-                    include_timestamp,
-                    custom_name,
-                    custom_directory,
-                },
-            });
-            return;
-        case 'restore':
-            await execute_restore({
-                definition,
-                paths,
-                options: {
-                    include_all,
-                    include_timestamp,
-                    custom_name,
-                    custom_directory,
-                    provided_path: restore_file,
-                },
-            });
-            return;
-        case 'install':
-            await execute_install({
-                definition,
-                paths,
-                options: {
-                    include_all,
-                    custom_name,
-                    custom_directory,
-                },
-            });
-            return;
-        case 'uninstall':
-            await execute_uninstall({
-                definition,
-                paths,
-            });
-            return;
-    }
+    const parameters: NormalizedParameters = {
+        include_all,
+        include_timestamp,
+        custom_name,
+        custom_directory,
+        restore_file,
+    };
+
+    await handler({
+        context: { definition, paths },
+        parameters,
+    });
 }
 
 async function execute_backup({
-    backup_config: {
-        default_base_name,
-        include_all_suffix,
-        environment_variable,
-        exclude_patterns,
-        fallback_directory,
-    },
+    context: { definition, paths },
     options: { include_all, custom_name, custom_directory, include_timestamp },
-    paths,
 }: {
-    paths: ApplicationPaths;
-    backup_config: ApplicationBackupConfig;
+    context: ManageContext;
     options: {
         include_all: boolean;
         include_timestamp: boolean;
@@ -118,6 +145,14 @@ async function execute_backup({
     };
 }): Promise<BackupExecutionResult> {
     await ensure_directory(paths.main_directory);
+
+    const {
+        default_base_name,
+        include_all_suffix,
+        environment_variable,
+        exclude_patterns,
+        fallback_directory,
+    } = definition.backup;
 
     const suffixes: string[] = [];
     if (include_all && include_all_suffix) {
@@ -149,12 +184,10 @@ async function execute_backup({
 }
 
 async function execute_restore({
-    definition,
-    paths,
+    context: { definition, paths },
     options,
 }: {
-    definition: ApplicationDefinition;
-    paths: ApplicationPaths;
+    context: ManageContext;
     options: {
         include_all: boolean;
         include_timestamp: boolean;
@@ -233,18 +266,17 @@ async function execute_restore({
 }
 
 async function execute_install({
-    definition,
-    paths,
+    context,
     options,
 }: {
-    definition: ApplicationDefinition;
-    paths: ApplicationPaths;
+    context: ManageContext;
     options: {
         include_all: boolean;
         custom_name?: string;
         custom_directory?: string;
     };
 }): Promise<void> {
+    const { definition, paths } = context;
     await ensure_directory(paths.main_directory);
     await ensure_directory(paths.install_directory);
 
@@ -261,8 +293,7 @@ async function execute_install({
                       definition.backup.default_base_name);
 
             last_backup = await execute_backup({
-                backup_config: definition.backup,
-                paths,
+                context,
                 options: {
                     include_all: options.include_all,
                     include_timestamp: true,
@@ -326,69 +357,70 @@ async function execute_install({
 }
 
 async function execute_uninstall({
-    definition,
-    paths,
+    context: { definition, paths },
 }: {
-    definition: ApplicationDefinition;
-    paths: ApplicationPaths;
+    context: ManageContext;
 }): Promise<void> {
     const config = definition.uninstall;
 
-    if (config?.directories) {
-        for (const target of config.directories(paths)) {
-            if (await is_directory(target.path)) {
-                if (target.description) {
-                    log.info(target.description);
-                } else {
-                    log.info(`Removing directory ${target.path}`);
-                }
-                await delete_recursively(target.path);
-            }
-        }
-    }
+    await processUninstallTargets({
+        targets: config?.directories?.(paths),
+        exists: is_directory,
+        remove: async (path) => {
+            await delete_recursively(path);
+        },
+        defaultMessage: (path) => `Removing directory ${path}`,
+    });
 
-    if (config?.symlinks) {
-        for (const target of config.symlinks(paths)) {
-            if (await is_symlink(target.path)) {
-                if (target.description) {
-                    log.info(target.description);
-                } else {
-                    log.info(`Removing symlink ${target.path}`);
-                }
-                await rm(target.path, { force: true });
-            }
-        }
-    }
+    await processUninstallTargets({
+        targets: config?.symlinks?.(paths),
+        exists: is_symlink,
+        remove: (path) => rm(path, { force: true }),
+        defaultMessage: (path) => `Removing symlink ${path}`,
+    });
 
-    if (config?.files) {
-        for (const target of config.files(paths)) {
-            if (await path_exists(target.path)) {
-                if (target.description) {
-                    log.info(target.description);
-                } else {
-                    log.info(`Removing file ${target.path}`);
-                }
-                await rm(target.path, { force: true });
-            }
-        }
-    }
+    await processUninstallTargets({
+        targets: config?.files?.(paths),
+        exists: path_exists,
+        remove: (path) => rm(path, { force: true }),
+        defaultMessage: (path) => `Removing file ${path}`,
+    });
 
     if (config?.extra_steps) {
         await config.extra_steps(paths);
     }
 
-    if (config?.empty_directories) {
-        for (const target of config.empty_directories(paths)) {
-            if ((await is_directory(target.path)) && (await directory_is_empty(target.path))) {
-                if (target.description) {
-                    log.info(target.description);
-                } else {
-                    log.info(`Removing empty directory ${target.path}`);
-                }
-                await delete_recursively(target.path);
-            }
-        }
-    }
+    await processUninstallTargets({
+        targets: config?.empty_directories?.(paths),
+        exists: async (path) => (await is_directory(path)) && (await directory_is_empty(path)),
+        remove: async (path) => {
+            await delete_recursively(path);
+        },
+        defaultMessage: (path) => `Removing empty directory ${path}`,
+    });
 
     log.success(`${definition.name} uninstallation completed`);
+}
+
+async function processUninstallTargets({
+    targets,
+    exists,
+    remove,
+    defaultMessage,
+}: {
+    targets?: UninstallTarget[];
+    exists: (path: string) => Promise<boolean>;
+    remove: (path: string) => Promise<void>;
+    defaultMessage: (path: string) => string;
+}): Promise<void> {
+    if (!targets || targets.length === 0) {
+        return;
+    }
+
+    for (const target of targets) {
+        if (await exists(target.path)) {
+            log.info(target.description ?? defaultMessage(target.path));
+            await remove(target.path);
+        }
+    }
 }
