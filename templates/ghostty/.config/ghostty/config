@@ -31,3 +31,5 @@ window-padding-y = 10
 shell-integration = zsh
 
 confirm-close-surface = false
+
+cursor-style = bar

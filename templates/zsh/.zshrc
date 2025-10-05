@@ -105,6 +105,9 @@ zstyle ':completion:*:messages' format '%d'             # Normal messages
 zstyle ':completion:*:warnings' format 'No matches: %d' # Warnings
 zstyle ':completion:*' group-name ''                    # Group options by category
 
+# bun completions
+[ -s "/home/petr/.bun/_bun" ] && source "/home/petr/.bun/_bun"
+
 # ~~~~~~~~~~~~~~~ Performance measurement end ~~~~~~~~~~~~~~~~
 
 local taken=$(printf "%.2f" $(( $EPOCHREALTIME - shell_start )))
