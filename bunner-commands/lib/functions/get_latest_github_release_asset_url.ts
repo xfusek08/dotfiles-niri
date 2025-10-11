@@ -11,11 +11,13 @@ export default async function get_latest_github_release_asset_url(
         throw new Error('repo and pattern are required');
     }
 
-    const tmp = await $`mktemp /tmp/github-release.XXXXXX.json`.text();
+    const tmp = await $`mktemp -p /tmp github-release.XXXXXX.json`.text();
+    const tmp_path = tmp.trim();
+
     try {
-        await $`curl -s https://api.github.com/repos/${repo}/releases/latest -o ${tmp}`;
+        await $`curl -s https://api.github.com/repos/${repo}/releases/latest -o ${tmp_path}`;
         const url =
-            await $`jq -r ".assets[] | select(.name | test(\"${pattern}\")) | .browser_download_url" ${tmp}`.text();
+            await $`jq -r ".assets[] | select(.name | test(\"${pattern}\")) | .browser_download_url" ${tmp_path}`.text();
         const trimmed = url.trim();
         if (!trimmed || trimmed === 'null') {
             throw new Error(
@@ -24,6 +26,6 @@ export default async function get_latest_github_release_asset_url(
         }
         return trimmed;
     } finally {
-        await $`rm -f ${tmp}`;
+        await $`rm -f ${tmp_path}`;
     }
 }
