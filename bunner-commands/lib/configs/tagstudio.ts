@@ -1,0 +1,40 @@
+import { AppConfig } from '../utils/app_manager';
+
+export const tagStudioConfig: AppConfig = {
+    id: 'tagstudio',
+    name: 'TagStudio',
+    repository: 'TagStudioDev/TagStudio',
+    assetPattern: 'tagstudio_linux_x86_64.tar.gz',
+    paths: {
+        mainDirectory: '$HOME/.tagstudio',
+        installDirectory: '$HOME/.tagstudio/app',
+        executableLink: '$HOME/.local/bin/tagstudio',
+        executableTarget: '$HOME/.tagstudio/app/tagstudio',
+        desktopFile: '$HOME/.local/share/applications/tagstudio.desktop',
+        iconPath: '$HOME/.tagstudio/app/resources/icon.png',
+        cacheDirectories: ['$HOME/.cache/tagstudio'],
+        profileDirectories: ['$HOME/.tagstudio/libraries'],
+    },
+    backup: {
+        defaultBaseName: 'tagstudio-backup',
+        preInstallBackupName: 'tagstudio-backup-before-installation',
+        environmentVariable: 'SYNCED_BACKUP_DIR',
+        excludePatterns: ['app/*', '*.tar.gz', '*.zip', '*/cache/**'],
+        includeAllSuffix: 'complete',
+    },
+    desktopEntry: {
+        version: '1.0',
+        name: 'TagStudio',
+        comment: 'A User-Focused Photo & File Management System',
+        genericName: 'File Manager',
+        keywords: ['Photo', 'File', 'Management', 'Tags', 'Organization'],
+        exec: '$HOME/.local/bin/tagstudio',
+        terminal: false,
+        type: 'Application',
+        icon: '$HOME/.tagstudio/app/resources/icon.png',
+        categories: ['Graphics', 'Photography', 'Utility', 'FileManager'],
+        mimeType: [],
+        startupNotify: true,
+        additionalFields: {},
+    },
+};
