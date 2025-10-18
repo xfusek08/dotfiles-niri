@@ -26,34 +26,36 @@ export default async function download_and_extract_archive({
         const archive_type = detect_archive_type(archive_url);
         log.debug(`Detected archive type: ${archive_type}`);
 
-        const temp_file = await create_temporary_file(
+        const temporary_archive_filename = await create_temporary_file(
             `archive.XXXXXX.${archive_type}`,
-        ).text();
+        );
 
-        to_delete.push(temp_file);
-        log.debug(`Temporary archive file created: ${temp_file}`);
+        to_delete.push(temporary_archive_filename);
+        log.debug(
+            `Temporary archive file created: ${temporary_archive_filename}`,
+        );
 
         log.info(`Downloading archive: ${archive_url}`);
         await download_file({
             url: archive_url,
-            outputPath: temp_file,
+            outputPath: temporary_archive_filename,
         });
         log.success(`Archive downloaded`);
 
         const temporary_extract_dir =
-            await create_temporary_directory('extract.XXXXXX').text();
+            await create_temporary_directory('extract.XXXXXX');
 
         to_delete.push(temporary_extract_dir);
         log.debug(
             `Temporary extract directory created: ${temporary_extract_dir}`,
         );
 
-        log.info(`Extracting archive...`);
+        log.info(`Extracting archive: ${temporary_archive_filename} ...`);
         await extract_archive({
-            archive_path: temp_file,
+            archive_path: temporary_archive_filename,
             output_directory: temporary_extract_dir,
         });
-        log.success(`Archive extracted`);
+        log.success(`Archive ${temporary_archive_filename} extracted.`);
 
         const entries = await readdir(temporary_extract_dir);
 

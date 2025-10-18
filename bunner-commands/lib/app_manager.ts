@@ -1,6 +1,5 @@
-import { $ } from 'bunner/framework';
 import { log } from 'bunner/framework';
-import { dirname, join, resolve as resolve_path } from 'node:path';
+import { dirname, join, resolve as resolve_path_node } from 'node:path';
 import { readdir, symlink, unlink, writeFile } from 'node:fs/promises';
 
 import create_zip_archive from './functions/create_zip_archive';
@@ -10,6 +9,8 @@ import ensure_directory from './functions/ensure_directory';
 import extract_archive from './functions/extract_archive';
 import get_latest_github_release_asset_url from './functions/get_latest_github_release_asset_url';
 import is_directory from './functions/is_directory';
+import { is_directory_non_empty } from './functions/is_directory_non_empty';
+import { resolve_path, canonicalize_path } from './functions/realpath';
 
 export type DesktopEntryConfig = {
     version: string;
@@ -77,42 +78,9 @@ type InstallParams = {
     config: AppConfig;
 };
 
-function expand_env_variables(value: string): string {
-    const home_resolved = value.startsWith('~')
-        ? `${process.env.HOME ?? ''}${value.slice(1)}`
-        : value;
-
-    return home_resolved.replace(/\$([A-Z0-9_]+)|\$\{([A-Z0-9_]+)\}/gi, (match, p1, p2) => {
-        const key = (p1 ?? p2) as string | undefined;
-        if (!key) {
-            return match;
-        }
-
-        const env_value = process.env[key];
-        return env_value ?? match;
-    });
-}
-
-function resolve_path_value(value: string): string {
-    return resolve_path(expand_env_variables(value));
-}
-
 async function ensure_parent_directory(path: string): Promise<void> {
     const parent_directory = dirname(path);
     await ensure_directory(parent_directory);
-}
-
-async function read_directory_entries(directory_path: string): Promise<string[]> {
-    try {
-        return await readdir(directory_path);
-    } catch {
-        return [];
-    }
-}
-
-async function is_directory_non_empty(directory_path: string): Promise<boolean> {
-    const entries = await read_directory_entries(directory_path);
-    return entries.length > 0;
 }
 
 function join_semicolon(values: string[]): string {
@@ -143,7 +111,9 @@ async function write_desktop_entry({
     lines.push(`StartupNotify=${config.startup_notify ? 'true' : 'false'}`);
 
     if (config.additional_fields) {
-        for (const [field_key, field_value] of Object.entries(config.additional_fields)) {
+        for (const [field_key, field_value] of Object.entries(
+            config.additional_fields,
+        )) {
             lines.push(`${field_key}=${field_value}`);
         }
     }
@@ -153,7 +123,13 @@ async function write_desktop_entry({
     await writeFile(desktop_file_path, `${lines.join('\n')}`, 'utf8');
 }
 
-async function create_symlink({ source, link }: { source: string; link: string }): Promise<void> {
+async function create_symlink({
+    source,
+    link,
+}: {
+    source: string;
+    link: string;
+}): Promise<void> {
     await ensure_parent_directory(link);
     try {
         await unlink(link);
@@ -161,14 +137,17 @@ async function create_symlink({ source, link }: { source: string; link: string }
     await symlink(source, link);
 }
 
-function get_backup_directory(config: AppConfig, custom_backup_dir?: string): string {
+async function get_backup_directory(
+    config: AppConfig,
+    custom_backup_dir?: string,
+): Promise<string> {
     if (custom_backup_dir) {
-        return resolve_path_value(custom_backup_dir);
+        return await canonicalize_path(custom_backup_dir);
     }
 
     const env_var = config.backup.environment_variable;
     if (env_var && process.env[env_var]) {
-        return resolve_path_value(process.env[env_var]!);
+        return await canonicalize_path(process.env[env_var]!);
     }
 
     throw new Error(
@@ -227,7 +206,7 @@ export async function backup({
 }: BackupParams): Promise<string> {
     log.info(`Creating backup for ${config.name}`);
 
-    const backup_dir = get_backup_directory(config, custom_backup_dir);
+    const backup_dir = await get_backup_directory(config, custom_backup_dir);
     await ensure_directory(backup_dir);
 
     const filename = generate_backup_filename({
@@ -238,7 +217,7 @@ export async function backup({
     });
 
     const backup_file = join(backup_dir, filename);
-    const main_directory = resolve_path_value(config.paths.main_directory);
+    const main_directory = await canonicalize_path(config.paths.main_directory);
 
     log.info(`Backing up ${main_directory} to ${backup_file}`);
 
@@ -254,17 +233,20 @@ export async function backup({
     return backup_file;
 }
 
-export async function restore({ config, backup_file }: RestoreParams): Promise<void> {
+export async function restore({
+    config,
+    backup_file,
+}: RestoreParams): Promise<void> {
     log.info(`Restoring backup for ${config.name}`);
 
-    const resolved_backup_file = resolve_path_value(backup_file);
-    const main_directory = resolve_path_value(config.paths.main_directory);
+    const resolved_backup_file = await canonicalize_path(backup_file);
+    const main_directory = await canonicalize_path(config.paths.main_directory);
 
     // Check if backup file exists
     const file_exists = await Bun.file(resolved_backup_file).exists();
     if (!file_exists) {
         // Try to find available backups
-        const backup_dir = get_backup_directory(config);
+        const backup_dir = await get_backup_directory(config);
         const available_backups = await list_backup_files(backup_dir);
 
         if (available_backups.length === 0) {
@@ -292,25 +274,37 @@ export async function restore({ config, backup_file }: RestoreParams): Promise<v
     log.success(`Restore completed from ${resolved_backup_file}`);
 }
 
-function collect_command_env(config: AppConfig): Record<string, string | undefined> | undefined {
+function collect_command_env(
+    config: AppConfig,
+): Record<string, string | undefined> | undefined {
     if (!config.backup.environment_variable) {
         return undefined;
     }
 
     return {
-        [config.backup.environment_variable]: process.env[config.backup.environment_variable],
+        [config.backup.environment_variable]:
+            process.env[config.backup.environment_variable],
     };
 }
 
 export async function uninstall({ config }: UninstallParams): Promise<void> {
     log.info(`Uninstalling ${config.name}`);
 
-    const install_directory = resolve_path_value(config.paths.install_directory);
-    const executable_link = resolve_path_value(config.paths.executable_link);
-    const desktop_file_path = resolve_path_value(config.paths.desktop_file);
-    const cache_directories = config.paths.cache_directories.map(resolve_path_value);
-    const profile_directories = config.paths.profile_directories.map(resolve_path_value);
-    const main_directory = resolve_path_value(config.paths.main_directory);
+    const install_directory = await canonicalize_path(
+        config.paths.install_directory,
+    );
+    // Don't canonicalize the executable link - we want to remove the symlink itself
+    const executable_link = await resolve_path(config.paths.executable_link);
+    const desktop_file_path = await canonicalize_path(
+        config.paths.desktop_file,
+    );
+    const cache_directories = await Promise.all(
+        config.paths.cache_directories.map(canonicalize_path),
+    );
+    const profile_directories = await Promise.all(
+        config.paths.profile_directories.map(canonicalize_path),
+    );
+    const main_directory = await canonicalize_path(config.paths.main_directory);
 
     await delete_recursively(install_directory);
     await delete_recursively(executable_link);
@@ -334,26 +328,22 @@ export async function uninstall({ config }: UninstallParams): Promise<void> {
 export async function install({ config }: InstallParams): Promise<void> {
     log.info(`Installing ${config.name}`);
 
-    const main_directory = resolve_path_value(config.paths.main_directory);
-    const install_directory = resolve_path_value(config.paths.install_directory);
-    const executable_link = resolve_path_value(config.paths.executable_link);
-    const executable_target = resolve_path_value(config.paths.executable_target);
-    const desktop_file_path = resolve_path_value(config.paths.desktop_file);
-    const icon_path = resolve_path_value(config.paths.icon_path);
+    const main_directory = await canonicalize_path(config.paths.main_directory);
+    const install_directory = await canonicalize_path(
+        config.paths.install_directory,
+    );
+    // Don't canonicalize executable_link - preserve it for desktop file Exec field
+    const executable_link = await resolve_path(config.paths.executable_link);
+    const executable_target = await canonicalize_path(
+        config.paths.executable_target,
+    );
+    const desktop_file_path = await canonicalize_path(
+        config.paths.desktop_file,
+    );
+    const icon_path = await canonicalize_path(config.paths.icon_path);
 
     await ensure_directory(main_directory);
     await ensure_directory(install_directory);
-
-    if (await is_directory_non_empty(install_directory)) {
-        log.info(`Existing installation detected at ${install_directory}`);
-        await backup({
-            config,
-            backup_name: config.backup.pre_install_backup_name,
-            use_timestamp: true,
-        });
-        await delete_recursively(install_directory);
-        await ensure_directory(install_directory);
-    }
 
     const archive_url = await get_latest_github_release_asset_url(
         config.repository,
@@ -366,7 +356,9 @@ export async function install({ config }: InstallParams): Promise<void> {
     });
 
     if (!(await is_directory_non_empty(install_directory))) {
-        throw new Error(`Extraction failed for ${config.name}, install directory is empty.`);
+        throw new Error(
+            `Extraction failed for ${config.name}, install directory is empty.`,
+        );
     }
 
     await ensure_directory(dirname(executable_target));
@@ -377,7 +369,7 @@ export async function install({ config }: InstallParams): Promise<void> {
     await write_desktop_entry({
         config: {
             ...config.desktop_entry,
-            exec: resolve_path_value(config.desktop_entry.exec),
+            exec: executable_link,
             icon: icon_path,
         },
         desktop_file_path,

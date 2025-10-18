@@ -9,6 +9,9 @@ export default function extract_archive({
     output_directory: string;
 }) {
     const archive_type = detect_archive_type(archive_path);
+    console.debug(
+        `Extracting archive of type: ${archive_path} --> ${archive_type}`,
+    );
 
     switch (archive_type) {
         case 'tar.gz':
