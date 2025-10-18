@@ -1,7 +1,7 @@
 import { defineCommand, log } from 'bunner/framework';
 
-import { backup } from './lib/app_manager';
-import { zen_browser_config } from './lib/configs/zen_browser';
+import { backup } from './lib/utils/app_manager';
+import { zenBrowserConfig } from './lib/configs/zen_browser';
 
 export default defineCommand({
     command: 'zen-browser-backup',
@@ -36,13 +36,13 @@ export default defineCommand({
     ] as const,
     action: async ({ options }) => {
         log.info('Starting Zen Browser backup');
-        const backup_file = await backup({
-            config: zen_browser_config,
-            backup_name: options.name,
-            use_timestamp: options.timestamp,
-            backup_all: options.all,
-            custom_backup_dir: options['backup-dir'],
+        const backupFile = await backup({
+            config: zenBrowserConfig,
+            backupName: options.name,
+            useTimestamp: options.timestamp,
+            backupAll: options.all,
+            customBackupDir: options['backup-dir'],
         });
-        log.success(`Backup created: ${backup_file}`);
+        log.success(`Backup created: ${backupFile}`);
     },
 });

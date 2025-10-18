@@ -1,7 +1,7 @@
 import { defineCommand, log } from 'bunner/framework';
 
-import { uninstall } from './lib/app_manager';
-import { zen_browser_config } from './lib/configs/zen_browser';
+import { uninstall } from './lib/utils/app_manager';
+import { zenBrowserConfig } from './lib/configs/zen_browser';
 
 export default defineCommand({
     command: 'zen-browser-uninstall',
@@ -9,7 +9,7 @@ export default defineCommand({
     options: [] as const,
     action: async () => {
         log.info('Starting Zen Browser uninstallation');
-        await uninstall({ config: zen_browser_config });
+        await uninstall({ config: zenBrowserConfig });
         log.success('Zen Browser uninstalled successfully');
     },
 });

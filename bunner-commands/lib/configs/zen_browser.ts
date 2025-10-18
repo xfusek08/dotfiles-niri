@@ -1,39 +1,39 @@
-import { AppConfig } from '../app_manager';
+import { AppConfig } from '../utils/app_manager';
 
-export const zen_browser_config: AppConfig = {
+export const zenBrowserConfig: AppConfig = {
     id: 'zen-browser',
     name: 'Zen Browser',
     repository: 'zen-browser/desktop',
-    asset_pattern: 'linux-x86_64.tar.xz',
+    assetPattern: 'linux-x86_64.tar.xz',
     paths: {
-        main_directory: '$HOME/.zen',
-        install_directory: '$HOME/.zen/zen',
-        executable_link: '$HOME/.local/bin/zen',
-        executable_target: '$HOME/.zen/zen/zen',
-        desktop_file: '$HOME/.local/share/applications/zen.desktop',
-        icon_path: '$HOME/.zen/zen/browser/chrome/icons/default/default128.png',
-        cache_directories: ['$HOME/.cache/zen'],
-        profile_directories: ['$HOME/.zen/zen-browser/profile', '$HOME/.zen/profile'],
+        mainDirectory: '$HOME/.zen',
+        installDirectory: '$HOME/.zen/zen',
+        executableLink: '$HOME/.local/bin/zen',
+        executableTarget: '$HOME/.zen/zen/zen',
+        desktopFile: '$HOME/.local/share/applications/zen.desktop',
+        iconPath: '$HOME/.zen/zen/browser/chrome/icons/default/default128.png',
+        cacheDirectories: ['$HOME/.cache/zen'],
+        profileDirectories: ['$HOME/.zen/zen-browser/profile', '$HOME/.zen/profile'],
     },
     backup: {
-        default_base_name: 'zen-browser-backup',
-        pre_install_backup_name: 'zen-browser-backup-before-installation',
-        environment_variable: 'SYNCED_BACKUP_DIR',
-        exclude_patterns: ['zen/*', '*.tar.gz', '*.zip', '*/storage/**'],
-        include_all_suffix: 'complete',
+        defaultBaseName: 'zen-browser-backup',
+        preInstallBackupName: 'zen-browser-backup-before-installation',
+        environmentVariable: 'SYNCED_BACKUP_DIR',
+        excludePatterns: ['zen/*', '*.tar.gz', '*.zip', '*/storage/**'],
+        includeAllSuffix: 'complete',
     },
-    desktop_entry: {
+    desktopEntry: {
         version: '1.0',
         name: 'Zen Browser',
         comment: 'Experience tranquillity while browsing the web without people tracking you!',
-        generic_name: 'Web Browser',
+        genericName: 'Web Browser',
         keywords: ['Internet', 'WWW', 'Browser', 'Web', 'Explorer'],
         exec: '$HOME/.local/bin/zen',
         terminal: false,
         type: 'Application',
         icon: '$HOME/.zen/zen/browser/chrome/icons/default/default128.png',
         categories: ['GNOME', 'GTK', 'Network', 'WebBrowser'],
-        mime_type: [
+        mimeType: [
             'text/html',
             'text/xml',
             'application/xhtml+xml',
@@ -49,8 +49,8 @@ export const zen_browser_config: AppConfig = {
             'video/webm',
             'application/x-xpinstall',
         ],
-        startup_notify: true,
-        additional_fields: {
+        startupNotify: true,
+        additionalFields: {
             'X-MultipleArgs': 'false',
         },
     },
