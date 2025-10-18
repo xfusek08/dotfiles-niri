@@ -1,11 +1,11 @@
 import { defineCommand, log } from 'bunner/framework';
 
 import { backup } from './lib/utils/app_manager';
-import { tagStudioConfig } from './lib/configs/tagstudio';
+import { tagSpacesConfig } from './lib/configs/tagspaces';
 
 export default defineCommand({
-    command: 'tagstudio-backup',
-    description: 'Create a backup of TagStudio installation',
+    command: 'tagspaces-backup',
+    description: 'Create a backup of TagSpaces installation',
     options: [
         {
             short: 'n',
@@ -35,9 +35,9 @@ export default defineCommand({
         },
     ] as const,
     action: async ({ options }) => {
-        log.info('Starting TagStudio backup');
+        log.info('Starting TagSpaces backup');
         const backupFile = await backup({
-            config: tagStudioConfig,
+            config: tagSpacesConfig,
             backupName: options.name,
             useTimestamp: options.timestamp,
             backupAll: options.all,

@@ -1,26 +1,26 @@
 import { defineCommand, log } from 'bunner/framework';
 
 import { restore } from './lib/utils/app_manager';
-import { tagStudioConfig } from './lib/configs/tagstudio';
+import { tagSpacesConfig } from './lib/configs/tagspaces';
 
 export default defineCommand({
-    command: 'tagstudio-restore',
-    description: 'Restore TagStudio from backup',
+    command: 'tagspaces-restore',
+    description: 'Restore TagSpaces from backup',
     options: [] as const,
     action: async ({ args }) => {
         const [backupFile] = args.popFirstArg();
 
         if (!backupFile) {
             log.error('Backup file path is required as an argument');
-            log.info('Usage: tagstudio-restore <backup-file>');
+            log.info('Usage: tagspaces-restore <backup-file>');
             process.exit(1);
         }
 
-        log.info('Starting TagStudio restore');
+        log.info('Starting TagSpaces restore');
         await restore({
-            config: tagStudioConfig,
+            config: tagSpacesConfig,
             backupFile,
         });
-        log.success('TagStudio restored successfully');
+        log.success('TagSpaces restored successfully');
     },
 });

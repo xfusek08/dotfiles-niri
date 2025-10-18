@@ -1,7 +1,7 @@
 import { defineCommand, log } from 'bunner/framework';
 
-import { backup } from './lib/utils/app_manager';
 import { zenBrowserConfig } from './lib/configs/zen_browser';
+import { backup } from './lib/utils/app_manager';
 
 export default defineCommand({
     command: 'zen-browser-backup',

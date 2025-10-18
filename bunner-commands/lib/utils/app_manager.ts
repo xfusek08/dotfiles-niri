@@ -1,5 +1,5 @@
 import { log } from 'bunner/framework';
-import { dirname, join } from 'node:path';
+import { dirname, join, basename } from 'node:path';
 import { readdir, symlink, unlink, writeFile } from 'node:fs/promises';
 
 import { createZipArchive, downloadAndExtractArchive, extractArchive } from './archive';
@@ -10,6 +10,7 @@ import { DESKTOP_ENTRY_HEADER, BACKUP_FILE_EXTENSION } from './constants';
 import { isNodeError, withErrorContext } from './types';
 import { generateBackupTimestamp } from './timestamp';
 import { validateAppConfig } from './configValidator';
+import { downloadAndSetupAppImage } from './appimage';
 
 export type DesktopEntryConfig = {
     version: string;
@@ -54,6 +55,7 @@ export type AppConfig = {
     paths: AppPathsConfig;
     backup: BackupConfig;
     desktopEntry: DesktopEntryConfig;
+    isAppImage?: boolean;
 };
 
 export type BackupParams = {
@@ -362,15 +364,27 @@ export async function install({ config }: InstallParams): Promise<void> {
     await ensureDirectory(paths.mainDirectory);
     await ensureDirectory(paths.installDirectory);
 
-    const archiveUrl = await getLatestGithubReleaseAssetUrl(config.repository, config.assetPattern);
+    const assetUrl = await getLatestGithubReleaseAssetUrl(config.repository, config.assetPattern);
 
-    await downloadAndExtractArchive({
-        archiveUrl: archiveUrl,
-        targetDirectory: paths.installDirectory,
-    });
+    if (config.isAppImage) {
+        // AppImage installation
+        const appName = basename(paths.executableTarget, '.AppImage');
+        await downloadAndSetupAppImage({
+            appImageUrl: assetUrl,
+            targetDirectory: paths.installDirectory,
+            appName,
+            iconPath: paths.iconPath,
+        });
+    } else {
+        // Archive installation
+        await downloadAndExtractArchive({
+            archiveUrl: assetUrl,
+            targetDirectory: paths.installDirectory,
+        });
+    }
 
     if (!(await isDirectoryNonEmpty(paths.installDirectory))) {
-        throw new Error(`Extraction failed for ${config.name}, install directory is empty.`);
+        throw new Error(`Installation failed for ${config.name}, install directory is empty.`);
     }
 
     await ensureDirectory(dirname(paths.executableTarget));
