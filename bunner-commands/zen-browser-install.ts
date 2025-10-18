@@ -11,9 +11,7 @@ import { canonicalize_path } from './lib/functions/realpath';
  * Handles backup and cleanup of an existing installation.
  * @returns The path to the backup file, or null if no backup was created
  */
-async function handle_existing_installation(
-    install_directory: string,
-): Promise<string | null> {
+async function handle_existing_installation(install_directory: string): Promise<string | null> {
     if (!(await is_directory_non_empty(install_directory))) {
         log.info(`No existing installation found at ${install_directory}`);
         return null;
@@ -51,9 +49,7 @@ async function rollback_on_failure(
         log.success(`Successfully restored from backup: ${backup_file}`);
     } catch (restore_error) {
         const error_message =
-            restore_error instanceof Error
-                ? restore_error.message
-                : String(restore_error);
+            restore_error instanceof Error ? restore_error.message : String(restore_error);
         log.error(`Failed to restore from backup: ${error_message}`);
     }
 }
@@ -68,8 +64,7 @@ export default defineCommand({
             zen_browser_config.paths.install_directory,
         );
 
-        const backup_file =
-            await handle_existing_installation(install_directory);
+        const backup_file = await handle_existing_installation(install_directory);
 
         try {
             // Attempt installation

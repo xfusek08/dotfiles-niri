@@ -8,7 +8,7 @@ ip_addr=$(ip -j addr | jq -r '.[] | select(.operstate=="UP") | .addr_info[] | se
 if [[ -n "$ip_addr" ]]; then
     # Copy to clipboard
     echo -n "$ip_addr" | clipse -c
-    
+
     # Notify user
     notify-send -t 3000 "IP address copied to clipboard:" "$(printf "%b" "\n<tt>$ip_addr</tt>")"
 else

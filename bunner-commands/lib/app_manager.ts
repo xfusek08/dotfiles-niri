@@ -161,9 +161,7 @@ async function write_desktop_entry({
     lines.push(`StartupNotify=${config.startup_notify ? 'true' : 'false'}`);
 
     if (config.additional_fields) {
-        for (const [field_key, field_value] of Object.entries(
-            config.additional_fields,
-        )) {
+        for (const [field_key, field_value] of Object.entries(config.additional_fields)) {
             lines.push(`${field_key}=${field_value}`);
         }
     }
@@ -173,24 +171,13 @@ async function write_desktop_entry({
     await writeFile(desktop_file_path, `${lines.join('\n')}`, 'utf8');
 }
 
-async function create_symlink({
-    source,
-    link,
-}: {
-    source: string;
-    link: string;
-}): Promise<void> {
+async function create_symlink({ source, link }: { source: string; link: string }): Promise<void> {
     await ensure_parent_directory(link);
     try {
         await unlink(link);
     } catch (error) {
         // Ignore ENOENT - file doesn't exist, which is fine
-        if (
-            error &&
-            typeof error === 'object' &&
-            'code' in error &&
-            error.code !== 'ENOENT'
-        ) {
+        if (error && typeof error === 'object' && 'code' in error && error.code !== 'ENOENT') {
             log.error(
                 `Failed to remove existing link: ${error instanceof Error ? error.message : String(error)}`,
             );
@@ -295,10 +282,7 @@ export async function backup({
     return backup_file;
 }
 
-export async function restore({
-    config,
-    backup_file,
-}: RestoreParams): Promise<void> {
+export async function restore({ config, backup_file }: RestoreParams): Promise<void> {
     log.info(`Restoring backup for ${config.name}`);
 
     const resolved_backup_file = await canonicalize_path(backup_file);
@@ -379,9 +363,7 @@ export async function install({ config }: InstallParams): Promise<void> {
     });
 
     if (!(await is_directory_non_empty(paths.install_directory))) {
-        throw new Error(
-            `Extraction failed for ${config.name}, install directory is empty.`,
-        );
+        throw new Error(`Extraction failed for ${config.name}, install directory is empty.`);
     }
 
     await ensure_directory(dirname(paths.executable_target));

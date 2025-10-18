@@ -14,13 +14,8 @@ export default async function install_from_github_release({
 }): Promise<void> {
     await ensure_directory(install_dir);
 
-    log.info(
-        `Fetching latest release asset for ${repo} matching pattern: ${asset_pattern}`,
-    );
-    const archive_url = await get_latest_github_release_asset_url(
-        repo,
-        asset_pattern,
-    );
+    log.info(`Fetching latest release asset for ${repo} matching pattern: ${asset_pattern}`);
+    const archive_url = await get_latest_github_release_asset_url(repo, asset_pattern);
     log.success(`Resolved asset URL: ${archive_url}`);
 
     await download_and_extract_archive({

@@ -30,35 +30,35 @@ zle_highlight+=(region:standout)
 
 # Get selected text from buffer
 get-selection() {
-    if (( !REGION_ACTIVE )); then
+    if ((!REGION_ACTIVE)); then
         return 1
     fi
-    
+
     local start end
-    if (( MARK < CURSOR )); then
+    if ((MARK < CURSOR)); then
         start=$MARK
         end=$CURSOR
     else
         start=$CURSOR
         end=$MARK
     fi
-    
-    echo -n "${BUFFER[start+1, end]}"
+
+    echo -n "${BUFFER[start + 1, end]}"
 }
 
 # Show notification with formatted text
 show-notification() {
     local title="$1"
     local content="$2"
-    
+
     # Format content for notification (HTML entities)
     local formatted_content="${content//&/&amp;}"
     formatted_content="${formatted_content//</&lt;}"
     formatted_content="${formatted_content//>/&gt;}"
-    
+
     # Show notification (silently ignore if notify-send isn't available)
-    command -v notify-send >/dev/null 2>&1 && \
-    notify-send -t 3000 "$title" "$(printf "%b" "\n<tt>$formatted_content</tt>")" 2>/dev/null
+    command -v notify-send > /dev/null 2>&1 \
+        && notify-send -t 3000 "$title" "$(printf "%b" "\n<tt>$formatted_content</tt>")" 2> /dev/null
 }
 
 # =============================================================================
@@ -84,32 +84,32 @@ select-all() {
     MARK=0
     CURSOR=${#BUFFER}
     REGION_ACTIVE=1
-    zle -R  # Force redraw for immediate visual feedback
+    zle -R # Force redraw for immediate visual feedback
 }
 zle -N select-all
 
 # Character-wise selection extension
 select-backward-char() {
-    (( !REGION_ACTIVE )) && zle set-mark-command
+    ((!REGION_ACTIVE)) && zle set-mark-command
     zle backward-char
 }
 zle -N select-backward-char
 
 select-forward-char() {
-    (( !REGION_ACTIVE )) && zle set-mark-command
+    ((!REGION_ACTIVE)) && zle set-mark-command
     zle forward-char
 }
 zle -N select-forward-char
 
 # Word-wise selection extension
 select-backward-word() {
-    (( !REGION_ACTIVE )) && zle set-mark-command
+    ((!REGION_ACTIVE)) && zle set-mark-command
     zle backward-word
 }
 zle -N select-backward-word
 
 select-forward-word() {
-    (( !REGION_ACTIVE )) && zle set-mark-command
+    ((!REGION_ACTIVE)) && zle set-mark-command
     zle forward-word
 }
 zle -N select-forward-word
@@ -154,14 +154,14 @@ zle -N cut-to-clipboard
 
 # Delete active selection without affecting kill ring (VS Code behavior)
 delete-selection-silent() {
-    (( !REGION_ACTIVE )) && return 1
-    
-    if (( MARK <= CURSOR )); then
-        LBUFFER=${LBUFFER[1, $(( ${#LBUFFER} - (CURSOR - MARK) ))]}
+    ((!REGION_ACTIVE)) && return 1
+
+    if ((MARK <= CURSOR)); then
+        LBUFFER=${LBUFFER[1, $((${#LBUFFER} - (CURSOR - MARK)))]}
     else
-        RBUFFER=${RBUFFER[$(( (MARK - CURSOR) + 1 )), -1]}
+        RBUFFER=${RBUFFER[$(((MARK - CURSOR) + 1)), -1]}
     fi
-    
+
     REGION_ACTIVE=0
     return 0
 }
@@ -179,20 +179,20 @@ zle -N backward-delete-or-kill-region
 
 # Typing replaces active selection
 insert-or-replace-selection() {
-    (( REGION_ACTIVE )) && delete-selection-silent
+    ((REGION_ACTIVE)) && delete-selection-silent
     zle .self-insert
 }
 zle -N self-insert insert-or-replace-selection
 
 # Pasting replaces active selection
 replace-then-yank() {
-    (( REGION_ACTIVE )) && delete-selection-silent
+    ((REGION_ACTIVE)) && delete-selection-silent
     zle .yank
 }
 zle -N yank replace-then-yank
 
 replace-then-bracketed-paste() {
-    (( REGION_ACTIVE )) && delete-selection-silent
+    ((REGION_ACTIVE)) && delete-selection-silent
     zle .bracketed-paste
 }
 zle -N bracketed-paste replace-then-bracketed-paste
@@ -202,39 +202,39 @@ zle -N bracketed-paste replace-then-bracketed-paste
 # =============================================================================
 
 # Navigation keys
-bindkey $'\e[H'  beginning-of-line       # Home
-bindkey $'\e[F'  end-of-line             # End
-bindkey $'\eOH'  beginning-of-line       # Alternative Home
-bindkey $'\eOF'  end-of-line             # Alternative End
-bindkey $'\e[1~' beginning-of-line       # Alternative Home
-bindkey $'\e[4~' end-of-line             # Alternative End
+bindkey $'\e[H' beginning-of-line  # Home
+bindkey $'\e[F' end-of-line        # End
+bindkey $'\eOH' beginning-of-line  # Alternative Home
+bindkey $'\eOF' end-of-line        # Alternative End
+bindkey $'\e[1~' beginning-of-line # Alternative Home
+bindkey $'\e[4~' end-of-line       # Alternative End
 
 # Word navigation (Ctrl+Left/Right)
-bindkey $'\e[1;5D' backward-word         # Ctrl+Left
-bindkey $'\e[1;5C' forward-word          # Ctrl+Right
+bindkey $'\e[1;5D' backward-word # Ctrl+Left
+bindkey $'\e[1;5C' forward-word  # Ctrl+Right
 
 # Selection keys
-bindkey '^A'     select-all              # Ctrl+A (select all)
-bindkey $'\e[1;2H' select-to-bol         # Shift+Home (select to beginning)
-bindkey $'\e[1;2F' select-to-eol         # Shift+End (select to end)
+bindkey '^A' select-all          # Ctrl+A (select all)
+bindkey $'\e[1;2H' select-to-bol # Shift+Home (select to beginning)
+bindkey $'\e[1;2F' select-to-eol # Shift+End (select to end)
 
 # Character-wise selection (Shift+Left/Right)
-bindkey $'\e[1;2D' select-backward-char  # Shift+Left
-bindkey $'\e[1;2C' select-forward-char   # Shift+Right
+bindkey $'\e[1;2D' select-backward-char # Shift+Left
+bindkey $'\e[1;2C' select-forward-char  # Shift+Right
 
 # Word-wise selection (Ctrl+Shift+Left/Right)
-bindkey $'\e[1;6D' select-backward-word  # Ctrl+Shift+Left
-bindkey $'\e[1;6C' select-forward-word   # Ctrl+Shift+Right
+bindkey $'\e[1;6D' select-backward-word # Ctrl+Shift+Left
+bindkey $'\e[1;6C' select-forward-word  # Ctrl+Shift+Right
 
 # Clipboard operations (Shift+Ctrl+C/X)
 # Note: These escape sequences might need adjustment for your terminal
-bindkey $'\e[99;6u'  copy-to-clipboard   # Shift+Ctrl+C (Escape + C)
-bindkey $'\e[120;6u' cut-to-clipboard    # Shift+Ctrl+X (Escape + X)
+bindkey $'\e[99;6u' copy-to-clipboard # Shift+Ctrl+C (Escape + C)
+bindkey $'\e[120;6u' cut-to-clipboard # Shift+Ctrl+X (Escape + X)
 
 # Deletion keys
-bindkey $'\e[3~'  delete-or-kill-region           # Delete key
-bindkey '^?'      backward-delete-or-kill-region  # Backspace
-bindkey '^H'      backward-delete-or-kill-region  # Alternative Backspace
+bindkey $'\e[3~' delete-or-kill-region      # Delete key
+bindkey '^?' backward-delete-or-kill-region # Backspace
+bindkey '^H' backward-delete-or-kill-region # Alternative Backspace
 
 # Special deletion (Ctrl+Delete)
-bindkey $'\e[3;5~' kill-word              # Ctrl+Delete (delete word right)
+bindkey $'\e[3;5~' kill-word # Ctrl+Delete (delete word right)

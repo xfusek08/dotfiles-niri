@@ -70,8 +70,7 @@ export default defineCommand({
 });
 
 async function getImageList(): Promise<ImageInfo[]> {
-    const result: string =
-        await $`docker image ls --format "{{.Repository}}:{{.Tag}}"`.text();
+    const result: string = await $`docker image ls --format "{{.Repository}}:{{.Tag}}"`.text();
     const names: string[] = result
         .split('\n')
         .filter((line: string) => line.length > 0 && !line.includes('<none>'));

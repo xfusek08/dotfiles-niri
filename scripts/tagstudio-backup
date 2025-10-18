@@ -25,11 +25,11 @@ function _parse_arguments() {
                     _restore_file="$1"
                     shift
                 fi
-            ;;
+                ;;
             -a | --all)
                 _backup_all=true
                 shift
-            ;;
+                ;;
             -f | --file-dir)
                 shift
                 if [[ $# -gt 0 && "$1" != -* ]]; then
@@ -39,7 +39,7 @@ function _parse_arguments() {
                     log -e "Error: -f|--file-dir option requires a directory path argument"
                     return 1
                 fi
-            ;;
+                ;;
             -n | --name)
                 shift
                 if [[ $# -gt 0 && "$1" != -* ]]; then
@@ -49,15 +49,15 @@ function _parse_arguments() {
                     log -e "Error: -n|--name option requires a name argument"
                     return 1
                 fi
-            ;;
+                ;;
             -t | --timestamp)
                 _use_timestamp=true
                 shift
-            ;;
+                ;;
             *)
                 # Skip unrecognized options
                 shift
-            ;;
+                ;;
         esac
     done
 

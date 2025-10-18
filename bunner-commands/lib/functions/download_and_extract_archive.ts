@@ -31,9 +31,7 @@ export default async function download_and_extract_archive({
         );
 
         to_delete.push(temporary_archive_filename);
-        log.debug(
-            `Temporary archive file created: ${temporary_archive_filename}`,
-        );
+        log.debug(`Temporary archive file created: ${temporary_archive_filename}`);
 
         log.info(`Downloading archive: ${archive_url}`);
         await download_file({
@@ -42,13 +40,10 @@ export default async function download_and_extract_archive({
         });
         log.success(`Archive downloaded`);
 
-        const temporary_extract_dir =
-            await create_temporary_directory('extract.XXXXXX');
+        const temporary_extract_dir = await create_temporary_directory('extract.XXXXXX');
 
         to_delete.push(temporary_extract_dir);
-        log.debug(
-            `Temporary extract directory created: ${temporary_extract_dir}`,
-        );
+        log.debug(`Temporary extract directory created: ${temporary_extract_dir}`);
 
         log.info(`Extracting archive: ${temporary_archive_filename} ...`);
         await extract_archive({
@@ -60,8 +55,7 @@ export default async function download_and_extract_archive({
         const entries = await readdir(temporary_extract_dir);
 
         const has_root_directory =
-            entries.length === 1 &&
-            (await is_directory(join(temporary_extract_dir, entries[0])));
+            entries.length === 1 && (await is_directory(join(temporary_extract_dir, entries[0])));
 
         if (has_root_directory) {
             const single_root = join(temporary_extract_dir, entries[0]);

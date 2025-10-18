@@ -34,7 +34,7 @@ function _main() {
     fi
 
     # Optionally remove icon cache entry (best-effort, desktop environments vary)
-    update-desktop-database "$HOME/.local/share/applications" >/dev/null 2>&1 || true
+    update-desktop-database "$HOME/.local/share/applications" > /dev/null 2>&1 || true
 
     # Remove cache directories
     # ------------------------

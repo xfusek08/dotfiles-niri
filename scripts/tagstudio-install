@@ -31,11 +31,14 @@ function _download_asset_and_install_to() {
     local url
     local type
     if [[ -n "$tarxz_url" ]]; then
-        url="$tarxz_url"; type="tar.xz"
+        url="$tarxz_url"
+        type="tar.xz"
     elif [[ -n "$targz_url" ]]; then
-        url="$targz_url"; type="tar.gz"
+        url="$targz_url"
+        type="tar.gz"
     elif [[ -n "$zip_url" ]]; then
-        url="$zip_url"; type="zip"
+        url="$zip_url"
+        type="zip"
     else
         log -e "Could not find a suitable Linux asset in latest release"
         return 1

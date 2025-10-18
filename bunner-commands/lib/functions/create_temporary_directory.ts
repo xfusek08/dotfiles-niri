@@ -8,9 +8,7 @@ const TMP_DIR = process.env.TMPDIR ?? '/tmp';
  * @returns The absolute path to the created temporary directory
  * @throws Error if the directory creation fails
  */
-export default async function create_temporary_directory(
-    pattern: string,
-): Promise<string> {
+export default async function create_temporary_directory(pattern: string): Promise<string> {
     try {
         const result = await $`mktemp -d ${TMP_DIR}/${pattern}`.text();
         const path = result.trim();
@@ -21,8 +19,7 @@ export default async function create_temporary_directory(
 
         return path;
     } catch (error) {
-        const error_message =
-            error instanceof Error ? error.message : String(error);
+        const error_message = error instanceof Error ? error.message : String(error);
         throw new Error(
             `Failed to create temporary directory with pattern "${pattern}": ${error_message}`,
         );

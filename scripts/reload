@@ -9,8 +9,8 @@ echo "Reloading mako..."
 makoctl reload
 
 echo "Reloading waybar..."
-killall  waybar;
-setsid waybar >/dev/null 2>&1 &
+killall waybar
+setsid waybar > /dev/null 2>&1 &
 
 echo "Setting all scripts in $SCRIPTS as executable..."
 find "$SCRIPTS" -type f -exec chmod +x {} \;
