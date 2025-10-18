@@ -1,3 +1,12 @@
 #!/usr/bin/env zsh
 
+# Source environment to get all the variables
+source "$GENERATED_DIR/environment"
+
+# Run bunner in native mode (directly on the system, not in Docker)
+export BUNNER_NATIVE=true
+
+# Environment variables are already available from the sourced environment file
+# No need to configure BUNNER_ENV_VARS in native mode
+
 $BUNNER_COMMAND "$BUNNER_COMMANDS_DIR" "$@"
