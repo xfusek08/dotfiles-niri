@@ -78,6 +78,56 @@ type InstallParams = {
     config: AppConfig;
 };
 
+type ResolvedPaths = {
+    main_directory: string;
+    install_directory: string;
+    executable_link: string;
+    executable_target: string;
+    desktop_file_path: string;
+    icon_path: string;
+    cache_directories: string[];
+    profile_directories: string[];
+};
+
+/**
+ * Resolves all paths in the app configuration to their absolute forms.
+ * @param config - The application configuration
+ * @returns Object containing all resolved paths
+ */
+async function resolve_app_paths(config: AppConfig): Promise<ResolvedPaths> {
+    const [
+        main_directory,
+        install_directory,
+        executable_target,
+        desktop_file_path,
+        icon_path,
+        cache_directories,
+        profile_directories,
+        executable_link,
+    ] = await Promise.all([
+        canonicalize_path(config.paths.main_directory),
+        canonicalize_path(config.paths.install_directory),
+        canonicalize_path(config.paths.executable_target),
+        canonicalize_path(config.paths.desktop_file),
+        canonicalize_path(config.paths.icon_path),
+        Promise.all(config.paths.cache_directories.map(canonicalize_path)),
+        Promise.all(config.paths.profile_directories.map(canonicalize_path)),
+        // Don't canonicalize executable_link - preserve for desktop file Exec field
+        resolve_path(config.paths.executable_link),
+    ]);
+
+    return {
+        main_directory,
+        install_directory,
+        executable_link,
+        executable_target,
+        desktop_file_path,
+        icon_path,
+        cache_directories,
+        profile_directories,
+    };
+}
+
 async function ensure_parent_directory(path: string): Promise<void> {
     const parent_directory = dirname(path);
     await ensure_directory(parent_directory);
@@ -133,7 +183,19 @@ async function create_symlink({
     await ensure_parent_directory(link);
     try {
         await unlink(link);
-    } catch {}
+    } catch (error) {
+        // Ignore ENOENT - file doesn't exist, which is fine
+        if (
+            error &&
+            typeof error === 'object' &&
+            'code' in error &&
+            error.code !== 'ENOENT'
+        ) {
+            log.error(
+                `Failed to remove existing link: ${error instanceof Error ? error.message : String(error)}`,
+            );
+        }
+    }
     await symlink(source, link);
 }
 
@@ -274,52 +336,25 @@ export async function restore({
     log.success(`Restore completed from ${resolved_backup_file}`);
 }
 
-function collect_command_env(
-    config: AppConfig,
-): Record<string, string | undefined> | undefined {
-    if (!config.backup.environment_variable) {
-        return undefined;
-    }
-
-    return {
-        [config.backup.environment_variable]:
-            process.env[config.backup.environment_variable],
-    };
-}
-
 export async function uninstall({ config }: UninstallParams): Promise<void> {
     log.info(`Uninstalling ${config.name}`);
 
-    const install_directory = await canonicalize_path(
-        config.paths.install_directory,
-    );
-    // Don't canonicalize the executable link - we want to remove the symlink itself
-    const executable_link = await resolve_path(config.paths.executable_link);
-    const desktop_file_path = await canonicalize_path(
-        config.paths.desktop_file,
-    );
-    const cache_directories = await Promise.all(
-        config.paths.cache_directories.map(canonicalize_path),
-    );
-    const profile_directories = await Promise.all(
-        config.paths.profile_directories.map(canonicalize_path),
-    );
-    const main_directory = await canonicalize_path(config.paths.main_directory);
+    const paths = await resolve_app_paths(config);
 
-    await delete_recursively(install_directory);
-    await delete_recursively(executable_link);
-    await delete_recursively(desktop_file_path);
+    await delete_recursively(paths.install_directory);
+    await delete_recursively(paths.executable_link);
+    await delete_recursively(paths.desktop_file_path);
 
-    for (const cache_dir of cache_directories) {
+    for (const cache_dir of paths.cache_directories) {
         await delete_recursively(cache_dir);
     }
 
-    for (const profile_dir of profile_directories) {
+    for (const profile_dir of paths.profile_directories) {
         await delete_recursively(profile_dir);
     }
 
-    if (!(await is_directory_non_empty(main_directory))) {
-        await delete_recursively(main_directory);
+    if (!(await is_directory_non_empty(paths.main_directory))) {
+        await delete_recursively(paths.main_directory);
     }
 
     log.success(`${config.name} uninstalled`);
@@ -328,22 +363,10 @@ export async function uninstall({ config }: UninstallParams): Promise<void> {
 export async function install({ config }: InstallParams): Promise<void> {
     log.info(`Installing ${config.name}`);
 
-    const main_directory = await canonicalize_path(config.paths.main_directory);
-    const install_directory = await canonicalize_path(
-        config.paths.install_directory,
-    );
-    // Don't canonicalize executable_link - preserve it for desktop file Exec field
-    const executable_link = await resolve_path(config.paths.executable_link);
-    const executable_target = await canonicalize_path(
-        config.paths.executable_target,
-    );
-    const desktop_file_path = await canonicalize_path(
-        config.paths.desktop_file,
-    );
-    const icon_path = await canonicalize_path(config.paths.icon_path);
+    const paths = await resolve_app_paths(config);
 
-    await ensure_directory(main_directory);
-    await ensure_directory(install_directory);
+    await ensure_directory(paths.main_directory);
+    await ensure_directory(paths.install_directory);
 
     const archive_url = await get_latest_github_release_asset_url(
         config.repository,
@@ -352,27 +375,30 @@ export async function install({ config }: InstallParams): Promise<void> {
 
     await download_and_extract_archive({
         archive_url,
-        target_directory: install_directory,
+        target_directory: paths.install_directory,
     });
 
-    if (!(await is_directory_non_empty(install_directory))) {
+    if (!(await is_directory_non_empty(paths.install_directory))) {
         throw new Error(
             `Extraction failed for ${config.name}, install directory is empty.`,
         );
     }
 
-    await ensure_directory(dirname(executable_target));
-    await create_symlink({ source: executable_target, link: executable_link });
+    await ensure_directory(dirname(paths.executable_target));
+    await create_symlink({
+        source: paths.executable_target,
+        link: paths.executable_link,
+    });
 
-    await ensure_parent_directory(icon_path);
+    await ensure_parent_directory(paths.icon_path);
 
     await write_desktop_entry({
         config: {
             ...config.desktop_entry,
-            exec: executable_link,
-            icon: icon_path,
+            exec: paths.executable_link,
+            icon: paths.icon_path,
         },
-        desktop_file_path,
+        desktop_file_path: paths.desktop_file_path,
     });
 
     log.success(`${config.name} installed`);
