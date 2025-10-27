@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<doublecmd DCVersion="1.1.28 gamma" ConfigVersion="15">
+<doublecmd DCVersion="1.1.29 gamma" ConfigVersion="15">
   <Toolbars>
     <MainToolbar>
       <Row>
@@ -158,9 +158,9 @@
   </Toolbars>
   <MainWindow>
     <Position Save="True">
-      <Left>1280</Left>
-      <Top>0</Top>
-      <Width>2050</Width>
+      <Left>0</Left>
+      <Top>240</Top>
+      <Width>3424</Width>
       <Height>1370</Height>
       <PixelsPerInch>96</PixelsPerInch>
       <Maximized>False</Maximized>
@@ -325,7 +325,7 @@
     </FreeSpaceIndicator>
   </Colors>
   <ToolTips>
-    <ShowToolTipMode>True</ShowToolTipMode>
+    <ShowToolTipMode>False</ShowToolTipMode>
     <ActualToolTipMode>0</ActualToolTipMode>
     <ToolTipHideTimeOut>0</ToolTipHideTimeOut>
     <CustomFields/>
@@ -564,9 +564,9 @@
     <IgnoreListFile>%DC_CONFIG_PATH%/ignorelist.txt</IgnoreListFile>
   </IgnoreList>
   <DirectoryHotList>
-    <HotDir Name="petr" Path="/home/petr/" PathSort="1"/>
+    <HotDir Name="petr" Path="/home/petr" PathSort="1"/>
     <HotDir Name="GoogleDrive" Path="/home/petr/GoogleDrive" PathSort="1"/>
-    <HotDir Name="Stažené" Path="/home/petr/Stažené/" PathSort="7"/>
+    <HotDir Name="Stažené" Path="/home/petr/Stažené" PathSort="7"/>
     <HotDir Name="Repo" Path="/home/petr/Repo" PathSort="1"/>
     <HotDir Name="tmp" Path="/tmp" PathSort="1"/>
   </DirectoryHotList>
