@@ -22,3 +22,8 @@ run  = [
 on = "T"
 run = "shell --confirm --orphan 'ghostty --working-directory=\"$(pwd)\"'"
 desc = "Open the current directory in Ghostty"
+
+[[mgr.prepend_keymap]]
+on = ["g", "r"]
+run = "cd ~/Repo"
+desc = "Go to ~/Repo"
