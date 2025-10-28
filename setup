@@ -54,7 +54,7 @@ cd "$CONFIGURATION_DIR"
 
 dirs_in_configuration=$(find "$CONFIGURATION_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
 echo stowing directories in "$CONFIGURATION_DIR": $dirs_in_configuration
-stow -v -t --override ~ $dirs_in_configuration $@
+stow -v -t ~ $dirs_in_configuration $@
 
 cd "$DOTFILES"
 
