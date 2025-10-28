@@ -1,8 +1,7 @@
 #!/usr/bin/env zsh
 
 function run_bash_tpl() {
-    local from_file_or_dir="$1"
-    local to_file_or_dir="$2"
+    local input_path="$1"
 
     # Bash has to be installed
     if ! command -v bash &> /dev/null; then
@@ -16,9 +15,14 @@ function run_bash_tpl() {
         return 1
     fi
 
-    # Check if from_file_or_dir and to_file_or_dir are provided and both are same type (file or directory)
-    if [[ -z "$from_file_or_dir" || -z "$to_file_or_dir" ]]; then
-        echo "Error: Both 'from_file_or_dir' and 'to_file_or_dir' must be provided."
+    # Check if input_path is provided
+    if [[ -z "$input_path" ]]; then
+        echo "Error: File or directory path must be provided."
+        return 1
+    fi
+
+    if [[ ! -e "$input_path" ]]; then
+        echo "Error: '$input_path' does not exist."
         return 1
     fi
 
@@ -44,22 +48,46 @@ function run_bash_tpl() {
         fi
     }
 
-    # If both are directories, process all files in the directory recursively using find
-    if [[ -d "$from_file_or_dir" && -d "$to_file_or_dir" ]]; then
-        echo "Processing all files in directory: $from_file_or_dir -> $to_file_or_dir"
-        find "$from_file_or_dir" -type f | while read -r input_file; do
-            local relative_path="${input_file#$from_file_or_dir/}"
-            local output_file="$to_file_or_dir/$relative_path"
+    # Function to generate output filename from template filename
+    function get_output_filename() {
+        local input_file="$1"
+        local output_file="${input_file%.template*}"
+        
+        # If file was *.template.ext, add back the extension
+        if [[ "$input_file" == *.template.* ]]; then
+            local ext="${input_file##*.}"
+            output_file="${output_file}.${ext}"
+        fi
+        
+        echo "$output_file"
+    }
+
+    # Handle single file
+    if [[ -f "$input_path" ]]; then
+        # Check if file matches template pattern
+        if [[ "$input_path" == *.template || "$input_path" == *.template.* ]]; then
+            local output_file=$(get_output_filename "$input_path")
+            process_file "$input_path" "$output_file"
+            return $?
+        else
+            echo "Error: File '$input_path' does not match template pattern (*.template or *.template.*)"
+            return 1
+        fi
+    fi
+
+    # Handle directory
+    if [[ -d "$input_path" ]]; then
+        echo "Processing all template files in directory: $input_path"
+        find "$input_path" -type f \( -name "*.template.*" -o -name "*.template" \) | while read -r input_file; do
+            local output_file=$(get_output_filename "$input_file")
+            
             process_file "$input_file" "$output_file"
             if [[ $? -ne 0 ]]; then
                 echo "Error processing file: $input_file"
                 return 1
             fi
         done
-    else
-        # process_file will check if both are files
-        process_file "$from_file_or_dir" "$to_file_or_dir"
-        return $?
     fi
+    
     return 0
 }

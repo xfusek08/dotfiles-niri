@@ -19,11 +19,11 @@ fi
 source "$(pwd)/functions/run_bash_tpl.zsh"
 
 export DOTFILES=$(pwd)
-export ENVIRONMENT_FILE="$DOTFILES/generated/environment"
+export ENVIRONMENT_FILE="${CONFIGURATION_DIR:-$DOTFILES/configuration}/environment"
 export RUN_TEMPLATE_COMMAND="$(pwd)/vendor/bash-tpl/bash-tpl"
 
 echo "Generating environment file at $ENVIRONMENT_FILE..."
-run_bash_tpl "$(pwd)/templates/environment" "$ENVIRONMENT_FILE"
+run_bash_tpl "$ENVIRONMENT_FILE.template"
 
 echo "Environment file generated at $ENVIRONMENT_FILE"
 source "$ENVIRONMENT_FILE"
@@ -31,7 +31,7 @@ source "$ENVIRONMENT_FILE"
 # ~~~~~~~~~~~~~~~ Generate templated files ~~~~~~~~~~~~~~~~
 
 echo "Generating templated files..."
-run_bash_tpl "$TEMPLATE_DIR" "$GENERATED_DIR"
+run_bash_tpl "$CONFIGURATION_DIR"
 
 # ~~~~~~~~~~~~~~~ Set all scripts as executable ~~~~~~~~~~~~~~~~
 
@@ -50,11 +50,11 @@ echo "Running system setup script..."
 
 # ~~~~~~~~~~~~~~~ Stow the config ~~~~~~~~~~~~~~~~
 
-cd "$GENERATED_DIR"
+cd "$CONFIGURATION_DIR"
 
-dirs_in_generated=$(find "$GENERATED_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
-echo stowing directories in "$GENERATED_DIR": $dirs_in_generated
-stow -v -t ~ $dirs_in_generated $@
+dirs_in_configuration=$(find "$CONFIGURATION_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+echo stowing directories in "$CONFIGURATION_DIR": $dirs_in_configuration
+stow -v -t --override ~ $dirs_in_configuration $@
 
 cd "$DOTFILES"
 

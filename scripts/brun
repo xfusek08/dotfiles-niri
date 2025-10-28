@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # Source environment to get all the variables
-source "$GENERATED_DIR/environment"
+source "$CONFIGURATION_DIR/environment"
 
 # Run bunner in native mode (directly on the system, not in Docker)
 export BUNNER_NATIVE=true

@@ -3,7 +3,7 @@
 source "$SCRIPT_FNS/run_bash_tpl.zsh"
 
 echo "Regenerating dotfiles..."
-run_bash_tpl "$TEMPLATE_DIR" "$GENERATED_DIR"
+run_bash_tpl "$CONFIGURATION_DIR"
 
 echo "Reloading mako..."
 makoctl reload

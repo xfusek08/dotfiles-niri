@@ -1,0 +1,258 @@
+/* Modern Waybar Theme */
+
+/* Color variables */
+
+@define-color text #cdd6f4;
+@define-color text-inactive #a6adc8;
+@define-color text-muted #7f849c;
+@define-color text-white #ffffff;
+@define-color bg rgba(30, 30, 46, 0.95);
+@define-color bg-solid #1e1e2e;
+@define-color accent rgba(137, 180, 250, 0.3);
+@define-color accent-hover rgba(137, 180, 250, 0.2);
+@define-color accent-active rgba(137, 180, 250, 0.4);
+@define-color accent-border rgba(137, 180, 250, 0.5);
+@define-color urgent rgba(243, 139, 168, 0.8);
+@define-color urgent-solid #f38ba8;
+@define-color urgent-hover rgba(243, 139, 168, 0.2);
+
+* {
+    margin: 0;
+    padding: 1px;
+    border: none;
+    font-family: 'JetBrainsMono Nerd Font', 'Font Awesome 6 Free', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    transition-property: background-color;
+    transition-duration: 0.3s;
+    border-radius: 0;
+    min-height: 0;
+}
+
+window#waybar {
+    color: @text;
+    background: @bg;
+    border-bottom: 2px solid @accent;
+}
+
+tooltip {
+    border: 1px solid @accent-border;
+    background: @bg;
+    border-radius: 8px;
+}
+
+tooltip label {
+    padding: 6px;
+    color: @text;
+}
+
+#workspaces button {
+    margin: 4px 2px;
+    padding: 0 5px;
+    color: @text-inactive;
+    background: transparent;
+    border-radius: 4px;
+}
+
+#workspaces button:hover {
+    color: @text;
+    background: @accent-hover;
+}
+
+#workspaces button.active {
+    color: @bg-solid;
+    background: @accent-active;
+}
+
+#workspaces button.urgent {
+    color: @bg-solid;
+    background: @urgent;
+}
+
+#clock,
+#custom-clock,
+#battery,
+#cpu,
+#memory,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#power-profiles-daemon,
+#mpd,
+#custom-power,
+#custom-clipboard,
+#custom-colorpicker,
+#niri-window {
+    margin: 0 0px;
+    padding: 5px;
+    color: @text;
+    background: transparent;
+    min-width: 20px;
+}
+
+#clock,
+#custom-clock {
+    font-weight: bold;
+    color: @text;
+    background: transparent;
+}
+
+#battery {
+    color: @text;
+    background: transparent;
+}
+
+#battery.charging,
+#battery.plugged {
+    background: transparent;
+}
+
+#battery.warning:not(.charging) {
+    color: @text;
+    background: transparent;
+}
+
+#battery.critical:not(.charging) {
+    color: @text;
+    animation-name: battery-blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    background: transparent;
+}
+
+#cpu {
+    color: @text;
+    background: transparent;
+}
+
+#memory {
+    color: @text;
+    background: transparent;
+}
+
+#backlight {
+    color: @text;
+    background: transparent;
+}
+
+#network {
+    color: @text;
+    background: transparent;
+    padding-left: 8px;
+}
+
+#network.disconnected {
+    color: @text;
+    background: transparent;
+}
+
+#pulseaudio {
+    color: @text;
+    background: transparent;
+}
+
+#pulseaudio.muted {
+    color: @text-muted;
+    background: transparent;
+}
+
+#temperature {
+    color: @text;
+    background: transparent;
+}
+
+#temperature.critical {
+    color: @text;
+    background: transparent;
+}
+
+#tray {
+    padding: 0 10px;
+    background: transparent;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
+
+#idle_inhibitor {
+    background: transparent;
+}
+
+#idle_inhibitor.activated {
+    color: @text-white;
+    background: transparent;
+}
+
+#power-profiles-daemon {
+    color: @text;
+    background: transparent;
+}
+
+#custom-media {
+    color: @text;
+    background: transparent;
+    min-width: 100px;
+}
+
+#custom-power,
+#custom-clipboard,
+#custom-colorpicker {
+    min-width: 30px;
+    padding-right: 8px;
+    font-size: 16px;
+    color: @text;
+    background: transparent;
+}
+
+#custom-separator {
+    padding: 0 6px;
+    color: @text-muted;
+    background: transparent;
+}
+
+#custom-power:hover,
+#custom-clipboard:hover,
+#custom-colorpicker:hover {
+    background: @accent-hover;
+}
+
+#niri-window {
+    padding: 0 15px;
+    font-style: italic;
+    color: @text;
+    background: transparent;
+    margin-left: 8px;
+}
+
+/* Style for hardware group */
+#hardware {
+    border-left: 2px solid @accent;
+    border-right: 2px solid @accent;
+}
+
+#hardware * {
+    padding: 0;
+    margin: 0;
+    min-width: 75px;
+}
+
+/* Battery animation color should use the urgent color */
+
+@keyframes battery-blink {
+    to {
+        background-color: transparent;
+        color: @urgent-solid;
+    }
+}

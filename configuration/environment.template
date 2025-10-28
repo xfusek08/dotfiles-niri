@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+export BUNNER_COMMAND="$DOTFILES/vendor/bunner/run"
+export BUNNER_COMMANDS_DIR="$DOTFILES/bunner-commands"
+export COMPLETIONS_DIR="$DOTFILES/completions"
+export CONFIGURATION_DIR="$DOTFILES/configuration"
+export DOTFILES=${DOTFILES:-"<%$DOTFILES%>"}
+export RUN_TEMPLATE_COMMAND="$DOTFILES/vendor/bash-tpl/bash-tpl"
+export SCRIPT_FNS="$DOTFILES/functions"
+export SCRIPTS="$DOTFILES/scripts"
+export SETUP_SCRIPTS="$DOTFILES/setup-scripts"
+export SYNCED_BACKUP_DIR="$HOME/GoogleDrive/Zalohy"
