@@ -13,7 +13,7 @@ keybind = performable:ctrl+c=copy_to_clipboard
 keybind = ctrl+v=paste_from_clipboard
 
 font-family = "FiraCode Nerd Font"
-theme = ayu
+theme = Ayu
 
 window-decoration = false
 gtk-titlebar = false
