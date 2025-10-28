@@ -1,6 +1,0 @@
-[submodule "shell/bunner"]
-	path = vendor/bunner
-	url = git@github.com:xfusek08/bunner.git
-[submodule "vendor/bash-tpl"]
-	path = vendor/bash-tpl
-	url = git@github.com:TekWizely/bash-tpl.git
