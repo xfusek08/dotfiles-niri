@@ -1,8 +1,11 @@
 { config, pkgs, ... }:
 
 {
-  # Enable experimental features for flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Enable experimental features for flakes and increase download buffer
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    download-buffer-size = 7516192768; # 7 GB to handle large downloads
+  };
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
