@@ -15,5 +15,8 @@ setsid waybar > /dev/null 2>&1 &
 echo "Setting all scripts in $SCRIPTS as executable..."
 find "$SCRIPTS" -type f -exec chmod +x {} \;
 
+echo "Reloading ZSH completions..."
+autoload -Uz compinit && compinit
+
 echo "Entering new shell..."
 zsh

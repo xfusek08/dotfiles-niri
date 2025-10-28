@@ -1,0 +1,23 @@
+#compdef brun
+
+# Dynamic completions for brun command
+# This completion file calls 'brun bunner-completions' to get the current
+# list of available commands and their options
+
+_brun() {
+    typeset -A opt_args
+    local cwd="$(pwd)"
+
+    # Get dynamic completion data from bunner
+    local completion_data=$(brun bunner-completions 2>/dev/null)
+    
+    if [[ -z "$completion_data" ]]; then
+        _message "no bunner commands available"
+        return 1
+    fi
+    
+    eval "$completion_data" 2>/dev/null
+    return 0
+}
+
+compdef _brun brun
