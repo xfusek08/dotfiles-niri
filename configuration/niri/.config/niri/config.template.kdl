@@ -361,12 +361,6 @@ window-rule {
     open-floating true
 }
 
-// Float all Double Commander windows except the main one
-window-rule {
-    match app-id=r#"doublecmd|org\.doublecmd\.DoubleCmd"# title!=r#"^Double Commander.*"#
-    open-floating true
-}
-
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
 /-window-rule {
