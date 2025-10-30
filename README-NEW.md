@@ -14,26 +14,49 @@ For a complete NixOS installation from scratch with automated disk partitioning:
 
 ### TL;DR
 
+Boot NixOS live ISO, or use [[SSH Access from Host to VM]] for easier command execution:
+
 ```bash
-# Boot NixOS live ISO, then:
+# 0. If not already root, switch to root.
 sudo -i
-nix-shell -p git
+
+# 1. Open shell with git and disko.
+nix-shell -p git disko
+
+# 2. Clone this repository and switch to nixos branch.
 git clone https://github.com/xfusek08/dotfiles-niri /tmp/dotfiles-nixos
 cd /tmp/dotfiles-nixos
+git checkout nixos
 
-# Partition disk with Disko (⚠️ ERASES ALL DATA!)
-nix --experimental-features "nix-command flakes" run github:nix-community/disko -- \
-  --mode disko /tmp/dotfiles-nixos/disk-config.nix
+# 3. Partition disk with Disko (⚠️ ERASES ALL DATA!)
+disko --mode disko /tmp/dotfiles-nixos/disk-config.nix
 
-# Generate hardware config
+# 4. Verify partitions with lsblk:
+lsblk
+# Result for VM:
+# -----------------------------------------------
+# $ lsblk
+# NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+# loop0    7:0    0  1.2G  1 loop /nix/.ro-store
+# sr0     11:0    1  1.3G  0 rom  /iso
+# vda    253:0    0   25G  0 disk
+# ├─vda1 253:1    0    1G  0 part /mnt/boot
+# ├─vda2 253:2    0    4G  0 part [SWAP]
+# └─vda3 253:3    0   20G  0 part /mnt
+
+# 5. Generate hardware config:
 nixos-generate-config --root /mnt --no-filesystems
-cp /mnt/etc/nixos/hardware-configuration.nix /tmp/dotfiles-nixos/
+# writing /mnt/etc/nixos/hardware-configuration.nix...
+# writing /mnt/etc/nixos/configuration.nix...
+# For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware.
 
-# Edit configuration.nix to uncomment hardware-configuration.nix import
-# Then install:
-cp -r /tmp/dotfiles-nixos /mnt/tmp/
-nixos-install --flake /mnt/tmp/dotfiles-nixos#nixos
+# 6. ONE-STEP INSTALL with your complete flake
+nixos-install --flake /tmp/dotfiles-nixos#nixos
+
+# 7. Set user password
 nixos-enter --root /mnt -c 'passwd petr'
+
+# 8. Reboot
 reboot
 ```
 
