@@ -1,10 +1,12 @@
 # NixOS Dotfiles with Niri, Disko, and Home Manager
 
 A declarative, reproducible NixOS configuration featuring:
-- **Niri**: Modern scrollable-tiling Wayland compositor (installed from nixpkgs)
+- **Niri**: Modern scrollable-tiling Wayland compositor with unique horizontal workflow
 - **Disko**: Declarative disk partitioning
 - **Home Manager**: User environment management
 - **Flakes**: For reproducible builds and easy updates
+
+> **Note**: This configuration uses Niri from nixpkgs (programs.niri.enable = true)
 
 ## 🚀 Installation
 
@@ -136,4 +138,10 @@ To rebuild after making changes:
 rebuild  # Alias defined in home.nix
 # or
 sudo nixos-rebuild switch --flake ~/dotfiles-nixos#nixos
+```
+
+```shell
+cp /tmp/dotfiles-nixos/configuration.nix /etc/nixos/configuration.nix
+cp /tmp/dotfiles-nixos/home.nix /etc/nixos/home.nix
+cp /tmp/dotfiles-nixos/flake.nix /etc/nixos/flake.nix
 ```

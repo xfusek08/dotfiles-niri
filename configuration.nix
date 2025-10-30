@@ -15,15 +15,27 @@
 
   services.getty.autologinUser = "petr";
 
+  # Enable SSH daemon
+  services.openssh = {
+    enable = true;
+    settings.PermitRootLogin = "yes";
+  };
+
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Prague";
 
-  programs.hyprland = {
+  programs.niri = {
     enable = true;
-    withUWSM = true;
-    xwayland.enable = true;
+    package = pkgs.niri;
+  };
+
+  # XDG Desktop Portal for screencasting, file pickers, etc.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = "gtk";
   };
 
   users.users.petr = {
@@ -37,9 +49,16 @@
   environment.systemPackages = with pkgs; [
     vim
     wget
-    foot
     waybar
-    kitty
+    # Niri-related utilities
+    alacritty
+    fuzzel
+    swaylock
+    xwayland-satellite
+    grim       # Screenshot tool
+    slurp      # Region selector for screenshots
+    wl-clipboard  # Wayland clipboard utilities
+    mako       # Notification daemon
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
