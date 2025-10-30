@@ -16,8 +16,8 @@
   # Enable git with basic configuration
   programs.git = {
     enable = true;
-    userName = "Your Name";  # Change this
-    userEmail = "your.email@example.com";  # Change this
+    userName = "Petr Fusek";
+    userEmail = "petr.fusek97@gmail.com"
   };
 
   # Enable bash with some useful aliases
