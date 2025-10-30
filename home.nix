@@ -19,7 +19,7 @@
     profileExtra = ''
       # Start niri on TTY1 after login
       if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-        exec niri-session
+        exec niri
       fi
     '';
   };
