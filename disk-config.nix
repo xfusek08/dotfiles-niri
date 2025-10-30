@@ -1,24 +1,27 @@
-{ ... }:
-
 {
   disko.devices = {
     disk = {
       main = {
         type = "disk";
-        device = "/dev/vda"; # Change this to your actual disk device
+        device = "/dev/vda";
         content = {
           type = "gpt";
           partitions = {
             ESP = {
-              size = "512M";
+              size = "1G";
               type = "EF00";
               content = {
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
-                mountOptions = [
-                  "defaults"
-                ];
+                mountOptions = [ "umask=0077" ];
+              };
+            };
+            swap = {
+              size = "4G";
+              content = {
+                type = "swap";
+                randomEncryption = true;
               };
             };
             root = {
