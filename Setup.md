@@ -1,5 +1,13 @@
 # NixOS Installation with niri Window Manager
 
+**⚠️ For streamlined installation with automated disk partitioning, see [INSTALL.md](./INSTALL.md) instead!**
+
+This document describes the manual installation process. For an automated, flake-based installation with Disko and Home Manager, refer to the comprehensive guide in INSTALL.md.
+
+---
+
+## Old Manual Installation Method
+
 This repository contains a declarative NixOS configuration with the niri scrollable-tiling Wayland compositor.
 
 ## 0. Prerequisites
@@ -43,7 +51,7 @@ git clone https://github.com/xfusek08/dotfiles-niri.git
 git checkout nixos
 
 # Apply the disko configuration
-disko --mode disko --config /tmp/dotfiles-niri/disk-config.nix
+disko --mode disko /tmp/dotfiles-niri/disk-config.nix
 ```
 
 This will automatically:

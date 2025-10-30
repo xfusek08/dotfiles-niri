@@ -1,25 +1,47 @@
 {
-  description = "NixOS configuration with niri window manager";
+  description = "NixOS configuration with niri window manager, Disko, and Home Manager";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    
     niri.url = "github:sodiboo/niri-flake";
+    
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, niri, disko, ... }: {
+  outputs = { self, nixpkgs, niri, disko, home-manager, ... }: {
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
+          # Disko for declarative disk partitioning
           disko.nixosModules.disko
           ./disk-config.nix
-          ./hardware-configuration.nix
+          
+          # System configuration
           ./configuration.nix
+          
+          # Niri window manager
           niri.nixosModules.niri
+          
+          # Home Manager as a NixOS module
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.petr = import ./home.nix;
+              backupFileExtension = "backup";
+            };
+          }
         ];
       };
     };
