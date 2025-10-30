@@ -12,6 +12,9 @@
 
   # Enable experimental features for flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  
+  # Allow unfree packages (needed for VS Code, etc.)
+  nixpkgs.config.allowUnfree = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
