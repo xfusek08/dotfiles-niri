@@ -52,7 +52,7 @@ nixos-generate-config --root /mnt
 nixos-install --root /mnt
 
 # 7. (Optional) Use nixos-enter to run commands in new system
-nixos-enter --root /mnt
+nixos-enter --root /mnt -c 'psswd petr'  # Set root password if not set during install
 
 # 8. Reboot into new system
 reboot
@@ -148,7 +148,9 @@ cp /home/petr/dotfiles-niri/niri-config.kdl /etc/nixos/niri-config.kdl
 ```
 
 
-cp /tmp/dotfiles-nixos/configuration.nix /mnt/etc/nixos/configuration.nix
-cp /tmp/dotfiles-nixos/home.nix /mnt/etc/nixos/home.nix
-cp /tmp/dotfiles-nixos/flake.nix /mnt/etc/nixos/flake.nix
-cp /tmp/dotfiles-nixos/niri-config.kdl /mnt/etc/nixos/niri-config.kdl
+cp ~/dotfiles-nixos/configuration.nix /mnt/etc/nixos/configuration.nix
+cp ~/dotfiles-nixos/home.nix /mnt/etc/nixos/home.nix
+cp ~/dotfiles-nixos/flake.nix /mnt/etc/nixos/flake.nix
+cp ~/dotfiles-nixos/niri-config.kdl /mnt/etc/nixos/niri-config.kdl
+
+cat /mnt/etc/nixos/configuration.nix /mnt/etc/nixos/home.nix
