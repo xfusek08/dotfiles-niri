@@ -5,6 +5,7 @@ This repository contains a declarative NixOS configuration with the niri scrolla
 ## 0. Prerequisites
 
 - A machine booted from NixOS minimal live ISO
+- \[OPTIONAL\] [[SSH Access from Host to VM]] for easier administration and copy-pasting of commands.
 
 ## 1. Disk partitioning
 
