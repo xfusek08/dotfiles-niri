@@ -33,12 +33,13 @@
 
   # Basic packages for your user
   home.packages = with pkgs; [
-    # Add your personal packages here
-    neovim
-    htop
-    tree
-    ripgrep
+    bat
+    btop
     fd
+    fzf
+    ripgrep
+    tree
+    vscode
   ];
 
   # Example: Configure user-specific programs here
