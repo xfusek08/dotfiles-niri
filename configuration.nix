@@ -45,6 +45,7 @@
 
   programs.firefox.enable = true;
   environment.systemPackages = with pkgs; [
+    git
     vim
     wget
     waybar
