@@ -27,10 +27,7 @@
 
   time.timeZone = "Europe/Prague";
 
-  programs.niri = {
-    enable = true;
-    xwayland.enable = true;
-  };
+  programs.niri.enable = true;
 
   # XDG Desktop Portal for screencasting, file pickers, etc.
   xdg.portal = {
