@@ -1,56 +1,19 @@
 { config, pkgs, ... }:
 
 {
-  # Home Manager needs a bit of information about you and the paths it should manage
-  home.username = "petr";
-  home.homeDirectory = "/home/petr";
-
-  # This value determines the Home Manager release that your configuration is
-  # compatible with. This helps avoid breakage when a new Home Manager release
-  # introduces backwards incompatible changes.
-  home.stateVersion = "24.05";
-
-  # Let Home Manager install and manage itself
-  programs.home-manager.enable = true;
-
-  # Enable git with basic configuration
-  programs.git = {
-    enable = true;
-    settings.user.name = "Petr Fusek";
-    settings.user.email = "petr.fusek97@gmail.com";
-  };
-
-  # Enable bash with some useful aliases
+  home.username = "tony";
+  home.homeDirectory = "/home/tony";
+  home.stateVersion = "25.05";
+  programs.git.enable = true;
   programs.bash = {
     enable = true;
     shellAliases = {
-      ll = "ls -l";
-      la = "ls -la";
-      rebuild = "sudo nixos-rebuild switch --flake ~/dotfiles-nixos#nixos";
-      update = "cd ~/dotfiles-nixos && nix flake update && rebuild";
+      btw = "echo i use nixos, btw";
     };
-    # Set environment variables for Wayland/niri
-    sessionVariables = {
-      NIXOS_OZONE_WL = "1"; # Enable Wayland support for Electron apps
-      MOZ_ENABLE_WAYLAND = "1"; # Enable Wayland for Firefox
-    };
+    profileExtra = ''
+      if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+        exec uwsm start -S hyprland-uwsm.desktop
+      fi
+    '';
   };
-
-  # Basic packages for your user
-  home.packages = with pkgs; [
-    bat
-    btop
-    fd
-    fzf
-    ripgrep
-    tree
-    vscode
-  ];
-
-  # Example: Configure user-specific programs here
-  # programs.neovim = {
-  #   enable = true;
-  #   viAlias = true;
-  #   vimAlias = true;
-  # };
 }
