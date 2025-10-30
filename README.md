@@ -119,9 +119,10 @@ For full niri documentation, see: https://yalter.github.io/niri/
 ## 🔧 Installed Wayland Components
 
 - **niri**: Scrollable-tiling Wayland compositor (from nixpkgs)
-- **xdg-desktop-portal-gnome**: Portal backend for screencasting
+- **xdg-desktop-portal-gtk**: Portal backend for file pickers, screencasting, and settings
+- **pipewire**: Audio and video routing (for screencasting)
 - **polkit-kde-agent**: Authentication agent
-- **gnome-keyring**: Credential storage
+- **gnome-keyring**: Credential storage (enabled by NixOS when using portals)
 
 ## 🎨 Customization
 

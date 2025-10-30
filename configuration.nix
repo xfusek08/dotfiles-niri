@@ -45,39 +45,8 @@
   # Enable niri wayland compositor
   programs.niri.enable = true;
 
-  # Enable XDG desktop portal with GNOME backend (needed for screencasting)
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
-    config.common.default = "*";
-  };
-
-  # Enable polkit for privilege escalation
-  security.polkit.enable = true;
-
-  # Enable GNOME Keyring
-  services.gnome.gnome-keyring.enable = true;
-
-  # Polkit authentication agent systemd service
-  systemd.user.services.polkit-kde-agent = {
-    description = "KDE Polkit Authentication Agent";
-    wantedBy = [ "graphical-session.target" ];
-    wants = [ "graphical-session.target" ];
-    after = [ "graphical-session.target" ];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.polkit_kde_agent}/libexec/polkit-kde-authentication-agent-1";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
-  };
-
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
-
-
-
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -125,8 +94,8 @@
     grim # Screenshot utility
     slurp # Screen area selection
     wl-clipboard # Clipboard utilities
-    # Polkit authentication agent
-    polkit_kde_agent
+    # Portal support (minimal, no GNOME)
+    xdg-desktop-portal-gtk # Provides file picker, screencasting, and all basic portal functionality
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
