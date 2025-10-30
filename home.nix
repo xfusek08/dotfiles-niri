@@ -29,6 +29,11 @@
       rebuild = "sudo nixos-rebuild switch --flake ~/dotfiles-nixos#nixos";
       update = "cd ~/dotfiles-nixos && nix flake update && rebuild";
     };
+    # Set environment variables for Wayland/niri
+    sessionVariables = {
+      NIXOS_OZONE_WL = "1"; # Enable Wayland support for Electron apps
+      MOZ_ENABLE_WAYLAND = "1"; # Enable Wayland for Firefox
+    };
   };
 
   # Basic packages for your user

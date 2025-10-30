@@ -4,8 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     
-    niri.url = "github:sodiboo/niri-flake";
-    
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,7 +15,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, niri, disko, home-manager, ... }: {
+  outputs = { self, nixpkgs, disko, home-manager, ... }: {
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -28,9 +26,6 @@
           
           # System configuration
           ./configuration.nix
-          
-          # Niri window manager
-          niri.nixosModules.niri
           
           # Home Manager as a NixOS module
           home-manager.nixosModules.home-manager

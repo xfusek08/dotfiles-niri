@@ -1,7 +1,7 @@
 # NixOS Dotfiles with Niri, Disko, and Home Manager
 
 A declarative, reproducible NixOS configuration featuring:
-- **Niri**: Modern scrollable-tiling Wayland compositor
+- **Niri**: Modern scrollable-tiling Wayland compositor (installed from nixpkgs)
 - **Disko**: Declarative disk partitioning
 - **Home Manager**: User environment management
 - **Flakes**: For reproducible builds and easy updates
@@ -76,10 +76,14 @@ git commit -m "Add hardware configuration"
 # 3. Apply your full flake configuration
 sudo nixos-rebuild switch --flake .#nixos
 
-# 4. Set password for your user
+# 4. Copy niri config to your home directory (optional - niri will use defaults if not present)
+mkdir -p ~/.config/niri
+cp niri-config.kdl ~/.config/niri/config.kdl
+
+# 5. Set password for your user
 sudo passwd petr
 
-# 5. Reboot to start Niri session
+# 6. Reboot to start Niri session
 reboot
 ```
 
@@ -89,8 +93,6 @@ If you're confident and want to install everything at once:
 
 ```bash
 # After step 6 in Phase 1, instead of basic install:
-# Edit configuration to add niri cache (avoids building from source)
-# Then run:
 nixos-install --flake /tmp/dotfiles-nixos#nixos --no-root-password
 
 # Set user password
@@ -98,4 +100,39 @@ nixos-enter --root /mnt -c 'passwd petr'
 
 # Reboot
 reboot
+```
+
+## 📝 Configuration
+
+After installation, you can customize niri by editing `~/.config/niri/config.kdl`. A sample configuration is provided in this repository at `niri-config.kdl`.
+
+Key features of the setup:
+- **Default Terminal**: Alacritty (`Super+T`)
+- **Application Launcher**: Fuzzel (`Super+D`)
+- **Status Bar**: Waybar (auto-starts)
+- **Notifications**: Mako (auto-starts)
+- **Screen Locker**: Swaylock (`Super+Alt+L`)
+- **Screenshots**: grim + slurp (`Print` key)
+
+For full niri documentation, see: https://yalter.github.io/niri/
+
+## 🔧 Installed Wayland Components
+
+- **niri**: Scrollable-tiling Wayland compositor (from nixpkgs)
+- **xdg-desktop-portal-gnome**: Portal backend for screencasting
+- **polkit-kde-agent**: Authentication agent
+- **gnome-keyring**: Credential storage
+
+## 🎨 Customization
+
+The configuration uses:
+- System packages defined in `configuration.nix`
+- User packages and settings in `home.nix`
+- Niri-specific config in `~/.config/niri/config.kdl`
+
+To rebuild after making changes:
+```bash
+rebuild  # Alias defined in home.nix
+# or
+sudo nixos-rebuild switch --flake ~/dotfiles-nixos#nixos
 ```

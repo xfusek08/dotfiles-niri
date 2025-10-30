@@ -13,12 +13,6 @@
   # Enable experimental features for flakes
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
-    substituters = [
-      "https://niri.cachix.org"
-    ];
-    trusted-public-keys = [
-      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
-    ];
   };
   
   # Allow unfree packages (needed for VS Code, etc.)
@@ -48,8 +42,36 @@
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
-  # Enable niri wayland compositor (configured via flake)
+  # Enable niri wayland compositor
   programs.niri.enable = true;
+
+  # Enable XDG desktop portal with GNOME backend (needed for screencasting)
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
+    config.common.default = "*";
+  };
+
+  # Enable polkit for privilege escalation
+  security.polkit.enable = true;
+
+  # Enable GNOME Keyring
+  services.gnome.gnome-keyring.enable = true;
+
+  # Polkit authentication agent systemd service
+  systemd.user.services.polkit-kde-agent = {
+    description = "KDE Polkit Authentication Agent";
+    wantedBy = [ "graphical-session.target" ];
+    wants = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+  };
 
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
@@ -94,6 +116,17 @@
     wget
     git
     curl
+    # Wayland utilities
+    alacritty # Default terminal for niri
+    fuzzel # Application launcher
+    waybar # Status bar
+    mako # Notification daemon
+    swaylock # Screen locker
+    grim # Screenshot utility
+    slurp # Screen area selection
+    wl-clipboard # Clipboard utilities
+    # Polkit authentication agent
+    libsForQt5.polkit-kde-agent
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
