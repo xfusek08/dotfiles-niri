@@ -162,7 +162,7 @@ Your entire system configuration is in version control. Easy rollbacks and shari
 ## 📚 Documentation
 
 - [INSTALL.md](./INSTALL.md) - Complete installation guide with Disko
-- [Setup.md](./Setup.md) - Legacy manual installation method
+- [Setup.md](doc/Setup.md) - Legacy manual installation method
 - [doc/Disko.md](./doc/Disko.md) - Disko documentation
 - [doc/GPT.md](./doc/GPT.md) - GPT partitioning info
 - [doc/SSH Access from Host to VM.md](./doc/SSH%20Access%20from%20Host%20to%20VM.md) - VM setup

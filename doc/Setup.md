@@ -34,7 +34,7 @@ $ lsblk
 | Swap      | /dev/vda2 | 4G        | Linux swap      | swap   | swap    | [SWAP]      | Memory swap space          |
 | Root      | /dev/vda3 | Remaining | Linux filesystem| ext4   | nixos   | /           | Root filesystem            |
 
-### Partitioning with [[Disko]]
+### Partitioning with [[Disko]] (manual method)
 
 Instead of manual partitioning with [[cfdisk]], we'll use disko for declarative disk management:
 
