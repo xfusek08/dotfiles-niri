@@ -38,7 +38,7 @@
 
   users.users.petr = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "video" "input" "render" ];
     packages = with pkgs; [
     ];
   };
