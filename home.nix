@@ -4,7 +4,11 @@
   home.username = "tony";
   home.homeDirectory = "/home/tony";
   home.stateVersion = "25.05";
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    settings.user.name = "Petr Fusek";
+    settings.user.email = "petr.fusek97@gmail.com";
+  };
   programs.bash = {
     enable = true;
     shellAliases = {
@@ -16,4 +20,12 @@
       fi
     '';
   };
+  home.packages = with pkgs; [
+    bat
+    btop
+    yazi
+    fzf
+    ripgrep
+    vscode
+  ];
 }
