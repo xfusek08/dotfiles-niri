@@ -49,7 +49,6 @@ nixos-generate-config --root /mnt --no-filesystems
 # writing /mnt/etc/nixos/hardware-configuration.nix...
 # writing /mnt/etc/nixos/configuration.nix...
 # For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware.
-cp /mnt/etc/nixos/hardware-configuration.nix /tmp/dotfiles-nixos/
 
 # 6. ONE-STEP INSTALL with your complete flake
 nixos-install --flake /tmp/dotfiles-nixos#nixos
