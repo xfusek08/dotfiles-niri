@@ -13,7 +13,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  services.getty.autologinUser = "tony";
+  services.getty.autologinUser = "petr";
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
@@ -30,7 +30,6 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     packages = with pkgs; [
-      tree
     ];
   };
 
