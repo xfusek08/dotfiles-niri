@@ -65,8 +65,8 @@ After rebooting into your basic NixOS system:
 ```bash
 # 1. Copy your dotfiles to home directory
 nix-shell -p git disko
-git clone https://github.com/xfusek08/dotfiles-niri ~/dotfiles-nixos
-cd ~/dotfiles-nixos
+git clone https://github.com/xfusek08/dotfiles-niri ~/dotfiles-niri
+cd ~/dotfiles-niri
 git checkout nixos
 
 # 2. Generate hardware configuration and include it in repo
@@ -145,7 +145,6 @@ cp /home/petr/dotfiles-niri/configuration.nix /etc/nixos/configuration.nix
 cp /home/petr/dotfiles-niri/home.nix /etc/nixos/home.nix
 cp /home/petr/dotfiles-niri/flake.nix /etc/nixos/flake.nix
 cp /home/petr/dotfiles-niri/niri-config.kdl /etc/nixos/niri-config.kdl
-```
 
 
 cp ~/dotfiles-nixos/configuration.nix /mnt/etc/nixos/configuration.nix
@@ -154,3 +153,12 @@ cp ~/dotfiles-nixos/flake.nix /mnt/etc/nixos/flake.nix
 cp ~/dotfiles-nixos/niri-config.kdl /mnt/etc/nixos/niri-config.kdl
 
 cat /mnt/etc/nixos/configuration.nix /mnt/etc/nixos/home.nix
+
+cp ~/dotfiles-niri/configuration.nix /etc/nixos/configuration.nix
+cp ~/dotfiles-niri/home.nix /etc/nixos/home.nix
+cp ~/dotfiles-niri/flake.nix /etc/nixos/flake.nix
+cp ~/dotfiles-niri/niri-config.kdl /etc/nixos/niri-config.kdl
+
+nixos-rebuild switch --flake /etc/nixos#nixos-btw
+
+```
