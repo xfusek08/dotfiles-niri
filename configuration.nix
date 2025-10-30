@@ -7,7 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      /mnt/etc/nixos/hardware-configuration.nix
+      ./hardware-configuration.nix
     ];
 
   # Enable experimental features for flakes
