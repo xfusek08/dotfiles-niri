@@ -15,7 +15,8 @@
       btw = "echo i use nixos, btw";
     };
     profileExtra = ''
-      if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+      # Start niri on any TTY if not already in a graphical session
+      if [ -z "$WAYLAND_DISPLAY" ] && [ -z "$DISPLAY" ]; then
         exec niri-session
       fi
     '';
