@@ -66,7 +66,7 @@
     after = [ "graphical-session.target" ];
     serviceConfig = {
       Type = "simple";
-      ExecStart = "${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-authentication-agent-1";
+      ExecStart = "${pkgs.polkit_kde_agent}/libexec/polkit-kde-authentication-agent-1";
       Restart = "on-failure";
       RestartSec = 1;
       TimeoutStopSec = 10;
@@ -126,7 +126,7 @@
     slurp # Screen area selection
     wl-clipboard # Clipboard utilities
     # Polkit authentication agent
-    libsForQt5.polkit-kde-agent
+    polkit_kde_agent
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
