@@ -13,6 +13,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Auto-login to TTY1 (niri will start automatically from bash profile)
   services.getty.autologinUser = "petr";
 
   # Enable SSH daemon
@@ -28,7 +29,7 @@
 
   programs.niri = {
     enable = true;
-    package = pkgs.niri;
+    xwayland.enable = true;
   };
 
   # XDG Desktop Portal for screencasting, file pickers, etc.
@@ -59,6 +60,8 @@
     slurp      # Region selector for screenshots
     wl-clipboard  # Wayland clipboard utilities
     mako       # Notification daemon
+    # Additional tools for niri
+    libnotify  # For notification support
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

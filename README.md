@@ -28,12 +28,12 @@ sudo -i
 nix-shell -p git disko
 
 # 2. Clone this repository
-git clone https://github.com/xfusek08/dotfiles-niri /tmp/dotfiles-nixos
-cd /tmp/dotfiles-nixos
+git clone https://github.com/xfusek08/dotfiles-niri ~/dotfiles-nixos
+cd ~/dotfiles-nixos
 git checkout nixos
 
 # 3. Partition disk with Disko (⚠️ ERASES ALL DATA!)
-disko --mode disko /tmp/dotfiles-nixos/disk-config.nix
+disko --mode disko ~/dotfiles-nixos/disk-config.nix
 
 # 4. Verify partitions
 lsblk
@@ -64,7 +64,7 @@ After rebooting into your basic NixOS system:
 
 ```bash
 # 1. Copy your dotfiles to home directory
-nix-shell -p git
+nix-shell -p git disko
 git clone https://github.com/xfusek08/dotfiles-niri ~/dotfiles-nixos
 cd ~/dotfiles-nixos
 git checkout nixos
@@ -146,3 +146,9 @@ cp /home/petr/dotfiles-niri/home.nix /etc/nixos/home.nix
 cp /home/petr/dotfiles-niri/flake.nix /etc/nixos/flake.nix
 cp /home/petr/dotfiles-niri/niri-config.kdl /etc/nixos/niri-config.kdl
 ```
+
+
+cp /tmp/dotfiles-nixos/configuration.nix /mnt/etc/nixos/configuration.nix
+cp /tmp/dotfiles-nixos/home.nix /mnt/etc/nixos/home.nix
+cp /tmp/dotfiles-nixos/flake.nix /mnt/etc/nixos/flake.nix
+cp /tmp/dotfiles-nixos/niri-config.kdl /mnt/etc/nixos/niri-config.kdl
