@@ -141,7 +141,8 @@ sudo nixos-rebuild switch --flake ~/dotfiles-nixos#nixos
 ```
 
 ```shell
-cp /tmp/dotfiles-nixos/configuration.nix /etc/nixos/configuration.nix
-cp /tmp/dotfiles-nixos/home.nix /etc/nixos/home.nix
-cp /tmp/dotfiles-nixos/flake.nix /etc/nixos/flake.nix
+cp /home/petr/dotfiles-niri/configuration.nix /etc/nixos/configuration.nix
+cp /home/petr/dotfiles-niri/home.nix /etc/nixos/home.nix
+cp /home/petr/dotfiles-niri/flake.nix /etc/nixos/flake.nix
+cp /home/petr/dotfiles-niri/niri-config.kdl /etc/nixos/niri-config.kdl
 ```

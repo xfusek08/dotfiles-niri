@@ -16,9 +16,9 @@
     shellAliases = {
       btw = "echo i use nixos, btw";
     };
-    profileExtra = ''
-      # Start niri on any TTY if not already in a graphical session
-      if [ -z "$WAYLAND_DISPLAY" ] && [ -z "$DISPLAY" ]; then
+    bashrcExtra = ''
+      # Start niri on TTY1 after login (not during profile loading)
+      if [ -z "$WAYLAND_DISPLAY" ] && [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
         exec niri-session
       fi
     '';
