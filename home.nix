@@ -4,7 +4,7 @@
   imports = [
     niri.homeModules.niri
     dankMaterialShell.homeModules.dankMaterialShell.default
-    dankMaterialShell.homeModules.dankMaterialShell.niri
+    # dankMaterialShell.homeModules.dankMaterialShell.niri
   ];
 
   home.username = "petr";
