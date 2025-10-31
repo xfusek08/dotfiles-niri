@@ -50,7 +50,7 @@
     wget
     waybar
     # Niri-related utilities
-    ghostty
+    alacritty
     fuzzel
     swaylock
     xwayland-satellite
