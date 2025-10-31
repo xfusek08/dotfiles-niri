@@ -45,25 +45,21 @@
 
   programs.firefox.enable = true;
   environment.systemPackages = with pkgs; [
-    git
-    vim
-    wget
-    waybar
-    # Niri-related utilities
-    alacritty
-    fuzzel
-    swaylock
-    xwayland-satellite
-    grim       # Screenshot tool
-    slurp      # Region selector for screenshots
-    wl-clipboard  # Wayland clipboard utilities
-    mako       # Notification daemon
-    # Dank Material Shell dependencies
-    cava
-    cliphist
-    brightnessctl
-    qt6.qtmultimedia
-    accountsservice
+    accountsservice    # For Dank Material Shell user menu
+    alacritty          # Terminal emulator
+    brightnessctl      # Screen brightness control
+    cava               # Audio visualizer
+    cliphist           # Clipboard manager
+    git                # Version control system
+    grim               # Screenshot tool
+    mako               # Notification daemon
+    matugen            # Wallpaper setter
+    qt6.qtmultimedia   # For media controls in Dank Material Shell
+    slurp              # Region selector for screenshots
+    swaylock           # Screen locker
+    wget               # For downloading files
+    wl-clipboard       # Wayland clipboard utilities
+    xwayland-satellite # For X11 app compatibility
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
