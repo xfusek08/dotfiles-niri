@@ -12,7 +12,16 @@
   home.stateVersion = "25.05";
   
   # Enable Dank Material Shell
-  programs.dankMaterialShell.enable = true;
+  programs.dankMaterialShell = {
+    enable = true;
+    enableSystemd = true;  # Enable automatic startup via systemd
+    
+    # Niri-specific options
+    niri = {
+      enableKeybinds = true;  # Enable DMS keybindings in niri
+      enableSpawn = true;      # Enable DMS spawn-at-startup in niri
+    };
+  };
   
   programs.git = {
     enable = true;
