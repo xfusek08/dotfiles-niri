@@ -50,7 +50,7 @@
     wget
     waybar
     # Niri-related utilities
-    alacritty
+    ghostty
     fuzzel
     swaylock
     xwayland-satellite
@@ -58,8 +58,6 @@
     slurp      # Region selector for screenshots
     wl-clipboard  # Wayland clipboard utilities
     mako       # Notification daemon
-    # Additional tools for niri
-    libnotify  # For notification support
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

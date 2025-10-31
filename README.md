@@ -47,12 +47,17 @@ lsblk
 # 5. Generate hardware config
 nixos-generate-config --root /mnt
 
+cp ~/dotfiles-nixos/configuration.nix /mnt/etc/nixos/configuration.nix
+cp ~/dotfiles-nixos/home.nix /mnt/etc/nixos/home.nix
+cp ~/dotfiles-nixos/flake.nix /mnt/etc/nixos/flake.nix
+cp ~/dotfiles-nixos/niri-config.kdl /mnt/etc/nixos/niri-config.kdl
+
 # 6. Install MINIMAL NixOS
 # Will prompt for root password at the end
 nixos-install --root /mnt
 
-# 7. (Optional) Use nixos-enter to run commands in new system
-nixos-enter --root /mnt -c 'psswd petr'  # Set root password if not set during install
+# 7. Set password for your user
+nixos-enter --root /mnt -c 'passwd petr'
 
 # 8. Reboot into new system
 reboot
@@ -158,6 +163,15 @@ cp ~/dotfiles-niri/configuration.nix /etc/nixos/configuration.nix
 cp ~/dotfiles-niri/home.nix /etc/nixos/home.nix
 cp ~/dotfiles-niri/flake.nix /etc/nixos/flake.nix
 cp ~/dotfiles-niri/niri-config.kdl /etc/nixos/niri-config.kdl
+
+nixos-rebuild switch --flake /etc/nixos#nixos-btw
+
+# ---
+
+cp configuration.nix /etc/nixos/configuration.nix
+cp home.nix /etc/nixos/home.nix
+cp flake.nix /etc/nixos/flake.nix
+cp niri-config.kdl /etc/nixos/niri-config.kdl
 
 nixos-rebuild switch --flake /etc/nixos#nixos-btw
 
