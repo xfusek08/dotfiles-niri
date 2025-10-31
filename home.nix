@@ -10,7 +10,7 @@
   home.homeDirectory = "/home/petr";
   home.stateVersion = "25.05";
   
-  programs.dankMaterialShell.enable = true
+  programs.dankMaterialShell.enable = true;
   
   programs.git = {
     enable = true;
