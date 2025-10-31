@@ -68,7 +68,8 @@ paru -S --noconfirm --needed \
     inter-font \
     libqalculate \
     sherlock-launcher-bin \
-    hyprpicker
+    hyprpicker \
+    jujutsu
 
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
 
