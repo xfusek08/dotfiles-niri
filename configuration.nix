@@ -30,6 +30,13 @@
   
   programs.firefox.enable = true;
   
+  # XDG Desktop Portal for screen casting, file pickers, etc.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = "gtk";
+  };
+  
   environment.systemPackages = with pkgs; [
     accountsservice    # For Dank Material Shell user menu
     alacritty          # Terminal emulator
