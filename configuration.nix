@@ -58,6 +58,12 @@
     slurp      # Region selector for screenshots
     wl-clipboard  # Wayland clipboard utilities
     mako       # Notification daemon
+    # Dank Material Shell dependencies
+    cava
+    cliphist
+    brightnessctl
+    qt6.qtmultimedia
+    accountsservice
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
