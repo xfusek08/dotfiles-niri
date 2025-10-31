@@ -2,9 +2,11 @@
 
 {
   imports = [
-    niri.homeModules.niri
+    # Note: Not importing niri.homeModules.niri to avoid config file conflict
+    # We'll manage niri config manually via the config.kdl file
     dankMaterialShell.homeModules.dankMaterialShell.default
-    dankMaterialShell.homeModules.dankMaterialShell.niri
+    # Note: Not importing the niri-specific DMS module since it requires niri home module
+    # We'll configure DMS to work with niri manually
   ];
 
   home.username = "petr";
@@ -15,12 +17,6 @@
   programs.dankMaterialShell = {
     enable = true;
     enableSystemd = true;  # Enable automatic startup via systemd
-    
-    # Niri-specific options
-    niri = {
-      enableKeybinds = true;  # Enable DMS keybindings in niri
-      enableSpawn = true;      # Enable DMS spawn-at-startup in niri
-    };
   };
   
   programs.git = {
