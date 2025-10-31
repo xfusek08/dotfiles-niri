@@ -280,6 +280,10 @@ layout {
 // See the binds section below for more spawn examples.
 
 spawn-at-startup "xwayland-satellite"
+// Required for clipboard-history integration (wl-clipboard + cliphist)
+spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
+// Recommended for elevation prompts (install polkit-mate first)
+spawn-at-startup "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"
 // Dank Material Shell - provides bar, notifications, and more
 spawn-at-startup "dms" "run"
 
@@ -314,37 +318,6 @@ animations {
 // Find more information on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
 
-// Work around WezTerm's initial configure bug
-// by setting an empty default-column-width.
-window-rule {
-    // This regular expression is intentionally made as specific as possible,
-    // since this is the default config, and we want no false positives.
-    // You can get away with just app-id="wezterm" if you want.
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    default-column-width {}
-}
-
-// Open the Firefox picture-in-picture player as floating by default.
-window-rule {
-    // This app-id regular expression will work for both:
-    // - host Firefox (app-id is "firefox")
-    // - Flatpak Firefox (app-id is "org.mozilla.firefox")
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true
-}
-
-// Example: block out two password managers from screen capture.
-// (This example rule is commented out with a "/-" in front.)
-/-window-rule {
-    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-    match app-id=r#"^org\.gnome\.World\.Secrets$"#
-
-    block-out-from "screen-capture"
-
-    // Use this instead if you want them visible on third-party screenshot tools.
-    // block-out-from "screencast"
-}
-
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
@@ -353,9 +326,22 @@ window-rule {
     draw-border-with-background false
 }
 
-window-rule {
-    match title="Clipse TUI"
-    open-floating true
+config-notification {
+    disable-failed
+}
+
+debug {
+    honor-xdg-activation-with-invalid-serial
+}
+
+layer-rule {
+    match namespace="quickshell"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace="dms:blurwallpaper"
+    place-within-backdrop true
 }
 
 binds {

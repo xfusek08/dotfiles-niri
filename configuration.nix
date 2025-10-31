@@ -29,7 +29,7 @@
 
   programs.niri.enable = true;
 
-  # XDG Desktop Portal for screencasting, file pickers, etc.
+  # XDG Desktop Portal for screen casting, file pickers, etc.
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
@@ -46,6 +46,7 @@
   programs.firefox.enable = true;
   environment.systemPackages = with pkgs; [
     accountsservice    # For Dank Material Shell user menu
+    polkit-mate        # PolicyKit authentication agent (mate-polkit)
     alacritty          # Terminal emulator
     brightnessctl      # Screen brightness control
     cava               # Audio visualizer
