@@ -2,7 +2,7 @@
 
 {
   imports = [
-    inputs.niri.homeModules.niri
+    niri.homeModules.niri
     dankMaterialShell.homeModules.dankMaterialShell.default
   ];
 
