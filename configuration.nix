@@ -9,32 +9,13 @@
   # Allow unfree packages (needed for VS Code, etc.)
   nixpkgs.config.allowUnfree = true;
 
-
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # Auto-login to TTY1 (niri will start automatically from bash profile)
-  services.getty.autologinUser = "petr";
-
-  # Enable SSH daemon
-  services.openssh = {
-    enable = true;
-    settings.PermitRootLogin = "yes";
-  };
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Prague";
-
-  programs.niri.enable = true;
-
-  # XDG Desktop Portal for screen casting, file pickers, etc.
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    config.common.default = "gtk";
-  };
 
   users.users.petr = {
     isNormalUser = true;
