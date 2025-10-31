@@ -53,7 +53,7 @@
     git                # Version control system
     grim               # Screenshot tool
     mako               # Notification daemon
-    mate-polkit        # PolicyKit authentication agent (mate-polkit)
+    mate.mate-polkit   # PolicyKit authentication agent (mate-polkit)
     matugen            # Wallpaper setter
     qt6.qtmultimedia   # For media controls in Dank Material Shell
     slurp              # Region selector for screenshots
