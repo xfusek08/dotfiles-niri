@@ -1,20 +1,16 @@
 {
-  description = "NixOS with NiriWM and DankMaterialShell";
+  description = "Hyprland on Nixos";
 
   inputs = {
-    # Nixpkgs channel (using unstable for latest packages)
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
-    # Home Manager (for user config)
-    home-manager.url = "github:nix-community/home-manager";
-
-    # Niri flake (provides Niri packages and modules)
+    nixpkgs.url = "nixpkgs/nixos-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # DankMaterialShell components (for the shell and CLI tools)
     dgop = {
       url = "github:AvengeMedia/dgop";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,45 +27,24 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, niri, dankMaterialShell, ... }@inputs:
-    let
+  outputs = { self, nixpkgs, home-manager, niri, dankMaterialShell, ... }: {
+    nixosConfigurations.nixos-btw = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      # NixOS system configuration output
-      nixosConfigurations = {
-        # Replace "my-host" with your actual hostname
-        my-host = nixpkgs.lib.nixosSystem {
-          system = system;
-          modules = [
-            # Import our configuration.nix (defined below)
-            ./configuration.nix
-          ];
-        };
-      };
-
-      # Home Manager user configuration output
-      homeConfigurations = {
-        # Replace "petr" with your actual username
-        petr = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgs;
-          username = "petr";                # the UNIX username
-          homeDirectory = "/home/petr";     # the home path
-          configuration = ./home.nix;        # our home-manager config
-
-          # Import the DMS home modules for core and Niri integration
-          modules = [
-            dankMaterialShell.homeModules.dankMaterialShell.default
-            dankMaterialShell.homeModules.dankMaterialShell.niri
-            niri.homeModules.niri
-          ];
-
-          # Allow using packages from unstable for quickshell (if needed)
-          extraSpecialArgs = {
-            inherit inputs;
-            pkgs = pkgs;
+      modules = [
+        ./configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.petr = import ./home.nix;
+            backupFileExtension = "backup";
+            extraSpecialArgs = {
+              inherit niri dankMaterialShell;
+            };
           };
-        };
-      };
+        }
+      ];
     };
+  };
 }

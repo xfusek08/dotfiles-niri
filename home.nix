@@ -1,28 +1,45 @@
-{ pkgs, lib, config, ... }:
+{ config, pkgs, niri, dankMaterialShell, ... }:
 
 {
-  # Import DankMaterialShell home modules (core and Niri integration)
   imports = [
-    # Core DankMaterialShell Home Manager module
-    pkgs.fetchFromGitHub {
-      owner = "AvengeMedia"; repo = "DankMaterialShell"; rev = "master"; # or tag
-      sha256 = "..."; # fill in or override nixpkgs fetcher (optional)
-    } + "/homeModules/dankMaterialShell/default.nix"
-    
-    # DMS Niri support module
-    pkgs.fetchFromGitHub {
-      owner = "AvengeMedia"; repo = "DankMaterialShell"; rev = "master";
-      sha256 = "...";
-    } + "/homeModules/dankMaterialShell/niri.nix"
+    niri.homeModules.niri
+    dankMaterialShell.homeModules.dankMaterialShell.default
+    # dankMaterialShell.homeModules.dankMaterialShell.niri
   ];
 
-  # Enable DankMaterialShell
+  home.username = "petr";
+  home.homeDirectory = "/home/petr";
+  home.stateVersion = "25.05";
+  
   programs.dankMaterialShell.enable = true;
-
-  # (Optional) If quickshell is not in stable pkgs, override to unstable
-  programs.dankMaterialShell.quickshell.package = pkgs.quickshell;
-
-  # You can customize DMS or add plugins here, per its documentation.
-  # For example:
-  # programs.dankMaterialShell.enableWidgets = [ "spotlight" "systemMonitor" ];
+  
+  programs.git = {
+    enable = true;
+    settings.user.name = "Petr Fusek";
+    settings.user.email = "petr.fusek97@gmail.com";
+  };
+  
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      btw = "echo i use nixos, btw";
+    };
+    profileExtra = ''
+      # Start niri on TTY1 after login
+      if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+        exec niri
+      fi
+    '';
+  };
+  
+  home.packages = with pkgs; [
+    bat
+    btop
+    yazi
+    fzf
+    ripgrep
+    vscode
+  ];
+  
+  home.file.".config/niri/config.kdl".source = ./niri-config.kdl;
 }
