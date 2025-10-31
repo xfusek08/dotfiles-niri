@@ -555,7 +555,7 @@ binds {
     // Makes the column "fill the rest of the space".
     Alt+Ctrl+F { expand-column-to-available-width; }
 
-    Alt+C { center-column; }
+    // Alt+C { center-column; }
 
     // Center all fully visible columns on screen.
     Alt+Ctrl+C { center-visible-columns; }
@@ -576,8 +576,8 @@ binds {
     Alt+Shift+Equal { set-window-height "+10%"; }
 
     // Move the focused window between the floating and the tiling layout.
-    Alt+V       { toggle-window-floating; }
-    Alt+Shift+V { switch-focus-between-floating-and-tiling; }
+    // Alt+V       { toggle-window-floating; }
+    // Alt+Shift+V { switch-focus-between-floating-and-tiling; }
 
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
