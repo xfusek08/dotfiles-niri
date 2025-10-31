@@ -46,7 +46,6 @@
   programs.firefox.enable = true;
   environment.systemPackages = with pkgs; [
     accountsservice    # For Dank Material Shell user menu
-    polkit-mate        # PolicyKit authentication agent (mate-polkit)
     alacritty          # Terminal emulator
     brightnessctl      # Screen brightness control
     cava               # Audio visualizer
@@ -54,6 +53,7 @@
     git                # Version control system
     grim               # Screenshot tool
     mako               # Notification daemon
+    mate-polkit        # PolicyKit authentication agent (mate-polkit)
     matugen            # Wallpaper setter
     qt6.qtmultimedia   # For media controls in Dank Material Shell
     slurp              # Region selector for screenshots
