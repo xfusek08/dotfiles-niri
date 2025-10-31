@@ -11,6 +11,8 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  
+  services.getty.autologinUser = "petr";
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;

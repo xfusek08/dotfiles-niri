@@ -35,6 +35,5 @@
     vscode
   ];
   
-  # Deploy niri configuration
-  # home.file.".config/niri/config.kdl".source = ./niri-config.kdl;
+  home.file.".config/niri/config.kdl".source = ./niri-config.kdl;
 }
