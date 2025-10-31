@@ -23,8 +23,11 @@
     packages = with pkgs; [
     ];
   };
-
+  
+  programs.niri.enable = true;
+  
   programs.firefox.enable = true;
+  
   environment.systemPackages = with pkgs; [
     accountsservice    # For Dank Material Shell user menu
     alacritty          # Terminal emulator
