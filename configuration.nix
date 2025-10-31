@@ -51,6 +51,7 @@
     qt6.qtmultimedia   # For media controls in Dank Material Shell
     slurp              # Region selector for screenshots
     swaylock           # Screen locker
+    swaybg             # Wallpaper setter for Sway
     wget               # For downloading files
     wl-clipboard       # Wayland clipboard utilities
     xwayland-satellite # For X11 app compatibility

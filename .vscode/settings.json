@@ -12,6 +12,7 @@
         "pkgs",
         "polkit",
         "qtmultimedia",
+        "swaybg",
         "swaylock",
         "xwayland"
     ],
