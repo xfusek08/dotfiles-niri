@@ -37,9 +37,14 @@
     config.common.default = "gtk";
   };
   
-  services.displayManager.sddm = {
+  services.greetd = {
     enable = true;
-    wayland.enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l -c niri-session";
+        user = "greeter";
+      };
+    };
   };
   
   environment.systemPackages = with pkgs; [
@@ -81,13 +86,16 @@
     wayland-protocols  # Additional Wayland protocols
     xwayland-satellite # For X11 app compatibility
     
+    # --- Shell nice-to-haves ---
+    
+    alacritty  # Terminal emulator
+    fuzzel     # Application launcher
+    matugen    # Wallpaper setter
+    swaybg     # Wallpaper setter for Sway
+    
     # --- Packages creating useful DE ---
     
-    alacritty               # Terminal emulator
-    fuzzel                  # Application launcher
-    swaybg                  # Wallpaper setter for Sway
     firefox                 # Web browser
-
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
