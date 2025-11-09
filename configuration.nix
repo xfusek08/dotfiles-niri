@@ -28,6 +28,8 @@
   
   programs.niri.enable = true;
   
+  services.openssh.enable = true;
+  
   # # XDG Desktop Portal for screen casting, file pickers, etc.
   # xdg.portal = {
   #   enable = true;
