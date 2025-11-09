@@ -12,8 +12,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   
-  services.getty.autologinUser = "petr";
-
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
@@ -37,13 +35,30 @@
     config.common.default = "gtk";
   };
   
+  # Auto-login with greetd and start niri locked
   services.greetd = {
     enable = true;
     settings = {
-      default_session = {
-        command = "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l -c niri-session";
-        user = "greeter";
+      initial_session = {
+        command = "${pkgs.niri}/bin/niri-session";
+        user = "petr";
       };
+      default_session = {
+        command = "${pkgs.niri}/bin/niri-session";
+        user = "petr";
+      };
+    };
+  };
+  
+  # Start niri locked by default using Noctalia lock screen
+  systemd.user.services.niri-lock-on-start = {
+    description = "Lock niri on startup with Noctalia";
+    wantedBy = [ "niri.service" ];
+    after = [ "niri.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'sleep 2 && qs -c noctalia-shell ipc call lockScreen lock'";
+      RemainAfterExit = false;
     };
   };
   
