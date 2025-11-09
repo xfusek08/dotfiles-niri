@@ -16,12 +16,12 @@
     shellAliases = {
       btw = "echo i use nixos, btw";
     };
-    profileExtra = ''
-      # Start niri on TTY1 after login
-      if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-        exec niri
-      fi
-    '';
+    # profileExtra = ''
+    #   # Start niri on TTY1 after login
+    #   if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+    #     exec niri
+    #   fi
+    # '';
   };
   
   home.packages = with pkgs; [
