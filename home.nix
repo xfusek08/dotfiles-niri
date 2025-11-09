@@ -13,19 +13,17 @@
   
   programs.dankMaterialShell = {
     enable = true;
-    # No niri options needed - not using the niri module
-    
-      # Core features
-      enableSystemd = true;              # Systemd service for auto-start
-      enableSystemMonitoring = true;     # System monitoring widgets (dgop)
-      enableClipboard = true;            # Clipboard history manager
-      enableVPN = true;                  # VPN management widget
-      enableBrightnessControl = true;    # Backlight/brightness controls
-      enableColorPicker = true;          # Color picker tool
-      enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
-      enableAudioWavelength = true;      # Audio visualizer (cava)
-      enableCalendarEvents = true;       # Calendar integration (khal)
-      enableSystemSound = true;          # System sound effects
+    # Core features
+    enableSystemd = true;           # Systemd service for auto-start
+    enableSystemMonitoring = true;  # System monitoring widgets (dgop)
+    enableClipboard = true;         # Clipboard history manager
+    enableVPN = true;               # VPN management widget
+    enableBrightnessControl = true; # Backlight/brightness controls
+    enableColorPicker = true;       # Color picker tool
+    enableDynamicTheming = true;    # Wallpaper-based theming (matugen)
+    enableAudioWavelength = true;   # Audio visualizer (cava)
+    enableCalendarEvents = true;    # Calendar integration (khal)
+    enableSystemSound = true;       # System sound effects
   };
 
   programs.git = {

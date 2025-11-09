@@ -56,23 +56,23 @@
   };
   
   environment.systemPackages = with pkgs; [
-    # accountsservice    # For Dank Material Shell user menu
-    # alacritty          # Terminal emulator
-    # brightnessctl      # Screen brightness control
-    # cava               # Audio visualizer
-    # cliphist           # Clipboard manager
-    # git                # Version control system
-    # grim               # Screenshot tool
-    # mako               # Notification daemon
-    # mate.mate-polkit   # PolicyKit authentication agent (mate-polkit)
-    # matugen            # Wallpaper setter
-    # qt6.qtmultimedia   # For media controls in Dank Material Shell
-    # slurp              # Region selector for screenshots
-    # swaylock           # Screen locker
-    # swaybg             # Wallpaper setter for Sway
-    # wget               # For downloading files
-    # wl-clipboard       # Wayland clipboard utilities
-    # xwayland-satellite # For X11 app compatibility
+    accountsservice    # For Dank Material Shell user menu
+    alacritty          # Terminal emulator
+    brightnessctl      # Screen brightness control
+    cava               # Audio visualizer
+    cliphist           # Clipboard manager
+    git                # Version control system
+    grim               # Screenshot tool
+    mako               # Notification daemon
+    mate.mate-polkit   # PolicyKit authentication agent (mate-polkit)
+    matugen            # Wallpaper setter
+    qt6.qtmultimedia   # For media controls in Dank Material Shell
+    slurp              # Region selector for screenshots
+    swaylock           # Screen locker
+    swaybg             # Wallpaper setter for Sway
+    wget               # For downloading files
+    wl-clipboard       # Wayland clipboard utilities
+    xwayland-satellite # For X11 app compatibility
     
     # --- Essential packages for niri ---
     
@@ -96,9 +96,9 @@
     
     # --- Shell nice-to-haves ---
     
-    alacritty  # Terminal emulator
-    fuzzel     # Application launcher
-    matugen    # Wallpaper setter
+    # alacritty  # Terminal emulator
+    # fuzzel     # Application launcher
+    # matugen    # Wallpaper setter
     # swaybg     # Wallpaper setter for Sway
     
     # --- Packages creating useful DE ---
