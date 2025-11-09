@@ -31,10 +31,9 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }: {
+  outputs = inputs@{ self, nixpkgs, home-manager, niri, dankMaterialShell, ... }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = { inherit inputs; };  # Pass inputs to all modules
       modules = [
         ./configuration.nix
         home-manager.nixosModules.home-manager
@@ -43,7 +42,6 @@
             useGlobalPkgs = true;
             useUserPackages = true;
             users.petr = import ./home.nix;
-            extraSpecialArgs = { inherit inputs; };
             backupFileExtension = "backup";
           };
         }
