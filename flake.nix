@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    noctalia-shell.url = "github:Noctalia-Shell/noctalia-shell";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,6 +15,11 @@
       system = "x86_64-linux";
       modules = [
         ./configuration.nix
+        ({ pkgs, ... }: {
+          environment.systemPackages = [
+            noctalia-shell.packages.x86_64-linux.default
+          ];
+        })
         home-manager.nixosModules.home-manager
         {
           home-manager = {
