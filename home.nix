@@ -4,6 +4,7 @@
   imports = [
     inputs.niri.homeModules.niri
     inputs.dankMaterialShell.homeModules.dankMaterialShell.default
+    inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
   ];
 
   home.username = "petr";
