@@ -57,7 +57,7 @@
     after = [ "niri.service" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'sleep 2 && qs -c noctalia-shell ipc call lockScreen lock'";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'sleep 2 && noctalia-shell ipc call lockScreen lock'";
       RemainAfterExit = false;
     };
   };
