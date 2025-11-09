@@ -7,8 +7,8 @@
   
   programs.git = {
     enable = true;
-    settings.user.name = "Petr Fusek";
-    settings.user.email = "petr.fusek97@gmail.com";
+    userName = "Petr Fusek";
+    userEmail = "petr.fusek97@gmail.com";
   };
   
   programs.bash = {
