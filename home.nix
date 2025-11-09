@@ -1,9 +1,9 @@
-{ config, pkgs, inputs, niri, dankMaterialShell, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports = [
-    niri.homeModules.niri
-    dankMaterialShell.homeModules.dankMaterialShell.default
+    inputs.niri.homeModules.niri
+    inputs.dankMaterialShell.homeModules.dankMaterialShell.default
   ];
 
   home.username = "petr";
