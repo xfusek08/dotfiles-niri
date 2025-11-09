@@ -30,12 +30,20 @@
   
   services.openssh.enable = true;
   
-  # # XDG Desktop Portal for screen casting, file pickers, etc.
-  # xdg.portal = {
-  #   enable = true;
-  #   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  #   config.common.default = "gtk";
-  # };
+  # XDG Desktop Portal for screen casting, file pickers, etc.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = "gtk";
+  };
+  
+  
+  profileExtra = ''
+    # Start niri on TTY1 after login
+    if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+      exec niri
+    fi
+  '';
   
   environment.systemPackages = with pkgs; [
     # accountsservice    # For Dank Material Shell user menu
