@@ -2,7 +2,7 @@
   description = "Hyprland on Nixos";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     noctalia-shell.url = "github:Noctalia-Shell/noctalia-shell";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -10,7 +10,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }: {
+  outputs = { self, nixpkgs, noctalia-shell, home-manager }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
