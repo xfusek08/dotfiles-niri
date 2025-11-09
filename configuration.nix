@@ -14,8 +14,13 @@
   
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
+  
+  hardware.bluetooth.enable = true;
+  services.power-profiles-daemon.enable = true;
+  services.upower.enable = true;
 
   time.timeZone = "Europe/Prague";
+  i18n.defaultLocale = "cs_CZ.UTF-8";
 
   users.users.petr = {
     isNormalUser = true;
@@ -47,18 +52,6 @@
         command = "${pkgs.niri}/bin/niri-session";
         user = "petr";
       };
-    };
-  };
-  
-  # Start niri locked by default using Noctalia lock screen
-  systemd.user.services.niri-lock-on-start = {
-    description = "Lock niri on startup with Noctalia";
-    wantedBy = [ "niri.service" ];
-    after = [ "niri.service" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'sleep 2 && noctalia-shell ipc call lockScreen lock'";
-      RemainAfterExit = false;
     };
   };
   
