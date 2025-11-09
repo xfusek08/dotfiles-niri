@@ -4,7 +4,7 @@
   imports = [
     inputs.niri.homeModules.niri
     inputs.dankMaterialShell.homeModules.dankMaterialShell.default
-    inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
+    # Don't import the niri module - we're using our own niri config
   ];
 
   home.username = "petr";
@@ -13,10 +13,7 @@
   
   programs.dankMaterialShell = {
     enable = true;
-    niri = {
-      enableKeybinds = false;  # Keep your own niri keybinds
-      enableSpawn = true;      # Auto-start DMS with niri
-    };
+    # No niri options needed - not using the niri module
   };
 
   programs.git = {
