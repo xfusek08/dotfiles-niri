@@ -31,7 +31,7 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, niri, dankMaterialShell, ... }: {
+  outputs = inputs@{ self, nixpkgs, ... }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
