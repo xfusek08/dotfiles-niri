@@ -1,17 +1,9 @@
-{ config, pkgs, niri, dankMaterialShell, ... }:
+{ config, pkgs, ... }:
 
 {
-  imports = [
-    niri.homeModules.niri
-    dankMaterialShell.homeModules.dankMaterialShell.default
-    # dankMaterialShell.homeModules.dankMaterialShell.niri
-  ];
-
   home.username = "petr";
   home.homeDirectory = "/home/petr";
   home.stateVersion = "25.05";
-  
-  programs.dankMaterialShell.enable = true;
   
   programs.git = {
     enable = true;

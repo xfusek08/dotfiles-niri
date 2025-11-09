@@ -69,7 +69,7 @@ After rebooting into your basic NixOS system:
 
 ```bash
 # 1. Copy your dotfiles to home directory
-nix-shell -p git disko
+nix-shell -p disko
 git clone https://github.com/xfusek08/dotfiles-niri ~/dotfiles-niri
 cd ~/dotfiles-niri
 git checkout nixos
