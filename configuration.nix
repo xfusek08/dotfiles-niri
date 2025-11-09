@@ -80,7 +80,6 @@
     fuzzel                  # Application launcher
     swaybg                  # Wallpaper setter for Sway
     firefox                 # Web browser
-    ttf-jetbrains-mono-nerd # Programming font
 
   ];
 
