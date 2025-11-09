@@ -4,6 +4,9 @@
   imports =
     [
       ./hardware-configuration.nix
+      inputs.niri.homeModules.niri
+      inputs.dankMaterialShell.homeModules.dankMaterialShell.default
+      inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
     ];
     
   # Allow unfree packages (needed for VS Code, etc.)
@@ -30,6 +33,14 @@
   };
   
   programs.niri.enable = true;
+  
+  programs.dankMaterialShell = {
+    enable = true;
+    niri = {
+      enableKeybinds = true;  # Automatic keybinding configuration
+      enableSpawn = true;      # Auto-start DMS with niri
+    };
+  };
   
   services.openssh.enable = true;
   
@@ -76,30 +87,30 @@
     
     # --- Essential packages for niri ---
     
-    git                # Version control system
-    glibc              # GNU C Library
-    hwdata             # Hardware data files
-    libdisplay-info    # Library for querying display information
-    libdrm             # Direct Rendering Manager library
-    libinput           # Input device handling library
-    libliftoff         # Library for managing display power state
-    libxkbcommon       # Keyboard handling library
-    meson              # Build system
-    ninja              # Build system
-    niri               # A scrollable wayland window compositor
-    pcre2              # Perl Compatible Regular Expressions library
-    pixman             # Pixel manipulation library
-    seatd              # Seat management daemon
-    wayland            # Core Wayland libraries and utilities
-    wayland-protocols  # Additional Wayland protocols
-    xwayland-satellite # For X11 app compatibility
+    # git                # Version control system
+    # glibc              # GNU C Library
+    # hwdata             # Hardware data files
+    # libdisplay-info    # Library for querying display information
+    # libdrm             # Direct Rendering Manager library
+    # libinput           # Input device handling library
+    # libliftoff         # Library for managing display power state
+    # libxkbcommon       # Keyboard handling library
+    # meson              # Build system
+    # ninja              # Build system
+    # niri               # A scrollable wayland window compositor
+    # pcre2              # Perl Compatible Regular Expressions library
+    # pixman             # Pixel manipulation library
+    # seatd              # Seat management daemon
+    # wayland            # Core Wayland libraries and utilities
+    # wayland-protocols  # Additional Wayland protocols
+    # xwayland-satellite # For X11 app compatibility
     
     # --- Shell nice-to-haves ---
     
     alacritty  # Terminal emulator
     fuzzel     # Application launcher
     matugen    # Wallpaper setter
-    swaybg     # Wallpaper setter for Sway
+    # swaybg     # Wallpaper setter for Sway
     
     # --- Packages creating useful DE ---
     
