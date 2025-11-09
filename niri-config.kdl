@@ -8,9 +8,10 @@
 // https://yalter.github.io/niri/Configuration:-Input
 input {
     keyboard {
+        repeat-delay 200
+        repeat-rate 35
+        
         xkb {
-            repeat-delay 200
-            repeat-rate 35
             layout "cz"
             variant "coder"
             options "cmpose:caps"
