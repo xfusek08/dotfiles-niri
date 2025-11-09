@@ -37,13 +37,10 @@
     config.common.default = "gtk";
   };
   
-  
-  profileExtra = ''
-    # Start niri on TTY1 after login
-    if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-      exec niri
-    fi
-  '';
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+  };
   
   environment.systemPackages = with pkgs; [
     # accountsservice    # For Dank Material Shell user menu
