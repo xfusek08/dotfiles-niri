@@ -273,9 +273,9 @@ layout {
 
 spawn-at-startup "xwayland-satellite"
 
-spawn-at-startup "noctalia-shell"
+spawn-at-startup "dms" "run"
 
-spawn-at-startup "noctalia-shell" "ipc" "call" "sessionMenu" "lockAndSuspend"
+spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.

@@ -1,10 +1,23 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
+  imports = [
+    inputs.niri.homeModules.niri
+    inputs.dankMaterialShell.homeModules.dankMaterialShell.default
+  ];
+
   home.username = "petr";
   home.homeDirectory = "/home/petr";
   home.stateVersion = "25.05";
   
+  programs.dankMaterialShell = {
+    enable = true;
+    niri = {
+      enableKeybinds = false;  # Keep your own niri keybinds
+      enableSpawn = true;      # Auto-start DMS with niri
+    };
+  };
+
   programs.git = {
     enable = true;
     settings.user.name = "Petr Fusek";

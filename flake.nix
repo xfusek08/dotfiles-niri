@@ -43,6 +43,7 @@
             useGlobalPkgs = true;
             useUserPackages = true;
             users.petr = import ./home.nix;
+            extraSpecialArgs = { inherit inputs; };
             backupFileExtension = "backup";
           };
         }

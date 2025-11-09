@@ -4,9 +4,6 @@
   imports =
     [
       ./hardware-configuration.nix
-      inputs.niri.homeModules.niri
-      inputs.dankMaterialShell.homeModules.dankMaterialShell.default
-      inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
     ];
     
   # Allow unfree packages (needed for VS Code, etc.)
@@ -33,14 +30,6 @@
   };
   
   programs.niri.enable = true;
-  
-  programs.dankMaterialShell = {
-    enable = true;
-    niri = {
-      enableKeybinds = true;  # Automatic keybinding configuration
-      enableSpawn = true;      # Auto-start DMS with niri
-    };
-  };
   
   services.openssh.enable = true;
   
