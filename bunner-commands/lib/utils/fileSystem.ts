@@ -2,6 +2,21 @@ import { stat, mkdir, readdir } from 'node:fs/promises';
 import { $ } from 'bunner/framework';
 
 /**
+ * Checks if a path exists and is a file.
+ *
+ * @param path - The path to check
+ * @returns True if path exists and is a file, false otherwise
+ */
+export async function isFile(path: string): Promise<boolean> {
+    try {
+        const res = await stat(path);
+        return res.isFile();
+    } catch {
+        return false;
+    }
+}
+
+/**
  * Checks if a path exists and is a directory.
  *
  * @param path - The path to check

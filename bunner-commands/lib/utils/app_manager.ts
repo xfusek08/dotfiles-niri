@@ -10,7 +10,7 @@ import { DESKTOP_ENTRY_HEADER, BACKUP_FILE_EXTENSION } from './constants';
 import { isNodeError, withErrorContext } from './types';
 import { generateBackupTimestamp } from './timestamp';
 import { validateAppConfig } from './configValidator';
-import { downloadAndSetupAppImage } from './appimage';
+import { installAppImage } from './appimage';
 
 export type DesktopEntryConfig = {
     version: string;
@@ -367,21 +367,21 @@ export async function install({ config }: InstallParams): Promise<void> {
     const assetUrl = await getLatestGithubReleaseAssetUrl(config.repository, config.assetPattern);
 
     if (config.isAppImage) {
-        // AppImage installation
+        // AppImage installation - handles everything including desktop integration
         const appName = basename(paths.executableTarget, '.AppImage');
-        await downloadAndSetupAppImage({
-            appImageUrl: assetUrl,
-            targetDirectory: paths.installDirectory,
+        await installAppImage({
             appName,
-            iconPath: paths.iconPath,
+            appImageSource: assetUrl,
         });
-    } else {
-        // Archive installation
-        await downloadAndExtractArchive({
-            archiveUrl: assetUrl,
-            targetDirectory: paths.installDirectory,
-        });
+        log.success(`${config.name} installed`);
+        return;
     }
+
+    // Archive installation
+    await downloadAndExtractArchive({
+        archiveUrl: assetUrl,
+        targetDirectory: paths.installDirectory,
+    });
 
     if (!(await isDirectoryNonEmpty(paths.installDirectory))) {
         throw new Error(`Installation failed for ${config.name}, install directory is empty.`);

@@ -16,3 +16,12 @@ export const ARCHIVE_EXTENSIONS = {
  * Backup file extension
  */
 export const BACKUP_FILE_EXTENSION = ARCHIVE_EXTENSIONS.ZIP;
+
+/**
+ * AppImage installation paths
+ */
+export const APPIMAGE_PATHS = {
+    BASE_DIR: '~/.local/appimages',
+    BIN_DIR: '~/.local/bin',
+    APPLICATIONS_DIR: '~/.local/share/applications',
+} as const;
