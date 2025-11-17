@@ -24,6 +24,7 @@
         "makoctl",
         "mediainfo",
         "mktemp",
+        "myproject",
         "noconfirm",
         "nothrow",
         "pixbuf",
@@ -37,7 +38,8 @@
         "xclip",
         "xfusek",
         "yazi",
-        "ZINIT"
+        "ZINIT",
+        "zparseopts"
     ],
     "files.associations": {
         "*.css": "less"

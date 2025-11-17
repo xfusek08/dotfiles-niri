@@ -81,6 +81,10 @@ alias cd='z'
 alias cdi='zi'
 alias y='yazi'
 
+# ~~~~~~~~~~~~~~~ Custom Functions ~~~~~~~~~~~~~~~
+
+source "$SCRIPTS/fcd"
+
 # ~~~~~~~~~~~~~~~ Keybindings ~~~~~~~~~~~~~~~
 
 # Load keybindings via zinit snippet for speed (compiled and cached)

@@ -1,12 +1,9 @@
-#!/usr/bin/env zsh
-
 #
-# Script:
+# Function:
 #     fcd (Fuzzy Change Directory)
 #
 # Description:
-#     This scripts registers the `fcd` into current shell session.
-#     The `fcd` command is a simple way to change the current directory
+#     This function provides a way to change the current directory
 #     or navigate to a file's location using an interactive fuzzy finder.
 #
 # Usage:
@@ -44,44 +41,45 @@
 #     - Chat GPT for helping me document this script! 🤖
 #
 
-# Parse options and arguments
-local all=false
-local prt=false
-local help=false
-local verbose=false
-local searchDirectory
+function fcd() {
+    # Parse options and arguments
+    local all=false
+    local prt=false
+    local help=false
+    local verbose=false
+    local searchDirectory
 
-# Add logging function
-function log() {
-    local level="$1"
-    shift
-    if [[ $level = "DEBUG" && $verbose != "true" ]]; then
-        return
-    fi
-    printf "[%s] %s\n" $level "$@" >&2
-}
+    # Add logging function
+    function log() {
+        local level="$1"
+        shift
+        if [[ $level = "DEBUG" && $verbose != "true" ]]; then
+            return
+        fi
+        printf "[%s] %s\n" $level "$@" >&2
+    }
 
-# Parse options using zsh's zparseopts
-local -A opts
-zparseopts -D -A opts -- \
-    h=help -help=help \
-    a=all -all=all \
-    p=print -print=print \
-    v=verbose -verbose=verbose
+    # Parse options using zsh's zparseopts
+    local -A opts
+    zparseopts -D -A opts -- \
+        h=help -help=help \
+        a=all -all=all \
+        p=print -print=print \
+        v=verbose -verbose=verbose
 
-# Handle options
-[[ -n "${help}" ]] && help=true
-[[ -n "${all}" ]] && all=true
-[[ -n "${print}" ]] && prt=true
-[[ -n "${verbose}" ]] && verbose=true
+    # Handle options
+    [[ -n "${help}" ]] && help=true
+    [[ -n "${all}" ]] && all=true
+    [[ -n "${print}" ]] && prt=true
+    [[ -n "${verbose}" ]] && verbose=true
 
-# Get the directory to search in from the first argument
-searchDirectory="${1:-$PWD}"
+    # Get the directory to search in from the first argument
+    searchDirectory="${1:-$PWD}"
 
-# Show help message if -h option is specified
-if [[ $help == "true" ]]; then
-    echo -e "$(
-        cat << EOF
+    # Show help message if -h option is specified
+    if [[ $help == "true" ]]; then
+        echo -e "$(
+            cat << EOF
 \033[1mUsage:\033[0m fcd [OPTIONS] [DIRECTORY]
 
 Changes the current directory to the specified directory or to a directory selected interactively using \033[1;36mfzf\033[0m.
@@ -109,35 +107,36 @@ This script requires the following dependencies:
 
 Please make sure to install these dependencies before using the script.
 EOF
+        )"
+        return 0
+    fi
+
+    # Set bfs arguments based on all flag
+    local bfs_args=""
+    [[ $all == "false" ]] && bfs_args="-nohidden"
+
+    # Use the preview script directly without sourcing
+    local findResult="$(
+        bfs "$searchDirectory" $bfs_args \
+            | fzf --preview "fzf-preview {}"
     )"
-    exit 0
-fi
 
-# Set bfs arguments based on all flag
-local bfs_args=""
-[[ $all == "false" ]] && bfs_args="-nohidden"
+    # If no result found (user cancelled), return quietly
+    [[ -z "$findResult" ]] && return 0
 
-# Use the preview script directly without sourcing
-local findResult="$(
-    bfs "$searchDirectory" $bfs_args \
-        | fzf --preview "fzf-preview {}"
-)"
+    log "DEBUG" "Extracting directory from findResult: $findResult"
 
-# If no result found (user cancelled), exit quietly
-[[ -z "$findResult" ]] && exit 0
+    if [[ -f $findResult ]]; then
+        findResult=$(dirname "$findResult")
+    fi
 
-log "DEBUG" "Extracting directory from findResult: $findResult"
+    log "DEBUG" "Will navigate to $findResult"
 
-if [[ -f $findResult ]]; then
-    findResult=$(dirname "$findResult")
-fi
-
-log "DEBUG" "Will navigate to $findResult"
-
-# Print the selected directory if -p option is specified
-if [[ $prt == "true" ]]; then
-    print -r -- "$findResult"
-else
-    print -r -- "cd ${findResult}" >&2
-    echo "$findResult" # Output the directory so the calling script can use it
-fi
+    # Print the selected directory if -p option is specified
+    if [[ $prt == "true" ]]; then
+        print -r -- "$findResult"
+    else
+        log "DEBUG" "Changing directory to: $findResult"
+        cd "$findResult"
+    fi
+}
