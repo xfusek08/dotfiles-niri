@@ -26,7 +26,7 @@ function _parse_arguments() {
                 shift
                 ;;
             -h | --help)
-                echo "Usage: appimage-util [options] <app-name> [appimage-url]"
+                echo "Usage: appimage-util [options] <app-name> [appimage-url-or-file]"
                 echo "Options:"
                 echo "  -i, --install     Install an AppImage"
                 echo "  -u, --uninstall   Uninstall an AppImage"
@@ -34,6 +34,7 @@ function _parse_arguments() {
                 echo ""
                 echo "Examples:"
                 echo "  appimage-util -i my-app https://example.com/myapp.AppImage"
+                echo "  appimage-util -i my-app /path/to/local/myapp.AppImage"
                 echo "  appimage-util -u my-app"
                 exit 0
                 ;;
@@ -67,14 +68,14 @@ function _parse_arguments() {
     fi
 
     if [[ "$action" == "install" && -z "$appimage_url" ]]; then
-        log -e "No AppImage URL specified for installation."
+        log -e "No AppImage URL or file path specified for installation."
         return 1
     fi
 
     # Export variables for use in main function
     APPIMAGE_ACTION="$action"
     APPIMAGE_APP_NAME="$app_name"
-    APPIMAGE_URL="$appimage_url"
+    APPIMAGE_SOURCE="$appimage_url"
 
     return 0
 }
@@ -172,6 +173,37 @@ EOF
     return 0
 }
 
+# Function: _copy_appimage
+# Description: Copies an AppImage from a local file path
+# Parameters:
+#   - app_name: Name of the application
+#   - appimage_source_path: Local path to the AppImage file
+#   - app_dir: Directory where application files are stored
+# Returns:
+#   - Path to the copied AppImage if successful, 1 otherwise
+function _copy_appimage() {
+    local app_name="$1"
+    local appimage_source_path="$2"
+    local app_dir="$3"
+    local appimage_path="${app_dir}/${app_name}.AppImage"
+
+    log -i "Copying AppImage from ${appimage_source_path}"
+
+    if [[ ! -f "$appimage_source_path" ]]; then
+        log -e "Source file not found: $appimage_source_path"
+        return 1
+    fi
+
+    if cp "$appimage_source_path" "$appimage_path"; then
+        chmod +x "$appimage_path"
+        log -i "AppImage copied to ${appimage_path}"
+        echo "$appimage_path"
+    else
+        log -e "Failed to copy AppImage"
+        return 1
+    fi
+}
+
 # Function: _download_appimage
 # Description: Downloads an AppImage from the provided URL
 # Parameters:
@@ -245,6 +277,7 @@ function _ensure_desktop_file() {
     # Try to find desktop file in extracted AppImage
     local found_desktop_file=""
     local squashfs_root="${extract_dir}/squashfs-root"
+    local icon_path="application-x-executable"
 
     if [[ -d "$squashfs_root" ]]; then
         found_desktop_file=$(find "$squashfs_root" -name "*.desktop" | head -n 1)
@@ -252,11 +285,30 @@ function _ensure_desktop_file() {
         if [[ -n "$found_desktop_file" ]]; then
             log -i "Found desktop file: $found_desktop_file"
 
-            # Update the Exec entry to point to our AppImage
-            sed -i "s|^Exec=.*|Exec=${appimage_path} %F|" "$found_desktop_file"
+            # Extract icon information from the original desktop file
+            local original_icon=$(grep "^Icon=" "$found_desktop_file" | cut -d'=' -f2)
+            
+            # Try to find and copy the icon
+            if [[ -n "$original_icon" ]]; then
+                # Look for icon files in common formats
+                local found_icon=$(find "$squashfs_root" -type f \( -name "${original_icon}.png" -o -name "${original_icon}.svg" -o -name "${original_icon}.xpm" -o -name "${original_icon}.*" \) | head -n 1)
+                
+                if [[ -n "$found_icon" ]]; then
+                    local icon_ext="${found_icon##*.}"
+                    icon_path="${app_dir}/${app_name}.${icon_ext}"
+                    cp "$found_icon" "$icon_path"
+                    log -i "Copied icon to ${icon_path}"
+                fi
+            fi
 
-            # Store the location of the found desktop file
-            desktop_path="$found_desktop_file"
+            # Copy desktop file to app directory and update it
+            desktop_path="${app_dir}/${app_name}.desktop"
+            cp "$found_desktop_file" "$desktop_path"
+            
+            # Update the Exec and Icon entries
+            sed -i "s|^Exec=.*|Exec=${appimage_path} %F|" "$desktop_path"
+            sed -i "s|^Icon=.*|Icon=${icon_path}|" "$desktop_path"
+
             return 0
         fi
     fi
@@ -333,14 +385,14 @@ function _remove_symlinks() {
 # Description: Main installation function that orchestrates the AppImage installation process
 # Parameters:
 #   - app_name: Name of the application
-#   - appimage_url: URL to download the AppImage from
+#   - appimage_source: URL to download the AppImage from or local file path
 # Returns:
 #   - 0 if successful, 1 otherwise
 function _install_appimage() {
     local app_name="$1"
-    local appimage_url="$2"
+    local appimage_source="$2"
 
-    log -i "Installing $app_name from $appimage_url"
+    log -i "Installing $app_name from $appimage_source"
 
     # Set up paths
     _setup_appimage_paths "$app_name"
@@ -351,10 +403,18 @@ function _install_appimage() {
     ensure_directory "$local_bin_dir"
     ensure_directory "$applications_dir"
 
-    # Download the AppImage
+    # Get the AppImage - either download from URL or copy from local file
     local downloaded_appimage_path
-    if ! downloaded_appimage_path=$(_download_appimage "$app_name" "$appimage_url" "$app_dir"); then
-        return 1
+    if [[ -f "$appimage_source" ]]; then
+        # Local file path
+        if ! downloaded_appimage_path=$(_copy_appimage "$app_name" "$appimage_source" "$app_dir"); then
+            return 1
+        fi
+    else
+        # Assume it's a URL
+        if ! downloaded_appimage_path=$(_download_appimage "$app_name" "$appimage_source" "$app_dir"); then
+            return 1
+        fi
     fi
 
     # Create extract directory
@@ -434,14 +494,14 @@ function _uninstall_appimage() {
 #   - Exit status of the called function
 function _main() {
     if ! _parse_arguments "$@"; then
-        echo "Usage: appimage-util [-i|-u] <app-name> [appimage-url]"
+        echo "Usage: appimage-util [-i|-u] <app-name> [appimage-url-or-file]"
         echo "Try 'appimage-util --help' for more information."
         return 1
     fi
 
     case "$APPIMAGE_ACTION" in
         "install")
-            _install_appimage "$APPIMAGE_APP_NAME" "$APPIMAGE_URL"
+            _install_appimage "$APPIMAGE_APP_NAME" "$APPIMAGE_SOURCE"
             ;;
         "uninstall")
             _uninstall_appimage "$APPIMAGE_APP_NAME"
