@@ -1,7 +1,7 @@
 import { defineCommand, log } from 'bunner/framework';
 
-import { tagSpacesConfig } from './lib/configs/tagspaces';
-import { orchestrateInstallation } from './lib/utils/installationOrchestrator';
+import { getLatestGithubReleaseAssetUrl } from './lib/utils/github';
+import { installAppImage } from './lib/utils/appimage';
 
 export default defineCommand({
     command: 'tagspaces-install',
@@ -9,13 +9,16 @@ export default defineCommand({
     action: async () => {
         log.info('Starting TagSpaces installation');
 
-        const result = await orchestrateInstallation(tagSpacesConfig);
+        const appImageUrl = await getLatestGithubReleaseAssetUrl(
+            'tagspaces/tagspaces',
+            'linux-x86_64.*AppImage',
+        );
 
-        if (result.success) {
-            log.success('TagSpaces installation finished');
-        } else {
-            log.error('Installation failed');
-            throw result.error;
-        }
+        await installAppImage({
+            appName: 'tagspaces',
+            appImageSource: appImageUrl,
+        });
+
+        log.success('TagSpaces installation finished');
     },
 });

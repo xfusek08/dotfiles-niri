@@ -30,6 +30,7 @@
         "pkill",
         "poppler",
         "SIGUSR",
+        "tagspaces",
         "tlsv",
         "wakapi",
         "waybar",

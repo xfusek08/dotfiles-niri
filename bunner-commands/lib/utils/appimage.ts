@@ -17,7 +17,52 @@ type AppImagePaths = {
     iconPath: string;
     launcherSymlink: string;
     desktopSymlink: string;
+    backupDir: string;
 };
+
+export async function resolveAppImagePaths(appName: string): Promise<{
+    appDir: string;
+    appImagePath: string;
+    launcherPath: string;
+    desktopPath: string;
+    iconPath: string;
+    launcherSymlink: string;
+    desktopSymlink: string;
+    backupDir: string;
+}> {
+    const [baseDir, binDir, applicationsDir] = await Promise.all([
+        canonicalizePath(APPIMAGE_PATHS.BASE_DIR),
+        resolvePath(APPIMAGE_PATHS.BIN_DIR),
+        resolvePath(APPIMAGE_PATHS.APPLICATIONS_DIR),
+    ]);
+
+    const appDir = join(baseDir, appName);
+    const appImagePath = join(appDir, `${appName}.AppImage`);
+    const launcherPath = join(appDir, `${appName}-launcher.sh`);
+    const desktopPath = join(appDir, `${appName}.desktop`);
+    const iconPath = join(appDir, appName); // Remove .png
+    const launcherSymlink = join(binDir, appName);
+    const desktopSymlink = join(applicationsDir, `${appName}.desktop`);
+    const backupDir = join(baseDir, 'backups');
+
+    // Ensure all necessary directories exist
+    await Promise.all([
+        ensureDirectory(appDir),
+        ensureDirectory(binDir),
+        ensureDirectory(applicationsDir),
+    ]);
+
+    return {
+        appDir,
+        appImagePath,
+        launcherPath,
+        desktopPath,
+        iconPath,
+        launcherSymlink,
+        desktopSymlink,
+        backupDir,
+    };
+}
 
 async function downloadAppImage({
     appImageUrl,
@@ -193,47 +238,6 @@ async function obtainAppImage({
     return downloadAppImage({ appImageUrl: appImageSource, targetDirectory, appName });
 }
 
-async function resolveAppImagePaths(appName: string): Promise<{
-    appDir: string;
-    appImagePath: string;
-    launcherPath: string;
-    desktopPath: string;
-    iconPath: string;
-    launcherSymlink: string;
-    desktopSymlink: string;
-}> {
-    const [baseDir, binDir, applicationsDir] = await Promise.all([
-        canonicalizePath(APPIMAGE_PATHS.BASE_DIR),
-        resolvePath(APPIMAGE_PATHS.BIN_DIR),
-        resolvePath(APPIMAGE_PATHS.APPLICATIONS_DIR),
-    ]);
-
-    const appDir = join(baseDir, appName);
-    const appImagePath = join(appDir, `${appName}.AppImage`);
-    const launcherPath = join(appDir, `${appName}-launcher.sh`);
-    const desktopPath = join(appDir, `${appName}.desktop`);
-    const iconPath = join(appDir, appName); // Remove .png
-    const launcherSymlink = join(binDir, appName);
-    const desktopSymlink = join(applicationsDir, `${appName}.desktop`);
-
-    // Ensure all necessary directories exist
-    await Promise.all([
-        ensureDirectory(appDir),
-        ensureDirectory(binDir),
-        ensureDirectory(applicationsDir),
-    ]);
-
-    return {
-        appDir,
-        appImagePath,
-        launcherPath,
-        desktopPath,
-        iconPath,
-        launcherSymlink,
-        desktopSymlink,
-    };
-}
-
 async function createAppImageDesktopFile(paths: AppImagePaths, appName: string): Promise<void> {
     const desktopContent = `[Desktop Entry]
 Version=1.0
@@ -298,8 +302,7 @@ async function backupExistingAppImage({
 }): Promise<string> {
     log.info(`AppImage "${appName}" is already installed, creating backup...`);
 
-    const backupDir = join(dirname(paths.appDir), 'backups');
-    await ensureDirectory(backupDir);
+    await ensureDirectory(paths.backupDir);
 
     const timestamp = new Date()
         .toISOString()
@@ -307,7 +310,7 @@ async function backupExistingAppImage({
         .split('T')
         .join('_')
         .split('Z')[0];
-    const backupFile = join(backupDir, `${appName}-pre-install-${timestamp}.zip`);
+    const backupFile = join(paths.backupDir, `${appName}-pre-install-${timestamp}.zip`);
 
     await withErrorContext(async () => {
         await createZipArchive({

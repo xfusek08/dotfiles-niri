@@ -1,7 +1,6 @@
 import { defineCommand, log } from 'bunner/framework';
 
-import { uninstall } from './lib/utils/app_manager';
-import { tagSpacesConfig } from './lib/configs/tagspaces';
+import { uninstallAppImage } from './lib/utils/appimage';
 
 export default defineCommand({
     command: 'tagspaces-uninstall',
@@ -9,7 +8,7 @@ export default defineCommand({
     options: [] as const,
     action: async () => {
         log.info('Starting TagSpaces uninstallation');
-        await uninstall({ config: tagSpacesConfig });
+        await uninstallAppImage({ appName: 'tagspaces' });
         log.success('TagSpaces uninstalled successfully');
     },
 });
