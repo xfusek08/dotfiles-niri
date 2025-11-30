@@ -2,7 +2,7 @@ import { $ } from 'bunner/framework';
 import { log } from 'bunner/framework';
 import { readdir, cp } from 'node:fs/promises';
 import { join } from 'node:path';
-import { isDirectory, ensureDirectory, deleteRecursively } from './fileSystem';
+import { isDirectory, ensureDirectory, deleteRecursively, isDirectoryNonEmpty } from './fileSystem';
 import { createTemporaryFile, createTemporaryDirectory } from './temporary';
 
 /**
@@ -78,6 +78,13 @@ export async function createZipArchive({
     outputFile: string;
     excludePatterns?: string[];
 }): Promise<void> {
+    const hasContent = await isDirectoryNonEmpty(sourceDirectory);
+
+    if (!hasContent && excludePatterns.length === 0) {
+        log.warn(`No ZIP archive created for ${sourceDirectory} because the directory is empty.`);
+        return;
+    }
+
     const excludeArgs = excludePatterns.flatMap((pattern) => ['-x', pattern]);
     await $`cd ${sourceDirectory} && zip -qr ${outputFile} . ${excludeArgs}`;
 }
