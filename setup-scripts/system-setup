@@ -38,38 +38,45 @@ fi
 # ~~~~~~~~~~~~~~ Paru packages installation  ~~~~~~~~~~~~~~~
 
 paru -S --noconfirm --needed \
-    wl-clipboard \
-    clipse-bin \
+    7zip \
+    atool \
     bat \
-    fzf \
     bfs \
-    jq \
+    binutils \
+    catdoc \
+    clipse-bin \
     dbus \
-    mediainfo \
-    gdk-pixbuf2 \
-    librsvg \
+    docx2txt \
+    doublecmd \
+    fd \
+    ffmpeg \
     ffmpegthumbnailer \
+    fzf \
+    gdk-pixbuf2 \
+    ghostty \
+    gnumeric \
+    hyprpicker \
+    imagemagick \
+    inter-font \
+    jq \
+    jujutsu \
+    kitty \
+    libcdio \
+    libqalculate \
+    librsvg \
+    mediainfo \
+    odt2txt \
+    openssl \
+    p7zip \
     perl-image-exiftool \
     poppler \
-    odt2txt \
-    catdoc \
-    docx2txt \
-    gnumeric \
-    atool \
-    p7zip \
-    binutils \
-    openssl \
-    libcdio \
-    kitty \
-    ghostty \
-    ttf-firacode-nerd \
-    doublecmd \
     qt6ct \
-    inter-font \
-    libqalculate \
+    resvg \
+    ripgrep \
     sherlock-launcher-bin \
-    hyprpicker \
-    jujutsu
+    ttf-firacode-nerd \
+    wl-clipboard \
+    yazi-nightly-bin
 
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
 
