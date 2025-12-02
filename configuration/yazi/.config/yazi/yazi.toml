@@ -1,15 +1,6 @@
 [mgr]
 show_hidden = true
-
-[general]
-linemode = "size_and_mtime"
-
-# [linemode]
-# custom = [
-# 	{ name = "permissions" },
-# 	{ name = "size" },
-# 	{ name = "mtime" }
-# ]
+linemode = "size_enhanced"
 
 [opener]
 code = [{ run = 'code "$@"', block = true }]

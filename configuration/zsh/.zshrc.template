@@ -79,11 +79,11 @@ alias lsl='ls -s modified -la'
 alias bat="bat --paging=always --italic-text=always --color=always --decorations=always --wrap=never"
 alias cd='z'
 alias cdi='zi'
-alias y='yazi'
 
 # ~~~~~~~~~~~~~~~ Custom Functions ~~~~~~~~~~~~~~~
 
-source "$SCRIPTS/fcd"
+source "$SCRIPT_FNS/fcd.zsh"
+source "$SCRIPT_FNS/y.zsh"
 
 # ~~~~~~~~~~~~~~~ Keybindings ~~~~~~~~~~~~~~~
 
