@@ -1,0 +1,19 @@
+[Unit]
+Description=Start Insync on user login
+After=graphical-session.target tray.target
+Wants=tray.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c "/usr/bin/insync start --qt-qpa-platform=xcb  --no-daemon"
+Restart=on-failure
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=%h/.Xauthority
+Environment=QT_QPA_PLATFORM=wayland
+Environment=XDG_CURRENT_DESKTOP=niri
+Environment=XDG_SESSION_TYPE=wayland
+Environment=QT_QPA_PLATFORMTHEME=qt6ct
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+
+[Install]
+WantedBy=xdg-desktop-autostart.target

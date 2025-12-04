@@ -149,7 +149,7 @@ output "DP-8" {
 layout {
     // Set gaps around windows in logical pixels.
     gaps 6
-
+    
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
     //   or right edge of the screen.
@@ -306,9 +306,8 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-spawn-at-startup "waybar"
+spawn-at-startup "dms run"
 spawn-at-startup "xwayland-satellite"
-spawn-at-startup "mako"
 spawn-at-startup "clipse" "-listen"
 spawn-at-startup "wakapi-start" "|" "stripcol" ">" "~/.log/wakapi.log" "2>&1"
 
@@ -403,11 +402,8 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
-    Mod+D hotkey-overlay-title="Run an Application: sherlock" { spawn "sherlock"; }
-    Mod+Semicolon hotkey-overlay-title="Run an emoji Picker: sherlock" {
-        spawn "sherlock" "-sm" "em";
-    }
-
+    Mod+D hotkey-overlay-title="Run an Application: Spotlight" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument in the end.
     // Mod+T { spawn "bash" "-c" "notify-send hello && exec ghostty"; }
@@ -418,8 +414,8 @@ binds {
     XF86AudioLowerVolume  allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
     XF86AudioMute         allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
     XF86AudioMicMute      allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
-    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "+10%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "10%-"; }
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "dms" "ipc" "call" "brightness" "increment" "5" "backlight:amdgpu_bl1"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "dms" "ipc" "call" "brightness" "decrement" "5" "backlight:amdgpu_bl1"; }
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,

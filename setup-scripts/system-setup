@@ -59,8 +59,6 @@ paru -S --noconfirm --needed \
     imagemagick \
     inter-font \
     jq \
-    jujutsu \
-    kitty \
     libcdio \
     libqalculate \
     librsvg \
@@ -73,10 +71,20 @@ paru -S --noconfirm --needed \
     qt6ct \
     resvg \
     ripgrep \
-    sherlock-launcher-bin \
     ttf-firacode-nerd \
     wl-clipboard \
     yazi-nightly-bin
+
+# Quickshell + dms-shell-bin dependencies
+# https://danklinux.com/docs/dankmaterialshell/installation
+paru -S --noconfirm --needed \
+    dgop \
+    dms-shell-bin \
+    dsearch-bin \
+    greetd-dms-greeter-git \
+    matugen \
+    qt6-multimedia \
+    quickshell
 
 # ~~~~~~~~~~~~~~ Cargo packages installation ~~~~~~~~~~~~~~~
 

@@ -112,10 +112,6 @@ zstyle ':completion:*' group-name ''                    # Group options by categ
 # bun completions
 [ -s "/home/petr/.bun/_bun" ] && source "/home/petr/.bun/_bun"
 
-# jj completions
-
-source <(COMPLETE=zsh jj)
-
 # ~~~~~~~~~~~~~~~ Performance measurement end ~~~~~~~~~~~~~~~~
 
 local taken=$(printf "%.2f" $(( $EPOCHREALTIME - shell_start )))

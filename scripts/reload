@@ -5,12 +5,7 @@ source "$SCRIPT_FNS/run_bash_tpl.zsh"
 echo "Regenerating dotfiles..."
 run_bash_tpl "$CONFIGURATION_DIR"
 
-echo "Reloading mako..."
-makoctl reload
-
-echo "Reloading waybar..."
-killall waybar
-setsid waybar > /dev/null 2>&1 &
+dms restart
 
 echo "Setting all scripts in $SCRIPTS as executable..."
 find "$SCRIPTS" -type f -exec chmod +x {} \;
