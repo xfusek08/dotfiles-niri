@@ -63,6 +63,9 @@ download = [
 	{ run = "ya emit download --open %S", desc = "Download and open" },
 	{ run = "ya emit download %S",        desc = "Download" },
 ]
+pdf = [
+	{ run = "evince %s1", desc = "Open in PDF viewer", for = "linux", orphan = true },
+]
 
 [open]
 rules = [
@@ -70,6 +73,8 @@ rules = [
 	{ url = "*/", use = [ "edit", "open", "reveal" ] },
 	# Text
 	{ mime = "text/*", use = [ "zeditor", "reveal" ] },
+	# PDF
+	{ mime = "application/pdf", use = [ "pdf", "reveal" ] },
 	# Image
 	{ mime = "image/*", use = [ "open", "reveal" ] },
 	# Media
