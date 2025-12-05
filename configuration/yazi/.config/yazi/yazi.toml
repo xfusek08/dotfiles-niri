@@ -72,7 +72,8 @@ rules = [
 	# Folder
 	{ url = "*/", use = [ "edit", "open", "reveal" ] },
 	# Text
-	{ mime = "text/*", use = [ "zeditor", "reveal" ] },
+	{ mime = "text/*", use = [ "edit", "reveal" ] },
+	{ url = "*.{md,markdown,css,scss,sass,less}", use = [ "edit", "reveal" ] },
 	# PDF
 	{ mime = "application/pdf", use = [ "pdf", "reveal" ] },
 	# Image
