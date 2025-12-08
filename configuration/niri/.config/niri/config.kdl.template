@@ -306,7 +306,7 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-spawn-at-startup "dms run"
+spawn-at-startup "dms" "run"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "clipse" "-listen"
 spawn-at-startup "wakapi-start" "|" "stripcol" ">" "~/.log/wakapi.log" "2>&1"

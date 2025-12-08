@@ -9,7 +9,7 @@ sort_sensitive = false
 sort_reverse 	 = false
 sort_dir_first = true
 sort_translit  = false
-linemode       = "size"
+linemode       = "permissions_size"
 show_hidden    = true
 show_symlink   = true
 scrolloff      = 5
@@ -30,7 +30,7 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-	{ run = "zeditor %s",       desc = "zeditor", for = "unix", orphan = true },
+	{ run = '''sh -c 'if [ -w "$1" ] || [ ! -e "$1" ]; then zeditor "$1"; else sudo vim "$1"; fi' sh %s''', desc = "edit", for = "unix", block = true },
 	{ run = "${EDITOR:-vi} %s", desc = "$EDITOR", for = "unix", block = true },
 	{ run = "code %s",          desc = "code",         for = "windows", orphan = true },
 	{ run = "code -w %s",       desc = "code (block)", for = "windows", block = true },
