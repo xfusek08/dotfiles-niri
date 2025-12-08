@@ -73,7 +73,8 @@ paru -S --noconfirm --needed \
     ripgrep \
     ttf-firacode-nerd \
     wl-clipboard \
-    yazi-nightly-bin
+    yazi-nightly-bin \
+    dragon-drop
 
 # Quickshell + dms-shell-bin dependencies
 # https://danklinux.com/docs/dankmaterialshell/installation

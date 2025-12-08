@@ -95,10 +95,11 @@ keymap = [
     { on = [ "m", "a" ], run = "linemode permissions_size",    desc = "Linemode: {permissions} {size}" },
 
 	# Copy
-	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy the file path" },
-	{ on = [ "c", "d" ], run = "copy dirname",          desc = "Copy the directory path" },
-	{ on = [ "c", "f" ], run = "copy filename",         desc = "Copy the filename" },
-	{ on = [ "c", "n" ], run = "copy name_without_ext", desc = "Copy the filename without extension" },
+	{ on = [ "c", "c" ], run = "copy path",                       desc = "Copy the file path" },
+	{ on = [ "c", "d" ], run = "copy dirname",                    desc = "Copy the directory path" },
+	{ on = [ "c", "f" ], run = "copy filename",                   desc = "Copy the filename" },
+	{ on = [ "c", "n" ], run = "copy name_without_ext",           desc = "Copy the filename without extension" },
+    { on = [ "c", "m" ], run = "shell -- dragon-drop -x -T %s1" , desc = "🖼️ Copy file as image via Dragon Drop" },
 	{ on = [ "c", "t" ], run = """shell --block -- bash -c '
 		fileName="$1"
 		fileType=$(file -b "$fileName")

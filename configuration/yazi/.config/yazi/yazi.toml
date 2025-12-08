@@ -43,6 +43,11 @@ play = [
 	{ run = "mediainfo %s1; echo 'Press enter to exit'; read _", block = true, desc = "Show media info", for = "unix" },
 	{ run = "mediainfo %s1 & pause", block = true, desc = "Show media info", for = "windows" },
 ]
+vlc = [
+	{ run = "vlc %s1", desc = "Play with VLC", for = "linux", orphan = true },
+	{ run = "vlc %s1", desc = "Play with VLC", for = "macos", orphan = true },
+	{ run = "vlc %s1", desc = "Play with VLC", for = "windows", orphan = true },
+]
 open = [
 	{ run = "xdg-open %s1",    desc = "Open", for = "linux" },
 	{ run = "open %s",         desc = "Open", for = "macos" },
@@ -78,6 +83,8 @@ rules = [
 	{ mime = "application/pdf", use = [ "pdf", "reveal" ] },
 	# Image
 	{ mime = "image/*", use = [ "open", "reveal" ] },
+	# Video files with VLC
+	{ url = "*.{mp4,mkv,webm}", use = [ "vlc", "play", "reveal" ] },
 	# Media
 	{ mime = "{audio,video}/*", use = [ "play", "reveal" ] },
 	# Archive
