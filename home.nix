@@ -1,7 +1,7 @@
 { config, pkgs, inputs, ... }: {
   imports = [
     inputs.dms.homeModules.dankMaterialShell.default # Dank Material Shell Home Manager module
-    inputs.dms.homeModules.dankMaterialShell.niri    # Niri-specific DMS integration
+    # Note: Not using niri module - it requires niri-flake which has limitations with DMS
   ];
 
   home.username = "petr";
@@ -11,16 +11,10 @@
   programs.dankMaterialShell = {
     enable = true;
     
-    # Use niri spawn instead of systemd for proper session integration
+    # Use systemd for DMS startup (binds to niri.service automatically)
     systemd = {
-      enable = false;            # Disable systemd - use niri.enableSpawn instead
+      enable = true;             # Enable systemd service for auto-start
       restartIfChanged = true;   # Auto-restart dms.service when dankMaterialShell changes
-    };
-
-    # Niri integration - spawns DMS with niri session
-    niri = {
-      enableKeybinds = true;     # Sets static preset keybinds for DMS
-      enableSpawn = true;        # Auto-start DMS with niri and cliphist
     };
   
     # Core features
