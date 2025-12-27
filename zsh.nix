@@ -5,7 +5,7 @@
 # Migrated from Arch Linux dotfiles
 # =============================================================================
 
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }: {
 
   # ===========================================================================
   # ZSH
@@ -13,13 +13,13 @@
 
   programs.zsh = {
     enable = true;
-    dotDir = ".config/zsh";  # Keep home directory clean
+    dotDir = "${config.xdg.configHome}/zsh";  # Keep home directory clean
 
     # --- History Configuration ---
     history = {
       size = 100000;
       save = 100000;
-      path = "$HOME/.zsh_history";
+      path = "${config.home.homeDirectory}/.zsh_history";
       ignoreDups = true;
       ignoreAllDups = true;
       ignoreSpace = true;
@@ -43,15 +43,18 @@
       ff = "fastfetch";
     };
 
-    # --- Zinit Plugin Manager ---
-    initExtraFirst = ''
-      # Performance measurement start
-      zmodload zsh/datetime
-      zmodload zsh/terminfo
-      typeset -F shell_start=$EPOCHREALTIME
-    '';
-
-    initExtra = builtins.readFile ./zsh/init-extra.zsh;
+    # --- Init Content ---
+    initContent = lib.mkMerge [
+      # Performance measurement (runs first)
+      (lib.mkBefore ''
+        # Performance measurement start
+        zmodload zsh/datetime
+        zmodload zsh/terminfo
+        typeset -F shell_start=$EPOCHREALTIME
+      '')
+      # Main init (zinit, plugins, etc.)
+      (builtins.readFile ./zsh/init-extra.zsh)
+    ];
   };
 
   # ===========================================================================
