@@ -141,7 +141,7 @@ output "DP-8" {
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 6
+    gaps 5
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -164,6 +164,8 @@ layout {
         // Fixed sets the width in logical pixels exactly.
         // fixed 1920
     }
+    
+    background-color "transparent"
 
     // You can also customize the heights that "switch-preset-window-height" (Mod+Shift+R) toggles between.
     // preset-window-heights { }
@@ -374,14 +376,21 @@ debug {
     honor-xdg-activation-with-invalid-serial
 }
 
+// https://danklinux.com/docs/dankmaterialshell/compositors?_highlight=place&_highlight=within&_highlight=backdrop#niri-configuration
 layer-rule {
-    match namespace="quickshell"
+    match namespace="dms:blurwallpaper"
     place-within-backdrop true
 }
 
 layer-rule {
-    match namespace="dms:blurwallpaper"
+    match namespace="^quickshell$"
     place-within-backdrop true
+}
+
+overview {
+    workspace-shadow {
+        on
+    }
 }
 
 binds {
