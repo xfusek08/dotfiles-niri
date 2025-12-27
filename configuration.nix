@@ -3,7 +3,7 @@
 {
   imports =
   [
-      /etc/nixos/hardware-configuration.nix
+      ./hardware-configuration.nix
   ];
 
   # Allow unfree packages (needed for VS Code, etc.)
