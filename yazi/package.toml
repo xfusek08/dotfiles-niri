@@ -1,0 +1,15 @@
+# =============================================================================
+# Yazi Package Manager Configuration
+# =============================================================================
+# Plugins and flavors managed by yazi's package manager
+# Install: ya pack -i
+# Update:  ya pack -u
+# =============================================================================
+
+[plugin]
+deps = []
+
+[[flavor.deps]]
+use = "yazi-rs/flavors:catppuccin-mocha"
+rev = "3edeb49"
+hash = "76b921b2d734331854d4a55b59a21388"
