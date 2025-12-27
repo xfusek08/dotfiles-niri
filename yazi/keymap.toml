@@ -100,7 +100,7 @@ keymap = [
 	{ on = [ "c", "f" ], run = "copy filename",                   desc = "Copy the filename" },
 	{ on = [ "c", "n" ], run = "copy name_without_ext",           desc = "Copy the filename without extension" },
     { on = [ "c", "m" ], run = "shell -- dragon-drop -x -T %s1" , desc = "🖼️ Copy file as image via Dragon Drop" },
-	{ on = [ "c", "t" ], run = """shell --block -- bash -c '
+	{ on = [ "c", "t" ], run = """shell --block -- zsh -c '
 		fileName="$1"
 		fileType=$(file -b "$fileName")
 		if echo "$fileType" | grep -qi "text\\|json\\|xml\\|script\\|source\\|program\\|ascii\\|utf-8\\|html\\|stylesheet"; then
