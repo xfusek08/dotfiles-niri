@@ -5,6 +5,8 @@
         "brightnessctl",
         "cava",
         "cliphist",
+        "danklinux",
+        "dgop",
         "fuzzel",
         "libdisplay",
         "libdrm",
@@ -23,9 +25,15 @@
         "polkit",
         "qtmultimedia",
         "seatd",
+        "sodiboo",
         "swaybg",
         "swaylock",
         "xwayland"
     ],
-    "editor.formatOnSave": false
+    "editor.formatOnSave": false,
+    // indentation settings for nix files
+    "[nix]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+    }
 }
