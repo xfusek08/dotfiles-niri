@@ -56,32 +56,4 @@
       (builtins.readFile ./zsh/init-extra.zsh)
     ];
   };
-
-  # ===========================================================================
-  # STARSHIP PROMPT
-  # ===========================================================================
-
-  programs.starship = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-  home.file.".config/starship.toml".source = ./starship.toml;
-
-  # ===========================================================================
-  # FZF FUZZY FINDER
-  # ===========================================================================
-
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  # ===========================================================================
-  # ZOXIDE (SMART CD)
-  # ===========================================================================
-
-  programs.zoxide = {
-    enable = true;
-    enableZshIntegration = true;
-  };
 }

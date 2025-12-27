@@ -12,8 +12,8 @@
   # ===========================================================================
   # External configuration modules to include
   imports = [
-    ./hardware-configuration.nix       # Auto-generated hardware-specific settings
-    inputs.dms.nixosModules.greeter     # DankGreeter - Material Design login screen module
+    ./hardware-configuration.nix    # Auto-generated hardware-specific settings
+    inputs.dms.nixosModules.greeter # DankGreeter - Material Design login screen module
   ];
 
   # ===========================================================================
@@ -79,11 +79,11 @@
     isNormalUser = true; # Regular user account (not system user)
     shell = pkgs.zsh;    # Set zsh as default shell
     extraGroups = [
-      "wheel"   # Sudo/admin privileges
-      "video"   # Access to video devices
-      "input"   # Access to input devices
-      "render"  # GPU rendering access
-      "docker"  # Docker access without sudo
+      "wheel"  # Sudo/admin privileges
+      "video"  # Access to video devices
+      "input"  # Access to input devices
+      "render" # GPU rendering access
+      "docker" # Docker access without sudo
     ];
     packages = with pkgs; [
       # User-specific packages can be added here
@@ -116,8 +116,8 @@
   # - And more...
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];  # GTK-based portal implementation
-    config.common.default = "gtk";                    # Use GTK portal as default
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ]; # GTK-based portal implementation
+    config.common.default = "gtk";                  # Use GTK portal as default
   };
 
   # DankGreeter - Material Design styled login/display manager
@@ -144,13 +144,13 @@
   environment.systemPackages = with pkgs; [
 
     # --- Development Tools ---
-    git     # Version control system
-    vscode  # Visual Studio Code editor (unfree)
-    file    # File type identification utility
+    git    # Version control system
+    vscode # Visual Studio Code editor (unfree)
+    file   # File type identification utility
 
     # --- Terminal & Shell ---
-    alacritty  # GPU-accelerated terminal emulator
-    wget       # CLI tool for downloading files
+    alacritty # GPU-accelerated terminal emulator
+    wget      # CLI tool for downloading files
 
     # --- Wayland Utilities ---
     grim               # Screenshot capture tool
@@ -162,20 +162,20 @@
     xwayland-satellite # XWayland for running X11 apps on Wayland
 
     # --- Desktop Integration ---
-    accountsservice   # User account info (for DMS user menu)
-    brightnessctl     # Screen brightness control
-    cliphist          # Clipboard history manager
-    mako              # Lightweight notification daemon
-    mate.mate-polkit  # PolicyKit authentication dialog
-    playerctl         # MPRIS media player control (for media keys)
-    libnotify         # Notification library (for various apps)
+    accountsservice  # User account info (for DMS user menu)
+    brightnessctl    # Screen brightness control
+    cliphist         # Clipboard history manager
+    mako             # Lightweight notification daemon
+    mate.mate-polkit # PolicyKit authentication dialog
+    playerctl        # MPRIS media player control (for media keys)
+    libnotify        # Notification library (for various apps)
 
     # --- Theming & Appearance ---
-    matugen           # Material You color palette generator
+    matugen # Material You color palette generator
 
     # --- DMS (Dank Material Shell) Dependencies ---
-    cava              # Audio visualizer
-    qt6.qtmultimedia  # Media controls and system sounds
+    cava             # Audio visualizer
+    qt6.qtmultimedia # Media controls and system sounds
 
     # --- Web Browser ---
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default  # Zen Browser (Firefox-based)

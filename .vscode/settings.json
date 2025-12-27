@@ -15,7 +15,9 @@
         "fira",
         "fuzzel",
         "greetd",
+        "keybind",
         "keybinds",
+        "keymap",
         "libdisplay",
         "libdrm",
         "libinput",
@@ -45,6 +47,7 @@
         "terminfo",
         "upower",
         "xwayland",
+        "youwen5",
         "Zinit",
         "zmodload"
     ],

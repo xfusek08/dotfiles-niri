@@ -66,6 +66,34 @@
     settings.user.name = "Petr Fusek";              # Git commit author name
     settings.user.email = "petr.fusek97@gmail.com"; # Git commit author email
   };
+  
+  # ===========================================================================
+  # STARSHIP PROMPT
+  # ===========================================================================
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+  home.file.".config/starship.toml".source = ./starship/starship.toml;
+
+  # ===========================================================================
+  # FZF FUZZY FINDER
+  # ===========================================================================
+
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  # ===========================================================================
+  # ZOXIDE (SMART CD)
+  # ===========================================================================
+
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 
   # ===========================================================================
   # USER PACKAGES
