@@ -549,7 +549,8 @@ binds {
     // Alt+R { switch-preset-column-width-back; }
     Alt+Shift+R { switch-preset-window-height; }
     Alt+Ctrl+R { reset-window-height; }
-    Alt+F { fullscreen-window; }
+    Alt+F { maximize-column; }
+    Alt+Shift+F { fullscreen-window; }
 
     // Expand the focused column to space not taken up by other fully visible columns.
     // Makes the column "fill the rest of the space".
