@@ -58,7 +58,15 @@
       system = "x86_64-linux";
       modules = [
         ./configuration.nix
-        # home-manager.nixosModules.home-manager
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.petr = import ./home.nix;
+            backupFileExtension = "backup";
+          };
+        }
       ];
     };
   };
