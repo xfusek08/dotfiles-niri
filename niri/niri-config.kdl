@@ -3,7 +3,7 @@
 // =============================================================================
 // Config format: KDL (https://kdl.dev)
 // Full documentation: https://yalter.github.io/niri/Configuration:-Introduction
-// 
+//
 // DMS Integration Notes:
 // - DMS auto-starts via systemd (bound to niri.service)
 // - Include files at bottom sync theming/keybinds with DMS
@@ -409,7 +409,7 @@ binds {
     Alt+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Alt+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
+    Alt+T hotkey-overlay-title="Open a Terminal: Ghostty" { spawn "ghostty"; }
 
     // Dank Material Shell keybindings
     Alt+D hotkey-overlay-title="Application Launcher" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
@@ -662,7 +662,7 @@ binds {
 // DMS will populate these with:
 // - colors.kdl: Border/focus ring colors matching your theme
 // - layout.kdl: Gap sizes and corner radius
-// - alttab.kdl: Alt+Tab window switcher config  
+// - alttab.kdl: Alt+Tab window switcher config
 // - binds.kdl: Additional DMS keybindings
 // =============================================================================
 

@@ -149,7 +149,7 @@
     file   # File type identification utility
 
     # --- Terminal & Shell ---
-    alacritty # GPU-accelerated terminal emulator
+    ghostty   # GPU-accelerated terminal emulator
     wget      # CLI tool for downloading files
 
     # --- Wayland Utilities ---
