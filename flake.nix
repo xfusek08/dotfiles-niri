@@ -15,17 +15,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    dms-cli = {
-      url = "github:AvengeMedia/danklinux";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # dms-cli = {
+    #   url = "github:AvengeMedia/danklinux";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
-    dankMaterialShell = {
-      url = "github:AvengeMedia/DankMaterialShell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.dgop.follows = "dgop";
-      inputs.dms-cli.follows = "dms-cli";
-    };
+    # dankMaterialShell = {
+    #   url = "github:AvengeMedia/DankMaterialShell";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs.dgop.follows = "dgop";
+    #   inputs.dms-cli.follows = "dms-cli";
+    # };
 
     niri = {
       url = "github:sodiboo/niri-flake";
@@ -53,11 +53,13 @@
   #   };
   # };
 
-  outputs = {
-      nixosConfigurations = {
-          nixos = lib.nixosSystem {
-
-          }
-      }
+  outputs = {self, nixpkgs, ...}: {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./configuration.nix
+        home-manager.nixosModules.home-manager
+      ];
+    };
   };
 }
