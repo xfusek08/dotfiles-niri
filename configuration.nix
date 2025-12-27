@@ -146,6 +146,7 @@
     # --- Development Tools ---
     git     # Version control system
     vscode  # Visual Studio Code editor (unfree)
+    file    # File type identification utility
 
     # --- Terminal & Shell ---
     alacritty  # GPU-accelerated terminal emulator
