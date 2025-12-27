@@ -2,7 +2,7 @@
 
 {
   imports = [
-    inputs.niri.homeModules.niri
+    # inputs.niri.homeModules.niri
     # inputs.dankMaterialShell.homeModules.dankMaterialShell.default
     # Don't import the niri module - we're using our own niri config
   ];
