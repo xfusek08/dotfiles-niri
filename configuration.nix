@@ -19,7 +19,7 @@
   # https://danklinux.com/docs/dankmaterialshell/nixos-flake#polkit-agent
   systemd.user.services.niri-flake-polkit.enable = false;
   
-  systemd.enable = true;
+  # systemd.enable = true;
   
   # niri.enableSpawn = true;
 
