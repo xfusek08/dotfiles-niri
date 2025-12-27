@@ -53,7 +53,7 @@
         typeset -F shell_start=$EPOCHREALTIME
       '')
       # Main init (zinit, plugins, etc.)
-      (builtins.readFile ./zsh/init-extra.zsh)
+      (builtins.readFile ./init-extra.zsh)
     ];
   };
 }
