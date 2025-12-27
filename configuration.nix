@@ -60,7 +60,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    zed-editor         # Text editor
+    vscode             # Text editor
 
     accountsservice    # For Dank Material Shell user menu
     alacritty          # Terminal emulator
@@ -110,8 +110,10 @@
     # --- Packages creating useful DE ---
 
     firefox                 # Web browser
-  ];
+  ]; # End of environment.systemPackages
 
+  # Allow nix flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   system.stateVersion = "25.05";
 }
