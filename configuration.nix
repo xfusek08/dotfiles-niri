@@ -60,6 +60,8 @@
   };
 
   environment.systemPackages = with pkgs; [
+    zed-editor         # Text editor
+
     accountsservice    # For Dank Material Shell user menu
     alacritty          # Terminal emulator
     brightnessctl      # Screen brightness control
