@@ -1,87 +1,186 @@
+# =============================================================================
+# NixOS System Configuration
+# =============================================================================
+# Main system configuration file for NixOS
+# Location: /etc/nixos/configuration.nix (or in dotfiles repo)
+# =============================================================================
+
 { config, lib, pkgs, inputs, ... }: {
+
+  # ===========================================================================
+  # IMPORTS
+  # ===========================================================================
+  # External configuration modules to include
   imports = [
-      ./hardware-configuration.nix
-      inputs.dms.nixosModules.greeter  # DankGreeter NixOS module
+    ./hardware-configuration.nix       # Auto-generated hardware-specific settings
+    inputs.dms.nixosModules.greeter     # DankGreeter - Material Design login screen module
   ];
 
-  # Allow unfree packages (needed for VS Code, etc.)
+  # ===========================================================================
+  # NIX SETTINGS
+  # ===========================================================================
+  # Configuration for the Nix package manager itself
+
+  # Allow installation of proprietary/closed-source packages (e.g., VS Code)
   nixpkgs.config.allowUnfree = true;
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Enable experimental Nix features:
+  # - nix-command: New CLI commands (nix build, nix run, etc.)
+  # - flakes: Reproducible package management with flake.nix
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
+  # ===========================================================================
+  # BOOT CONFIGURATION
+  # ===========================================================================
+  # Bootloader and early boot settings
 
-  hardware.bluetooth.enable = true;
-  services.power-profiles-daemon.enable = true;
-  services.upower.enable = true;
-  
-  # Disable niri-flake's default polkit agent - DMS has its own built-in polkit agent
-  # https://danklinux.com/docs/dankmaterialshell/nixos-flake#polkit-agent
-  systemd.user.services.niri-flake-polkit.enable = false;
+  boot.loader.systemd-boot.enable = true;       # Use systemd-boot as the bootloader
+  boot.loader.efi.canTouchEfiVariables = true;  # Allow modifying EFI variables
 
-  time.timeZone = "Europe/Prague";
-  i18n.defaultLocale = "cs_CZ.UTF-8";
+  # ===========================================================================
+  # NETWORKING
+  # ===========================================================================
+  # Network configuration
 
-  fonts.packages = with pkgs; [
-      nerd-fonts.fira-code
-  ];
+  networking.hostName = "nixos";            # System hostname
+  networking.networkmanager.enable = true;  # Enable NetworkManager for network management
+
+  # ===========================================================================
+  # LOCALIZATION
+  # ===========================================================================
+  # Time zone, language, and regional settings
+
+  time.timeZone = "Europe/Prague";      # System timezone
+  i18n.defaultLocale = "cs_CZ.UTF-8";   # Default system locale (Czech)
+
+  # ===========================================================================
+  # HARDWARE
+  # ===========================================================================
+  # Hardware-specific configuration
+
+  hardware.bluetooth.enable = true;  # Enable Bluetooth support
+
+  # ===========================================================================
+  # VIRTUALISATION
+  # ===========================================================================
+  # Container and VM configuration
+
+  virtualisation.docker.enable = true;  # Enable Docker container runtime
+
+  # ===========================================================================
+  # USER ACCOUNTS
+  # ===========================================================================
+  # User configuration and permissions
 
   users.users.petr = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "video" "input" "render" ];
+    isNormalUser = true; # Regular user account (not system user)
+    extraGroups = [
+      "wheel"   # Sudo/admin privileges
+      "video"   # Access to video devices
+      "input"   # Access to input devices
+      "render"  # GPU rendering access
+      "docker"  # Docker access without sudo
+    ];
     packages = with pkgs; [
+      # User-specific packages can be added here
     ];
   };
 
-  programs.niri.enable = true;
+  # ===========================================================================
+  # FONTS
+  # ===========================================================================
+  # System-wide font packages
 
-  services.openssh.enable = true;
-
-  # XDG Desktop Portal for screen casting, file pickers, etc.
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    config.common.default = "gtk";
-  };
-
-  # DankGreeter - Material Design login screen
-  programs.dankMaterialShell.greeter = {
-    enable = true;
-    compositor.name = "niri";
-    configHome = "/home/petr";  # Sync DMS theme with the greeter
-  };
-
-  environment.systemPackages = with pkgs; [
-    vscode             # Text editor
-
-    accountsservice    # For Dank Material Shell user menu
-    alacritty          # Terminal emulator
-    brightnessctl      # Screen brightness control
-    cava               # Audio visualizer
-    cliphist           # Clipboard manager
-    git                # Version control system
-    grim               # Screenshot tool
-    mako               # Notification daemon
-    mate.mate-polkit   # PolicyKit authentication agent (mate-polkit)
-    matugen            # Material Design color palette generation (dynamic theming)
-    playerctl          # Media player control (for media keys)
-    qt6.qtmultimedia   # For media controls and system sounds in DMS
-    slurp              # Region selector for screenshots
-    swappy             # Screenshot editor for DMS
-    swaylock           # Screen locker
-    swaybg             # Wallpaper setter
-    wget               # For downloading files
-    wl-clipboard       # Wayland clipboard utilities
-    xwayland-satellite # For X11 app compatibility
-
-    # Web browser (Zen)
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code # FiraCode with Nerd Font icons (great for terminals/editors)
   ];
 
-  # Allow nix flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # ===========================================================================
+  # DESKTOP ENVIRONMENT
+  # ===========================================================================
+  # Window manager, compositor, and desktop integration
 
+  # Niri - Scrollable tiling Wayland compositor
+  programs.niri.enable = true;
+
+  # Disable niri-flake's default polkit agent since DMS has its own built-in
+  # See: https://danklinux.com/docs/dankmaterialshell/nixos-flake#polkit-agent
+  systemd.user.services.niri-flake-polkit.enable = false;
+
+  # XDG Desktop Portal - Provides standardized desktop APIs for:
+  # - Screen sharing/casting
+  # - File picker dialogs
+  # - Notifications
+  # - And more...
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];  # GTK-based portal implementation
+    config.common.default = "gtk";                    # Use GTK portal as default
+  };
+
+  # DankGreeter - Material Design styled login/display manager
+  programs.dankMaterialShell.greeter = {
+    enable = true;
+    compositor.name = "niri";       # Use Niri as the greeter compositor
+    configHome = "/home/petr";      # Path to DMS config for theme sync
+  };
+
+  # ===========================================================================
+  # SERVICES
+  # ===========================================================================
+  # System services and daemons
+
+  services.openssh.enable = true;               # SSH server for remote access
+  services.power-profiles-daemon.enable = true; # Power management profiles
+  services.upower.enable = true;                # Battery/power device monitoring
+
+  # ===========================================================================
+  # SYSTEM PACKAGES
+  # ===========================================================================
+  # Packages installed system-wide for all users
+
+  environment.systemPackages = with pkgs; [
+
+    # --- Development Tools ---
+    git     # Version control system
+    vscode  # Visual Studio Code editor (unfree)
+
+    # --- Terminal & Shell ---
+    alacritty  # GPU-accelerated terminal emulator
+    wget       # CLI tool for downloading files
+
+    # --- Wayland Utilities ---
+    grim               # Screenshot capture tool
+    slurp              # Screen region selector (works with grim)
+    swappy             # Screenshot annotation/editor
+    swaybg             # Wallpaper setter for Wayland
+    swaylock           # Screen locker for Wayland
+    wl-clipboard       # Clipboard utilities (wl-copy, wl-paste)
+    xwayland-satellite # XWayland for running X11 apps on Wayland
+
+    # --- Desktop Integration ---
+    accountsservice   # User account info (for DMS user menu)
+    brightnessctl     # Screen brightness control
+    cliphist          # Clipboard history manager
+    mako              # Lightweight notification daemon
+    mate.mate-polkit  # PolicyKit authentication dialog
+    playerctl         # MPRIS media player control (for media keys)
+
+    # --- Theming & Appearance ---
+    matugen           # Material You color palette generator
+
+    # --- DMS (Dank Material Shell) Dependencies ---
+    cava              # Audio visualizer
+    qt6.qtmultimedia  # Media controls and system sounds
+
+    # --- Web Browser ---
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default  # Zen Browser (Firefox-based)
+  ];
+
+  # ===========================================================================
+  # SYSTEM STATE VERSION
+  # ===========================================================================
+  # DO NOT CHANGE - Tracks the NixOS version for state compatibility
+  # Only update when doing a full system upgrade with proper migration
   system.stateVersion = "25.05";
 }
