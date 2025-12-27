@@ -33,7 +33,7 @@
     enableAudioWavelength = true;   # Audio visualizer (cava)
     enableCalendarEvents = true;    # Calendar integration (khal)
     enableSystemSound = true;       # System sound effects
-    enablePolkitAgent = true;       # Enable DMS built-in polkit agent
+
   };
 
   programs.git = {
