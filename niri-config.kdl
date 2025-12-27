@@ -10,7 +10,7 @@ input {
     keyboard {
         repeat-delay 200
         repeat-rate 35
-        
+
         xkb {
             layout "cz"
             variant "coder"
@@ -273,8 +273,6 @@ layout {
 
 spawn-at-startup "xwayland-satellite"
 
-spawn-at-startup "dms" "run"
-
 spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 
 
@@ -435,14 +433,14 @@ binds {
     Alt+Ctrl+Page_Up   { move-workspace-up; }
     Alt+Page_Down      { move-column-to-workspace-down; }
     Alt+Page_Up        { move-column-to-workspace-up; }
-    
+
     // Alternatively, there are commands to move just a single window:
     // Alt+Ctrl+Page_Down { move-window-to-workspace-down; }
     // ...
 
     Alt+Shift+Page_Down { move-workspace-down; }
     Alt+Shift+Page_Up   { move-workspace-up; }
-    
+
     // You can bind mouse wheel scroll ticks using the following syntax.
     // These binds will change direction based on the natural-scroll setting.
     //
@@ -559,7 +557,7 @@ binds {
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
     Alt+W { toggle-column-tabbed-display; }
-    
+
 
     // Actions to switch layouts.
     // Note: if you uncomment these, make sure you do NOT have
