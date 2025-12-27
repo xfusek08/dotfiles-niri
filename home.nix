@@ -112,6 +112,15 @@
 
     # --- GUI Applications ---
     vscode    # Visual Studio Code editor
+    
+    # --- yazi dependencies ---
+    jq
+    dragon-drop
+    fd
+    ripgrep
+    poppler
+    imagemagick
+    
   ];
 
   # ===========================================================================
