@@ -1,6 +1,4 @@
-{ config, pkgs, inputs, ... }:
-
-{
+{ config, pkgs, inputs, ... }: {
   imports = [
     # inputs.niri.homeModules.niri
     # inputs.dankMaterialShell.homeModules.dankMaterialShell.default
@@ -48,6 +46,7 @@
     ripgrep
     vscode
     eza
+    fastfetch
   ];
 
   home.file.".config/niri/config.kdl".source = ./niri-config.kdl;
