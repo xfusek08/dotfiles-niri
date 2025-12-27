@@ -1,6 +1,7 @@
 { config, lib, pkgs, inputs, ... }: {
   imports = [
       ./hardware-configuration.nix
+      inputs.dms.nixosModules.greeter  # DankGreeter NixOS module
   ];
 
   # Allow unfree packages (needed for VS Code, etc.)
@@ -45,19 +46,11 @@
     config.common.default = "gtk";
   };
 
-  # Auto-login with greetd and start niri
-  services.greetd = {
+  # DankGreeter - Material Design login screen
+  programs.dankMaterialShell.greeter = {
     enable = true;
-    settings = {
-      initial_session = {
-        command = "${pkgs.niri}/bin/niri-session";
-        user = "petr";
-      };
-      default_session = {
-        command = "${pkgs.niri}/bin/niri-session";
-        user = "petr";
-      };
-    };
+    compositor.name = "niri";
+    configHome = "/home/petr";  # Sync DMS theme with the greeter
   };
 
   environment.systemPackages = with pkgs; [
