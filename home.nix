@@ -1,6 +1,6 @@
 { config, pkgs, inputs, ... }: {
   imports = [
-    # inputs.dms.homeModules.dankMaterialShell.default # Dank Material Shell Home Manager module
+    inputs.dms.homeModules.dankMaterialShell.default # Dank Material Shell Home Manager module
   ];
 
   home.username = "petr";
@@ -16,7 +16,6 @@
     };
   
     # Core features
-    enableSystemd = true;           # Systemd service for auto-start
     enableSystemMonitoring = true;  # System monitoring widgets (dgop)
     enableClipboard = true;         # Clipboard history manager
     enableVPN = true;               # VPN management widget
