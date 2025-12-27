@@ -87,6 +87,7 @@ environment {
     DISPLAY ":0"                        // XWayland display (for xwayland-satellite)
     QT_QPA_PLATFORMTHEME "gtk3"         // Qt theme integration with GTK
     QT_QPA_PLATFORMTHEME_QT6 "gtk3"     // Qt6 theme integration with GTK
+    TERMINAL "ghostty"                  // Default terminal emulator
 }
 
 // You can configure outputs by their name, which you can find
