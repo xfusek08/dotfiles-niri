@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, inputs, ... }: {
   imports = [
       ./hardware-configuration.nix
   ];
@@ -84,7 +84,7 @@
     wl-clipboard       # Wayland clipboard utilities
     xwayland-satellite # For X11 app compatibility
 
-    firefox                 # Web browser
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default  # Web browser (Zen)
   ];
 
   # Allow nix flakes

@@ -19,9 +19,15 @@
       url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ...}: { # inputs@{ ... } is needed to pass all inputs to modules
+  # inputs@{ ... } is needed to pass all inputs to modules
+  outputs = inputs@{ self, nixpkgs, home-manager, ...}: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";                    # Define the system architecture
       specialArgs = { inherit inputs; };          # Pass inputs to modules
@@ -31,11 +37,11 @@
         {
           # Home Manager configuration for user 'petr'
           home-manager = {
-            useGlobalPkgs = true;           # Use global packages
-            useUserPackages = true;         # Use user-specific packages
+            useGlobalPkgs = true;                   # Use global packages
+            useUserPackages = true;                 # Use user-specific packages
             extraSpecialArgs = { inherit inputs; }; # Pass inputs to home-manager
-            users.petr = import ./home.nix; # Import user configuration
-            backupFileExtension = "backup"; # Backup file extension
+            users.petr = import ./home.nix;         # Import user configuration
+            backupFileExtension = "backup";         # Backup file extension
           };
         }
       ];
