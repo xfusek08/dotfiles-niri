@@ -12,9 +12,9 @@
   # ===========================================================================
   # External Home Manager modules to include
   imports = [
-    inputs.dms.homeModules.dankMaterialShell.default  # Dank Material Shell module
-    ./zsh.nix                                          # Zsh shell configuration
-    # Note: Not using niri module - it requires niri-flake which has limitations with DMS
+    # Note: Not us ing niri module - it requires niri-flake which has limitations with DMS
+    inputs.dms.homeModules.dankMaterialShell.default # Dank Material Shell module
+    ./zsh/zsh.nix                                    # Zsh shell configuration
   ];
 
   # ===========================================================================
@@ -22,8 +22,8 @@
   # ===========================================================================
   # Basic user account configuration
 
-  home.username = "petr";               # Username (must match system user)
-  home.homeDirectory = "/home/petr";    # User's home directory path
+  home.username = "petr";            # Username (must match system user)
+  home.homeDirectory = "/home/petr"; # User's home directory path
 
   # DO NOT CHANGE - Tracks Home Manager version for state compatibility
   home.stateVersion = "25.05";
@@ -40,20 +40,20 @@
     # --- Systemd Integration ---
     # Run DMS as a systemd user service (auto-starts with niri.service)
     systemd = {
-      enable = true;            # Enable systemd service for auto-start
-      restartIfChanged = true;  # Auto-restart dms.service on config changes
+      enable = true;           # Enable systemd service for auto-start
+      restartIfChanged = true; # Auto-restart dms.service on config changes
     };
 
     # --- Feature Toggles ---
-    enableSystemMonitoring = true;   # System resource widgets (CPU, RAM, etc.)
-    enableClipboard = true;          # Clipboard history manager
-    enableVPN = true;                # VPN connection management widget
-    enableBrightnessControl = true;  # Screen brightness slider
-    enableColorPicker = true;        # Color picker tool
-    enableDynamicTheming = true;     # Auto-theme based on wallpaper (uses matugen)
-    enableAudioWavelength = true;    # Audio visualizer widget (uses cava)
-    enableCalendarEvents = true;     # Calendar integration (uses khal)
-    enableSystemSound = true;        # UI sound effects
+    enableSystemMonitoring = true;  # System resource widgets (CPU, RAM, etc.)
+    enableClipboard = true;         # Clipboard history manager
+    enableVPN = true;               # VPN connection management widget
+    enableBrightnessControl = true; # Screen brightness slider
+    enableColorPicker = true;       # Color picker tool
+    enableDynamicTheming = true;    # Auto-theme based on wallpaper (uses matugen)
+    enableAudioWavelength = true;   # Audio visualizer widget (uses cava)
+    enableCalendarEvents = true;    # Calendar integration (uses khal)
+    enableSystemSound = true;       # UI sound effects
   };
 
   # ===========================================================================
@@ -74,16 +74,16 @@
 
   home.packages = with pkgs; [
     # --- CLI Tools ---
-    bat         # Cat clone with syntax highlighting
-    bfs         # Breadth-first search file finder (for fcd function)
-    btop        # Resource monitor (better htop)
-    eza         # Modern ls replacement with icons
-    fastfetch   # System info display (neofetch alternative)
-    ripgrep     # Fast grep alternative (rg)
-    yazi        # Terminal file manager
+    bat       # Cat clone with syntax highlighting
+    bfs       # Breadth-first search file finder (for fcd function)
+    btop      # Resource monitor (better htop)
+    eza       # Modern ls replacement with icons
+    fastfetch # System info display (neofetch alternative)
+    ripgrep   # Fast grep alternative (rg)
+    yazi      # Terminal file manager
 
     # --- GUI Applications ---
-    vscode      # Visual Studio Code editor
+    vscode    # Visual Studio Code editor
   ];
 
   # ===========================================================================
@@ -92,7 +92,7 @@
   # Configuration files to symlink into home directory
 
   # Niri window manager config - symlink from this repo to ~/.config/niri/
-  home.file.".config/niri/config.kdl".source = ./niri-config.kdl;
+  home.file.".config/niri/config.kdl".source = ./niri/niri-config.kdl;
 
   # Yazi file manager config
   # Plugins/flavors managed by yazi: run `ya pkg i` to install, `ya pkg u` to update
