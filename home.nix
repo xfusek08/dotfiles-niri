@@ -1,6 +1,6 @@
 { config, pkgs, inputs, ... }: {
   imports = [
-    inputs.dms.homeModules.dankMaterialShell.default # Dank Material Shell Home Manager module
+    # inputs.dms.homeModules.dankMaterialShell.default # Dank Material Shell Home Manager module
   ];
 
   home.username = "petr";

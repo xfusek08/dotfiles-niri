@@ -44,7 +44,8 @@
       specialArgs = { inherit inputs; };          # Pass inputs to modules
       modules = [                                 # Include configuration modules
         ./configuration.nix                       # Main system configuration
-        home-manager.nixosModules.home-manager  # Home Manager integration
+        home-manager.nixosModules.home-manager    # Home Manager integration
+        inputs.dms.nixosModules.dankMaterialShell # Dank Material Shell NixOS module
         {
           # Home Manager configuration for user 'petr'
           home-manager = {
