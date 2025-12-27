@@ -7,7 +7,9 @@
         "cliphist",
         "danklinux",
         "dgop",
+        "fira",
         "fuzzel",
+        "greetd",
         "libdisplay",
         "libdrm",
         "libinput",
@@ -28,6 +30,7 @@
         "sodiboo",
         "swaybg",
         "swaylock",
+        "upower",
         "xwayland"
     ],
     "editor.formatOnSave": false,
