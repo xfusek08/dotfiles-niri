@@ -48,20 +48,20 @@
     config.common.default = "gtk";
   };
 
-  # # Auto-login with greetd and start niri locked
-  # services.greetd = {
-  #   enable = true;
-  #   settings = {
-  #     initial_session = {
-  #       command = "${pkgs.niri}/bin/niri-session";
-  #       user = "petr";
-  #     };
-  #     default_session = {
-  #       command = "${pkgs.niri}/bin/niri-session";
-  #       user = "petr";
-  #     };
-  #   };
-  # };
+  # Auto-login with greetd and start niri
+  services.greetd = {
+    enable = true;
+    settings = {
+      initial_session = {
+        command = "${pkgs.niri}/bin/niri-session";
+        user = "petr";
+      };
+      default_session = {
+        command = "${pkgs.niri}/bin/niri-session";
+        user = "petr";
+      };
+    };
+  };
 
   environment.systemPackages = with pkgs; [
     vscode             # Text editor
