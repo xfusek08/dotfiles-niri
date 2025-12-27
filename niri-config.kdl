@@ -1,11 +1,19 @@
-// This config is in the KDL format: https://kdl.dev
-// "/-" comments out the following node.
-// Check the wiki for a full description of the configuration:
-// https://yalter.github.io/niri/Configuration:-Introduction
+// =============================================================================
+// Niri Window Manager Configuration
+// =============================================================================
+// Config format: KDL (https://kdl.dev)
+// Full documentation: https://yalter.github.io/niri/Configuration:-Introduction
+// 
+// DMS Integration Notes:
+// - DMS auto-starts via systemd (bound to niri.service)
+// - Include files at bottom sync theming/keybinds with DMS
+// - Transparent background required for DMS wallpaper integration
+// =============================================================================
 
-// Input device configuration.
-// Find the full list of options on the wiki:
-// https://yalter.github.io/niri/Configuration:-Input
+// ===========================================================================
+// INPUT CONFIGURATION
+// ===========================================================================
+// Find the full list of options: https://yalter.github.io/niri/Configuration:-Input
 input {
     keyboard {
         repeat-delay 200
@@ -63,15 +71,22 @@ input {
     focus-follows-mouse max-scroll-amount="10%"
 }
 
+// ===========================================================================
+// ENVIRONMENT VARIABLES
+// ===========================================================================
+// Environment variables set for all spawned processes
 environment {
-    QT_QPA_PLATFORM "wayland"
-    XDG_SESSION_TYPE "wayland"
-    ELECTRON_OZONE_PLATFORM_HINT "auto"
-    GDK_BACKEND "wayland"
-    EDITOR "code"
-    GIT_EDITOR "code --wait"
-    CLUTTER_BACKEND "wayland"
-    DISPLAY ":0"
+    XDG_CURRENT_DESKTOP "niri"          // Required for proper desktop detection
+    QT_QPA_PLATFORM "wayland"           // Force Qt apps to use Wayland
+    XDG_SESSION_TYPE "wayland"          // Session type for apps
+    ELECTRON_OZONE_PLATFORM_HINT "auto" // Electron apps auto-detect Wayland
+    GDK_BACKEND "wayland"               // Force GTK apps to use Wayland
+    CLUTTER_BACKEND "wayland"           // Force Clutter apps to use Wayland
+    EDITOR "code"                       // Default text editor
+    GIT_EDITOR "code --wait"            // Git commit editor
+    DISPLAY ":0"                        // XWayland display (for xwayland-satellite)
+    QT_QPA_PLATFORMTHEME "gtk3"         // Qt theme integration with GTK
+    QT_QPA_PLATFORMTHEME_QT6 "gtk3"     // Qt6 theme integration with GTK
 }
 
 // You can configure outputs by their name, which you can find
@@ -268,15 +283,18 @@ layout {
     }
 }
 
-// Add lines like this to spawn processes at startup.
-// Note that running niri as a session supports xdg-desktop-autostart,
-// which may be more convenient to use.
-// See the binds section below for more spawn examples.
+// ===========================================================================
+// STARTUP PROGRAMS
+// ===========================================================================
+// Programs that start automatically with niri
+// Note: DMS auto-starts via systemd (bound to niri.service), not here
 
+// XWayland compatibility layer - allows running X11 apps on Wayland
 spawn-at-startup "xwayland-satellite"
 
-// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
-// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+// Clipboard history - watches clipboard and stores history for cliphist
+// Required for DMS clipboard manager to work
+spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
 
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
@@ -329,11 +347,17 @@ window-rule {
 }
 
 // Example: enable rounded corners for all windows.
-// (This example rule is commented out with a "/-" in front.)
 window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
     draw-border-with-background false
+}
+
+// Open DMS/Quickshell windows as floating by default
+// This ensures modals and popups appear correctly
+window-rule {
+    match app-id=r#"org.quickshell$"#
+    open-floating true
 }
 
 config-notification {
@@ -344,12 +368,20 @@ debug {
     honor-xdg-activation-with-invalid-serial
 }
 
-// https://danklinux.com/docs/dankmaterialshell/compositors?_highlight=place&_highlight=within&_highlight=backdrop#niri-configuration
+// ===========================================================================
+// DMS LAYER RULES
+// ===========================================================================
+// Layer rules for DankMaterialShell integration
+// place-within-backdrop puts layers on the overview for proper wallpaper display
+// See: https://danklinux.com/docs/dankmaterialshell/compositors#layer-rules
+
+// Blur wallpaper layer (if "Blur Layer" is enabled in DMS)
 layer-rule {
     match namespace="dms:blurwallpaper"
     place-within-backdrop true
 }
 
+// Main quickshell layer - shows wallpaper on overview
 layer-rule {
     match namespace="^quickshell$"
     place-within-backdrop true
@@ -618,3 +650,23 @@ binds {
     // moving the mouse or pressing any other key.
     Alt+Shift+P { power-off-monitors; }
 }
+
+// =============================================================================
+// DMS DYNAMIC CONFIGURATION INCLUDES
+// =============================================================================
+// These files are auto-generated by DankMaterialShell for theming sync
+// They MUST exist before niri starts - create empty files first:
+//   mkdir -p ~/.config/niri/dms
+//   touch ~/.config/niri/dms/{colors,layout,alttab,binds}.kdl
+//
+// DMS will populate these with:
+// - colors.kdl: Border/focus ring colors matching your theme
+// - layout.kdl: Gap sizes and corner radius
+// - alttab.kdl: Alt+Tab window switcher config  
+// - binds.kdl: Additional DMS keybindings
+// =============================================================================
+
+include "dms/colors.kdl"
+include "dms/layout.kdl"
+include "dms/alttab.kdl"
+include "dms/binds.kdl"

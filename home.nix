@@ -106,4 +106,11 @@
 
   # Niri window manager config - symlink from this repo to ~/.config/niri/
   home.file.".config/niri/config.kdl".source = ./niri-config.kdl;
+
+  # DMS include files for niri - these MUST exist before niri starts
+  # DMS will populate them with theme colors, layout, and keybinds
+  home.file.".config/niri/dms/colors.kdl".text = "// Auto-populated by DMS\n";
+  home.file.".config/niri/dms/layout.kdl".text = "// Auto-populated by DMS\n";
+  home.file.".config/niri/dms/alttab.kdl".text = "// Auto-populated by DMS\n";
+  home.file.".config/niri/dms/binds.kdl".text = "// Auto-populated by DMS\n";
 }

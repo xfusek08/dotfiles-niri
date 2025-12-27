@@ -101,11 +101,9 @@
   # Window manager, compositor, and desktop integration
 
   # Niri - Scrollable tiling Wayland compositor
+  # Using nixpkgs niri (25.11+) instead of niri-flake for DMS compatibility
+  # niri-flake doesn't support 'include' directives needed for DMS theming
   programs.niri.enable = true;
-
-  # Disable niri-flake's default polkit agent since DMS has its own built-in
-  # See: https://danklinux.com/docs/dankmaterialshell/nixos-flake#polkit-agent
-  systemd.user.services.niri-flake-polkit.enable = false;
 
   # XDG Desktop Portal - Provides standardized desktop APIs for:
   # - Screen sharing/casting
