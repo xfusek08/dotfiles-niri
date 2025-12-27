@@ -344,21 +344,20 @@ debug {
     honor-xdg-activation-with-invalid-serial
 }
 
-// layer-rule {
-//     match namespace="^quickshell$"
-//     place-within-backdrop true
-// }
+// https://danklinux.com/docs/dankmaterialshell/compositors?_highlight=place&_highlight=within&_highlight=backdrop#niri-configuration
+layer-rule {
+    match namespace="dms:blurwallpaper"
+    place-within-backdrop true
+}
 
-// // Only the blurred wallpaper goes in the backdrop (for blur overview effect)
-// // The normal wallpaper (dms:wallpaper) stays as regular layer on workspace
-// layer-rule {
-//     match namespace="dms:blurwallpaper"
-//     place-within-backdrop true
-// }
+layer-rule {
+    match namespace="^quickshell$"
+    place-within-backdrop true
+}
 
 overview {
     workspace-shadow {
-        off
+        on
     }
 }
 
