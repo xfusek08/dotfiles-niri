@@ -95,12 +95,24 @@
   home.file.".config/niri/config.kdl".source = ./niri-config.kdl;
 
   # Yazi file manager config
-  # Plugins/flavors managed by yazi: run `ya pack -i` to install, `ya pack -u` to update
+  # Plugins/flavors managed by yazi: run `ya pkg i` to install, `ya pkg u` to update
   home.file.".config/yazi/init.lua".source = ./yazi/init.lua;
   home.file.".config/yazi/yazi.toml".source = ./yazi/yazi.toml;
   home.file.".config/yazi/keymap.toml".source = ./yazi/keymap.toml;
   home.file.".config/yazi/theme.toml".source = ./yazi/theme.toml;
-  home.file.".config/yazi/package.toml".source = ./yazi/package.toml;
+
+  # Copy package.toml (not symlink) so yazi can write to it
+  home.activation.yaziPackageToml = {
+    after = [ "writeBoundary" ];
+    before = [];
+    data = ''
+      if [ ! -f "$HOME/.config/yazi/package.toml" ]; then
+        mkdir -p "$HOME/.config/yazi"
+        cp ${./yazi/package.toml} "$HOME/.config/yazi/package.toml"
+        chmod 644 "$HOME/.config/yazi/package.toml"
+      fi
+    '';
+  };
 
   # DMS include files for niri - these MUST exist before niri starts
   # DMS will populate them with theme colors, layout, and keybinds
