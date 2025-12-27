@@ -72,8 +72,12 @@
   # ===========================================================================
   # User configuration and permissions
 
+  # Enable zsh system-wide (required for setting it as default shell)
+  programs.zsh.enable = true;
+
   users.users.petr = {
     isNormalUser = true; # Regular user account (not system user)
+    shell = pkgs.zsh;    # Set zsh as default shell
     extraGroups = [
       "wheel"   # Sudo/admin privileges
       "video"   # Access to video devices

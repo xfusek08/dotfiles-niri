@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "accountsservice",
+        "alttab",
         "autologin",
         "brightnessctl",
         "btop",
@@ -8,6 +9,8 @@
         "cliphist",
         "danklinux",
         "dgop",
+        "Dups",
+        "EPOCHREALTIME",
         "fastfetch",
         "fira",
         "fuzzel",
@@ -32,8 +35,11 @@
         "sodiboo",
         "swaybg",
         "swaylock",
+        "terminfo",
         "upower",
-        "xwayland"
+        "xwayland",
+        "Zinit",
+        "zmodload"
     ],
     "editor.formatOnSave": false,
     // indentation settings for nix files

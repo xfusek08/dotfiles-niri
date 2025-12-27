@@ -13,6 +13,7 @@
   # External Home Manager modules to include
   imports = [
     inputs.dms.homeModules.dankMaterialShell.default  # Dank Material Shell module
+    ./zsh.nix                                          # Zsh shell configuration
     # Note: Not using niri module - it requires niri-flake which has limitations with DMS
   ];
 
@@ -67,20 +68,6 @@
   };
 
   # ===========================================================================
-  # SHELL (BASH)
-  # ===========================================================================
-  # Bash shell configuration and aliases
-
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-      btw = "echo i use nixos, btw";                              # The classic
-      ls = "eza -lga --icons=auto --color=auto --group-directories-first";  # Enhanced ls with eza
-      ff = "fastfetch";                                           # Quick system info
-    };
-  };
-
-  # ===========================================================================
   # USER PACKAGES
   # ===========================================================================
   # Packages installed for this user only (not system-wide)
@@ -88,10 +75,10 @@
   home.packages = with pkgs; [
     # --- CLI Tools ---
     bat         # Cat clone with syntax highlighting
+    bfs         # Breadth-first search file finder (for fcd function)
     btop        # Resource monitor (better htop)
     eza         # Modern ls replacement with icons
     fastfetch   # System info display (neofetch alternative)
-    fzf         # Fuzzy finder for files/commands
     ripgrep     # Fast grep alternative (rg)
     yazi        # Terminal file manager
 
@@ -106,6 +93,12 @@
 
   # Niri window manager config - symlink from this repo to ~/.config/niri/
   home.file.".config/niri/config.kdl".source = ./niri-config.kdl;
+
+  # Yazi file manager config
+  home.file.".config/yazi/init.lua".source = ./yazi/init.lua;
+  home.file.".config/yazi/yazi.toml".source = ./yazi/yazi.toml;
+  home.file.".config/yazi/keymap.toml".source = ./yazi/keymap.toml;
+  home.file.".config/yazi/theme.toml".source = ./yazi/theme.toml;
 
   # DMS include files for niri - these MUST exist before niri starts
   # DMS will populate them with theme colors, layout, and keybinds
