@@ -53,18 +53,21 @@
   #   };
   # };
 
-  outputs = {self, nixpkgs, ...}: {
+  
+  outputs = inputs@{ self, nixpkgs, home-manager, ...}: { # inputs@{ ... } is needed to pass all inputs to modules
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./configuration.nix
-        home-manager.nixosModules.home-manager
+      system = "x86_64-linux";                  # Define the system architecture
+      specialArgs = { inherit inputs; };        # Pass inputs to modules
+      modules = [                               # Include configuration modules
+        ./configuration.nix                     # Main system configuration
+        home-manager.nixosModules.home-manager  # Home Manager integration
         {
+          # Home Manager configuration for user 'petr'
           home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.petr = import ./home.nix;
-            backupFileExtension = "backup";
+            useGlobalPkgs = true;           # Use global packages
+            useUserPackages = true;         # Use user-specific packages
+            users.petr = import ./home.nix; # Import user configuration
+            backupFileExtension = "backup"; # Backup file extension
           };
         }
       ];
