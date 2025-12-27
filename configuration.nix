@@ -147,6 +147,9 @@
     git    # Version control system
     vscode # Visual Studio Code editor (unfree)
     file   # File type identification utility
+    
+    # --- GPU Tools ---
+    mesa-demos # OpenGL/Vulkan demos and utilities
 
     # --- Terminal & Shell ---
     ghostty   # GPU-accelerated terminal emulator
