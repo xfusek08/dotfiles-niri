@@ -36,6 +36,7 @@
     enable = true;
     shellAliases = {
       btw = "echo i use nixos, btw";
+      ls = "eza -lga --icons=auto --color=auto --group-directories-first";
     };
   };
 
