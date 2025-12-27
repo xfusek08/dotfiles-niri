@@ -1,6 +1,7 @@
 { config, pkgs, inputs, ... }: {
   imports = [
     inputs.dms.homeModules.dankMaterialShell.default # Dank Material Shell Home Manager module
+    inputs.dms.homeModules.dankMaterialShell.niri    # Niri-specific DMS integration
   ];
 
   home.username = "petr";
@@ -10,9 +11,16 @@
   programs.dankMaterialShell = {
     enable = true;
     
+    # Use niri spawn instead of systemd for proper session integration
     systemd = {
-      enable = true;             # Systemd service for auto-start
+      enable = false;            # Disable systemd - use niri.enableSpawn instead
       restartIfChanged = true;   # Auto-restart dms.service when dankMaterialShell changes
+    };
+
+    # Niri integration - spawns DMS with niri session
+    niri = {
+      enableKeybinds = true;     # Sets static preset keybinds for DMS
+      enableSpawn = true;        # Auto-start DMS with niri and cliphist
     };
   
     # Core features
@@ -25,6 +33,7 @@
     enableAudioWavelength = true;   # Audio visualizer (cava)
     enableCalendarEvents = true;    # Calendar integration (khal)
     enableSystemSound = true;       # System sound effects
+    enablePolkitAgent = true;       # Enable DMS built-in polkit agent
   };
 
   programs.git = {

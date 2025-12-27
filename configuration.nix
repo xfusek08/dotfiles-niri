@@ -16,12 +16,9 @@
   services.power-profiles-daemon.enable = true;
   services.upower.enable = true;
   
+  # Disable niri-flake's default polkit agent - DMS has its own built-in polkit agent
   # https://danklinux.com/docs/dankmaterialshell/nixos-flake#polkit-agent
   systemd.user.services.niri-flake-polkit.enable = false;
-  
-  # systemd.enable = true;
-  
-  # niri.enableSpawn = true;
 
   time.timeZone = "Europe/Prague";
   i18n.defaultLocale = "cs_CZ.UTF-8";
@@ -71,21 +68,23 @@
     brightnessctl      # Screen brightness control
     cava               # Audio visualizer
     cliphist           # Clipboard manager
+    fuzzel             # Application launcher (used by niri default keybinds)
     git                # Version control system
     grim               # Screenshot tool
     mako               # Notification daemon
-    mate.mate-polkit   # PolicyKit authentication agent (mate-polkit)
-    matugen            # Wallpaper setter
-    qt6.qtmultimedia   # For media controls in Dank Material Shell
+    matugen            # Material Design color palette generation (dynamic theming)
+    playerctl          # Media player control (for media keys)
+    qt6.qtmultimedia   # For media controls and system sounds in DMS
     slurp              # Region selector for screenshots
+    swappy             # Screenshot editor for DMS
     swaylock           # Screen locker
-    swaybg             # Wallpaper setter for Sway
+    swaybg             # Wallpaper setter
     wget               # For downloading files
     wl-clipboard       # Wayland clipboard utilities
     xwayland-satellite # For X11 app compatibility
 
     # Web browser (Zen)
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default  
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # Allow nix flakes
