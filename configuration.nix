@@ -168,6 +168,7 @@
     mako              # Lightweight notification daemon
     mate.mate-polkit  # PolicyKit authentication dialog
     playerctl         # MPRIS media player control (for media keys)
+    libnotify         # Notification library (for various apps)
 
     # --- Theming & Appearance ---
     matugen           # Material You color palette generator
