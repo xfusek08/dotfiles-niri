@@ -68,10 +68,10 @@
     brightnessctl      # Screen brightness control
     cava               # Audio visualizer
     cliphist           # Clipboard manager
-    fuzzel             # Application launcher (used by niri default keybinds)
     git                # Version control system
     grim               # Screenshot tool
     mako               # Notification daemon
+    mate.mate-polkit   # PolicyKit authentication agent (mate-polkit)
     matugen            # Material Design color palette generation (dynamic theming)
     playerctl          # Media player control (for media keys)
     qt6.qtmultimedia   # For media controls and system sounds in DMS
