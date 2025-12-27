@@ -389,7 +389,7 @@ layer-rule {
 
 overview {
     workspace-shadow {
-        on
+        off
     }
 }
 
