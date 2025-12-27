@@ -84,7 +84,8 @@
     wl-clipboard       # Wayland clipboard utilities
     xwayland-satellite # For X11 app compatibility
 
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default  # Web browser (Zen)
+    # Web browser (Zen)
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default  
   ];
 
   # Allow nix flakes
