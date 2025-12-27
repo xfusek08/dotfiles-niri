@@ -49,10 +49,14 @@ vlc = [
 	{ run = "vlc %s1", desc = "Play with VLC", for = "windows", orphan = true },
 ]
 open = [
-	{ run = "xdg-open %s1",    desc = "Open", for = "linux" },
+	{ run = "xdg-open \"$@\"", desc = "Open", for = "linux", orphan = true },
 	{ run = "open %s",         desc = "Open", for = "macos" },
 	{ run = 'start "" %s1',    desc = "Open", for = "windows", orphan = true },
 	{ run = "termux-open %s1", desc = "Open", for = "android" },
+]
+image = [
+	{ run = "loupe \"$@\"", desc = "Open with Loupe", for = "linux", orphan = true },
+	{ run = "eog \"$@\"",   desc = "Open with Eye of GNOME", for = "linux", orphan = true },
 ]
 reveal = [
 	{ run = "xdg-open %d1",         desc = "Reveal", for = "linux" },
@@ -82,7 +86,7 @@ rules = [
 	# PDF
 	{ mime = "application/pdf", use = [ "pdf", "reveal" ] },
 	# Image
-	{ mime = "image/*", use = [ "open", "reveal" ] },
+	{ mime = "image/*", use = [ "image", "open", "reveal" ] },
 	# Video files with VLC
 	{ url = "*.{mp4,mkv,webm}", use = [ "vlc", "play", "reveal" ] },
 	# Media
