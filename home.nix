@@ -47,6 +47,7 @@
     fzf
     ripgrep
     vscode
+    exa
   ];
 
   home.file.".config/niri/config.kdl".source = ./niri-config.kdl;
