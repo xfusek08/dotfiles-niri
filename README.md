@@ -135,3 +135,10 @@ reboot
 cd ~/dotfiles-nix
 sudo nixos-rebuild switch --flake .#nixos
 ```
+
+## Notes
+
+```bash
+# Collect garbage to free up space
+sudo nix-collect-garbage -d
+```
