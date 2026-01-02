@@ -1,37 +1,47 @@
+# =============================================================================
+# Nix Flake Configuration
+# =============================================================================
+# Defines all external inputs (dependencies) and system outputs
+# Run: sudo nixos-rebuild switch --flake .#nixos
+# =============================================================================
+
 {
-  description = "Hyprland on Nixos";
+  description = "NixOS with Niri + DankMaterialShell";
 
   inputs = {
+    # --- NixOS Packages ---
+    # Using unstable for latest niri (25.11+) which is required for DMS
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    # --- Home Manager ---
+    # User-level package and dotfile management
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
-    dgop = {
-      url = "github:AvengeMedia/dgop";
+
+    # --- DankMaterialShell ---
+    # Material Design desktop shell for Wayland compositors
+    # Note: NOT using niri-flake - it doesn't support 'include' directives
+    # which are required for DMS theming/keybind sync. Using nixpkgs niri instead.
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    dms-cli = {
-      url = "github:AvengeMedia/danklinux";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    dankMaterialShell = {
-      url = "github:AvengeMedia/DankMaterialShell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.dgop.follows = "dgop";
-      inputs.dms-cli.follows = "dms-cli";
-    };
-    
-    niri = {
-      url = "github:sodiboo/niri-flake";
+    # --- Web Browser ---
+    # Zen Browser - privacy-focused Firefox fork
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }: {
+  # ===========================================================================
+  # OUTPUTS
+  # ===========================================================================
+  # inputs@{ ... } passes all inputs to modules
+  outputs = inputs@{ self, nixpkgs, home-manager, ...}: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
@@ -42,8 +52,8 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            users.petr = import ./home.nix;
             extraSpecialArgs = { inherit inputs; };
+            users.petr = import ./home.nix;
             backupFileExtension = "backup";
           };
         }

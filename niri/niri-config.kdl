@@ -1,16 +1,24 @@
-// This config is in the KDL format: https://kdl.dev
-// "/-" comments out the following node.
-// Check the wiki for a full description of the configuration:
-// https://yalter.github.io/niri/Configuration:-Introduction
+// =============================================================================
+// Niri Window Manager Configuration
+// =============================================================================
+// Config format: KDL (https://kdl.dev)
+// Full documentation: https://yalter.github.io/niri/Configuration:-Introduction
+//
+// DMS Integration Notes:
+// - DMS auto-starts via systemd (bound to niri.service)
+// - Include files at bottom sync theming/keybinds with DMS
+// - Transparent background required for DMS wallpaper integration
+// =============================================================================
 
-// Input device configuration.
-// Find the full list of options on the wiki:
-// https://yalter.github.io/niri/Configuration:-Input
+// ===========================================================================
+// INPUT CONFIGURATION
+// ===========================================================================
+// Find the full list of options: https://yalter.github.io/niri/Configuration:-Input
 input {
     keyboard {
         repeat-delay 200
         repeat-rate 35
-        
+
         xkb {
             layout "cz"
             variant "coder"
@@ -21,6 +29,7 @@ input {
 
     // Next sections include libinput settings.
     // Omitting settings disables them, or leaves them at their default values.
+    // All commented-out settings here are examples, not defaults.
     touchpad {
         // off
         tap
@@ -50,6 +59,7 @@ input {
         // accel-profile "flat"
         // scroll-method "on-button-down"
         // scroll-button 273
+        // scroll-button-lock
         // middle-emulation
     }
 
@@ -58,19 +68,26 @@ input {
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="10%"
 }
 
+// ===========================================================================
+// ENVIRONMENT VARIABLES
+// ===========================================================================
+// Environment variables set for all spawned processes
 environment {
-    QT_QPA_PLATFORM "wayland"
-    XDG_SESSION_TYPE "wayland"
-    ELECTRON_OZONE_PLATFORM_HINT "auto"
-    GDK_BACKEND "wayland"
-    EDITOR "code"
-    GIT_EDITOR "code --wait"
-    CLUTTER_BACKEND "wayland"
-    DISPLAY ":0"
-    TERMINAL "ghostty"
+    XDG_CURRENT_DESKTOP "niri"          // Required for proper desktop detection
+    QT_QPA_PLATFORM "wayland"           // Force Qt apps to use Wayland
+    XDG_SESSION_TYPE "wayland"          // Session type for apps
+    ELECTRON_OZONE_PLATFORM_HINT "auto" // Electron apps auto-detect Wayland
+    GDK_BACKEND "wayland"               // Force GTK apps to use Wayland
+    CLUTTER_BACKEND "wayland"           // Force Clutter apps to use Wayland
+    EDITOR "code"                       // Default text editor
+    GIT_EDITOR "code --wait"            // Git commit editor
+    DISPLAY ":0"                        // XWayland display (for xwayland-satellite)
+    QT_QPA_PLATFORMTHEME "gtk3"         // Qt theme integration with GTK
+    QT_QPA_PLATFORMTHEME_QT6 "gtk3"     // Qt6 theme integration with GTK
+    TERMINAL "alacritty"                  // Default terminal emulator
 }
 
 // You can configure outputs by their name, which you can find
@@ -116,6 +133,7 @@ environment {
 layout {
     // Set gaps around windows in logical pixels.
     gaps 6
+    background-color "transparent"
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -142,9 +160,9 @@ layout {
     // preset-window-heights { }
 
     // You can change the default width of the new windows.
-    // default-column-width { proportion 0.33333; }
-    // If you leave the brackets empty, the windows themselves will decide their initial width.
     default-column-width { proportion 0.5; }
+    // If you leave the brackets empty, the windows themselves will decide their initial width.
+    // default-column-width {}
 
     // By default focus ring and border are rendered as a solid background rectangle
     // behind windows. That is, they will show up through semitransparent windows.
@@ -186,7 +204,7 @@ layout {
         // You can use any CSS linear-gradient tool on the web to set these up.
         // Changing the color space is also supported, check the wiki for more info.
         //
-        // active-gradient from="#80c8ff" to="#bbddff" angle=45
+        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
 
         // You can also color the gradient relative to the entire view
         // of the workspace, rather than relative to just the window itself.
@@ -266,16 +284,18 @@ layout {
     }
 }
 
-// Add lines like this to spawn processes at startup.
-// Note that running niri as a session supports xdg-desktop-autostart,
-// which may be more convenient to use.
-// See the binds section below for more spawn examples.
+// ===========================================================================
+// STARTUP PROGRAMS
+// ===========================================================================
+// Programs that start automatically with niri
+// Note: DMS auto-starts via systemd (bound to niri.service), not here
 
+// XWayland compatibility layer - allows running X11 apps on Wayland
 spawn-at-startup "xwayland-satellite"
 
-spawn-at-startup "dms" "run"
-
-spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
+// Clipboard history - watches clipboard and stores history for cliphist
+// Required for DMS clipboard manager to work
+spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
 
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
@@ -295,25 +315,50 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 // Animation settings.
 // The wiki explains how to configure individual animations:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Animations
+// https://yalter.github.io/niri/Configuration:-Animations
 animations {
     // Uncomment to turn off all animations.
     // off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    // slowdown 1.5
+    // slowdown 3.0
 }
 
 // Window rules let you adjust behavior for individual windows.
 // Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
+// https://yalter.github.io/niri/Configuration:-Window-Rules
+
+// Work around WezTerm's initial configure bug
+// by setting an empty default-column-width.
+window-rule {
+    // This regular expression is intentionally made as specific as possible,
+    // since this is the default config, and we want no false positives.
+    // You can get away with just app-id="wezterm" if you want.
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+// Open the Firefox picture-in-picture player as floating by default.
+window-rule {
+    // This app-id regular expression will work for both:
+    // - host Firefox (app-id is "firefox")
+    // - Flatpak Firefox (app-id is "org.mozilla.firefox")
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
 
 // Example: enable rounded corners for all windows.
-// (This example rule is commented out with a "/-" in front.)
 window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
     draw-border-with-background false
+}
+
+// Open DMS/Quickshell windows as floating by default
+// This ensures modals and popups appear correctly
+window-rule {
+    match app-id=r#"org.quickshell$"#
+    open-floating true
 }
 
 config-notification {
@@ -324,14 +369,29 @@ debug {
     honor-xdg-activation-with-invalid-serial
 }
 
-layer-rule {
-    match namespace="quickshell"
-    place-within-backdrop true
-}
+// ===========================================================================
+// DMS LAYER RULES
+// ===========================================================================
+// Layer rules for DankMaterialShell integration
+// place-within-backdrop puts layers on the overview for proper wallpaper display
+// See: https://danklinux.com/docs/dankmaterialshell/compositors#layer-rules
 
+// Blur wallpaper layer (if "Blur Layer" is enabled in DMS)
 layer-rule {
     match namespace="dms:blurwallpaper"
     place-within-backdrop true
+}
+
+// Main quickshell layer - shows wallpaper on overview
+layer-rule {
+    match namespace="^quickshell$"
+    place-within-backdrop true
+}
+
+overview {
+    workspace-shadow {
+        off
+    }
 }
 
 binds {
@@ -351,28 +411,31 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Alt+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
-    // DMS replaces fuzzel with its own spotlight launcher
-    // Alt+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    // DMS handles lock screen
-    // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-
-    // You can also use a shell. Do this if you need pipes, multiple commands, etc.
-    // Note: the entire command goes as a single argument in the end.
-    // Alt+T { spawn "bash" "-c" "notify-send hello && exec ghostty"; }
 
     // Dank Material Shell keybindings
     Alt+D hotkey-overlay-title="Application Launcher" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
-    Alt+V hotkey-overlay-title="Clipboard Manager" { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
+    Alt+A hotkey-overlay-title="Clipboard Manager" { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
     Alt+M hotkey-overlay-title="Task Manager" { spawn "dms" "ipc" "call" "processlist" "toggle"; }
     Alt+N hotkey-overlay-title="Notification Center" { spawn "dms" "ipc" "call" "notifications" "toggle"; }
-    Alt+Comma hotkey-overlay-title="Settings" { spawn "dms" "ipc" "call" "settings" "toggle"; }
+    Alt+Shift+Comma hotkey-overlay-title="Settings" { spawn "dms" "ipc" "call" "settings" "toggle"; }
     Alt+P hotkey-overlay-title="Notepad" { spawn "dms" "ipc" "call" "notepad" "toggle"; }
-    Super+Alt+L hotkey-overlay-title="Lock Screen" { spawn "dms" "ipc" "call" "lock" "lock"; }
+    Alt+L hotkey-overlay-title="Lock Screen" { spawn "dms" "ipc" "call" "lock" "lock"; }
     Alt+X hotkey-overlay-title="Power Menu" { spawn "dms" "ipc" "call" "powermenu" "toggle"; }
-    Alt+C hotkey-overlay-title="Control Center" { spawn "dms" "ipc" "call" "control-center" "toggle"; }
+    Alt+Shift+C hotkey-overlay-title="Control Center" { spawn "dms" "ipc" "call" "control-center" "toggle"; }
     Alt+Y hotkey-overlay-title="Browse Wallpapers" { spawn "dms" "ipc" "call" "dankdash" "wallpaper"; }
 
-    // Volume and brightness controls via DMS
+    // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
+    // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
+    // For example, this is a standard bind to toggle the screen reader (orca).
+    // Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
+
+    // Media Controls
+    XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
+    XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
+    XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+
+    // DMS Controls
     XF86AudioRaiseVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "increment" "3"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
     XF86AudioMute        allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "mute"; }
@@ -403,10 +466,6 @@ binds {
 
     // Alternative commands that move across workspaces when reaching
     // the first or last window in a column.
-    // Alt+J     { focus-window-or-workspace-down; }
-    // Alt+K     { focus-window-or-workspace-up; }
-    // Alt+Ctrl+J     { move-window-down-or-to-workspace-down; }
-    // Alt+Ctrl+K     { move-window-up-or-to-workspace-up; }
 
     Alt+Home { focus-column-first; }
     Alt+End  { focus-column-last; }
@@ -435,14 +494,16 @@ binds {
     Alt+Ctrl+Page_Up   { move-workspace-up; }
     Alt+Page_Down      { move-column-to-workspace-down; }
     Alt+Page_Up        { move-column-to-workspace-up; }
-    
+
     // Alternatively, there are commands to move just a single window:
     // Alt+Ctrl+Page_Down { move-window-to-workspace-down; }
     // ...
 
     Alt+Shift+Page_Down { move-workspace-down; }
     Alt+Shift+Page_Up   { move-workspace-up; }
-    
+    // Alt+Shift+U         { move-workspace-down; }
+    // Alt+Shift+I         { move-workspace-up; }
+
     // You can bind mouse wheel scroll ticks using the following syntax.
     // These binds will change direction based on the natural-scroll setting.
     //
@@ -472,8 +533,8 @@ binds {
     // These binds are also affected by touchpad's natural-scroll, so these
     // example binds are "inverted", since we have natural-scroll enabled for
     // touchpads by default.
-    // Alt+TouchpadScrollDown { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02+"; }
-    // Alt+TouchpadScrollUp   { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02-"; }
+    // Alt+TouchpadScrollDown { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02+"; }
+    // Alt+TouchpadScrollUp   { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02-"; }
 
     // You can refer to workspaces by index. However, keep in mind that
     // niri is a dynamic workspace system, so these commands are kind of
@@ -515,9 +576,9 @@ binds {
     Alt+BracketRight { consume-or-expel-window-right; }
 
     // Consume one window from the right to the bottom of the focused column.
-    // Alt+Comma  { consume-window-into-column; }
+    Alt+Comma  { consume-window-into-column; }
     // Expel the bottom window from the focused column to the right.
-    // Alt+Period { expel-window-from-column; }
+    Alt+Period { expel-window-from-column; }
 
     Alt+R { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.
@@ -531,7 +592,7 @@ binds {
     // Makes the column "fill the rest of the space".
     Alt+Ctrl+F { expand-column-to-available-width; }
 
-    // Alt+C { center-column; }
+    Alt+C { center-column; }
 
     // Center all fully visible columns on screen.
     Alt+Ctrl+C { center-visible-columns; }
@@ -552,14 +613,13 @@ binds {
     Alt+Shift+Equal { set-window-height "+10%"; }
 
     // Move the focused window between the floating and the tiling layout.
-    // Alt+V       { toggle-window-floating; }
-    // Alt+Shift+V { switch-focus-between-floating-and-tiling; }
+    Alt+V       { toggle-window-floating; }
+    Alt+Shift+V { switch-focus-between-floating-and-tiling; }
 
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
     Alt+W { toggle-column-tabbed-display; }
-    
 
     // Actions to switch layouts.
     // Note: if you uncomment these, make sure you do NOT have
@@ -592,6 +652,22 @@ binds {
     Alt+Shift+P { power-off-monitors; }
 }
 
-hotkey-overlay {
-    skip-at-startup
-}
+// =============================================================================
+// DMS DYNAMIC CONFIGURATION INCLUDES
+// =============================================================================
+// These files are auto-generated by DankMaterialShell for theming sync
+// They MUST exist before niri starts - create empty files first:
+//   mkdir -p ~/.config/niri/dms
+//   touch ~/.config/niri/dms/{colors,layout,alttab,binds}.kdl
+//
+// DMS will populate these with:
+// - colors.kdl: Border/focus ring colors matching your theme
+// - layout.kdl: Gap sizes and corner radius
+// - alttab.kdl: Alt+Tab window switcher config
+// - binds.kdl: Additional DMS keybindings
+// =============================================================================
+
+include "dms/colors.kdl"
+include "dms/layout.kdl"
+include "dms/alttab.kdl"
+include "dms/binds.kdl"
