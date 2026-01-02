@@ -190,8 +190,9 @@ in {
     mesa-demos # OpenGL/Vulkan demos and utilities
 
     # --- Terminal & Shell ---
-    ghostty # GPU-accelerated terminal emulator
-    wget    # CLI tool for downloading files
+    ghostty   # Terminal emulator
+    alacritty # Backup terminal in case ghostty encounters GPU issues.
+    wget      # CLI tool for downloading files
 
     # --- Wayland Utilities ---
     grim               # Screenshot capture tool

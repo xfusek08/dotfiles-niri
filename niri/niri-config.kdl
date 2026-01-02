@@ -76,19 +76,18 @@ input {
 // ===========================================================================
 // Environment variables set for all spawned processes
 environment {
-    XDG_CURRENT_DESKTOP "niri"             // Required for proper desktop detection
-    QT_QPA_PLATFORM "wayland"              // Force Qt apps to use Wayland
-    XDG_SESSION_TYPE "wayland"             // Session type for apps
-    ELECTRON_OZONE_PLATFORM_HINT "auto"    // Electron apps auto-detect Wayland
-    GDK_BACKEND "wayland"                  // Force GTK apps to use Wayland
-    CLUTTER_BACKEND "wayland"              // Force Clutter apps to use Wayland
-    EDITOR "code"                          // Default text editor
-    GIT_EDITOR "code --wait"               // Git commit editor
-    DISPLAY ":0"                           // XWayland display (for xwayland-satellite)
-    QT_QPA_PLATFORMTHEME "qt6ct"           // Qt6 theme via qt6ct (Matugen-managed)
-    QT_QPA_PLATFORMTHEME_QT6 "qt6ct"       // Qt6 theme via qt6ct
-    SSH_AUTH_SOCK "/run/user/1000/gcr/ssh" // GnuPG/SSH agent socket
-    TERMINAL "ghostty"                     // Default terminal emulator
+    XDG_CURRENT_DESKTOP "niri"          // Required for proper desktop detection
+    QT_QPA_PLATFORM "wayland"           // Force Qt apps to use Wayland
+    XDG_SESSION_TYPE "wayland"          // Session type for apps
+    ELECTRON_OZONE_PLATFORM_HINT "auto" // Electron apps auto-detect Wayland
+    GDK_BACKEND "wayland"               // Force GTK apps to use Wayland
+    CLUTTER_BACKEND "wayland"           // Force Clutter apps to use Wayland
+    EDITOR "code"                       // Default text editor
+    GIT_EDITOR "code --wait"            // Git commit editor
+    DISPLAY ":0"                        // XWayland display (for xwayland-satellite)
+    QT_QPA_PLATFORMTHEME "gtk3"         // Qt theme integration with GTK
+    QT_QPA_PLATFORMTHEME_QT6 "gtk3"     // Qt6 theme integration with GTK
+    TERMINAL "ghostty"                  // Default terminal emulator
 }
 
 // You can configure outputs by their name, which you can find
@@ -410,7 +409,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
+    Mod+T hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
 
     // Dank Material Shell keybindings
     Mod+D hotkey-overlay-title="Application Launcher" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
