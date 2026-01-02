@@ -120,7 +120,6 @@ git commit -m "nix-install"
 # Installs NixOS directly from the flake.
 # We use impure mode to allow using git-ignored files (hardware-configuration.nix) it will later not bee needed when the hw config is tracked.
 sudo nixos-install --root /mnt --flake .#nixos
-```
 
 # Set user password.
 # (In the future the configuration will hold the password hash so this step won't be necessary.)
