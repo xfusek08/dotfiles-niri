@@ -44,8 +44,7 @@
   
   networking = {
     hostName = "nixos";           # System hostname
-    networkmanager.enable = true; # Enable NetworkManager for network management (includes WiFi support)
-    useDHCP = true;               # Use DHCP for network configuration
+    networkmanager.enable = true; # Enable NetworkManager (automatically handles DHCP and WiFi)
   };
 
   # ===========================================================================
