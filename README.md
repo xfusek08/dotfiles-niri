@@ -104,19 +104,23 @@ cp v-box-hardware-configuration.nix hardware-configuration.nix
 
 ```bash
 # Copy hardware config to the repo for later use. We will later rename it to create a machine-specific hardware config which will be tracked by git when authenticated to your GitHub account via SSH keys.
-sudo nixos-generate-config --no-filesystems --root /mnt
+sudo nixos-generate-config --root /mnt
 cp /mnt/etc/nixos/hardware-configuration.nix ./hardware-configuration.nix
 ```
 
 ### 4. Install the system
 
 ```bash
-# Stage all changes (hardware-configuration.nix, disk-config.nix) so that they are available during installation.
+# Commit all changes (hardware-configuration.nix, disk-config.nix) so that nix flake can use them.
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
 git add .
+git commit -m "nix-install"
 
 # Installs NixOS directly from the flake.
 # We use impure mode to allow using git-ignored files (hardware-configuration.nix) it will later not bee needed when the hw config is tracked.
 sudo nixos-install --root /mnt --flake .#nixos
+```
 
 # Set user password.
 # (In the future the configuration will hold the password hash so this step won't be necessary.)
