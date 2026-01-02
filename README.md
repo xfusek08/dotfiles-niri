@@ -12,8 +12,9 @@ sudo -i
 nix-shell -p git disko
 
 # Clone repo
-git clone https://github.com/xfusek08/dotfiles-nix /tmp/dotfiles-nix
-cd /tmp/dotfiles-nix
+git clone https://github.com/xfusek08/dotfiles-niri
+cd dotfiles-niri
+git checkout nixos
 
 # ⚠️ ERASES ALL DATA - Partition disk declaratively
 disko --mode disko ./disk-config.nix
