@@ -41,9 +41,15 @@
   # NETWORKING
   # ===========================================================================
   # Network configuration
+  
+  networking = {
+    hostName = "nixos";           # System hostname
+    networkmanager.enable = true; # Enable NetworkManager for network management
+    useDHCP = true;               # Use DHCP for network configuration
+  };
 
-  networking.hostName = "nixos";            # System hostname
-  networking.networkmanager.enable = true;  # Enable NetworkManager for network management
+  # Wi-Fi support
+  services.wpa_supplicant.enable = true;
 
   # ===========================================================================
   # LOCALIZATION
