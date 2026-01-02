@@ -3,7 +3,7 @@
     disk = {
       main = {
         type = "disk";
-        device = "/dev/sda";
+        device = "..."; # Replace "..." with the target disk device (e.g., /dev/sda) Look up how to get disk device path in README.md
         content = {
           type = "gpt";
           partitions = {

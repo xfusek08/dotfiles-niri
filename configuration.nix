@@ -12,7 +12,7 @@
   # ===========================================================================
   # External configuration modules to include
   imports = [
-    ./v-box-hardware-configuration.nix # Auto-generated hardware-specific settings
+    ./hardware-configuration.nix # Auto-generated hardware-specific settings
     inputs.dms.nixosModules.greeter    # DankGreeter - Material Design login screen module
   ];
 
