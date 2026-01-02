@@ -34,8 +34,8 @@
   # ===========================================================================
   # Bootloader and early boot settings
 
-  boot.loader.systemd-boot.enable = true;       # Use systemd-boot as the bootloader
-  boot.loader.efi.canTouchEfiVariables = true;  # Allow modifying EFI variables
+  boot.loader.systemd-boot.enable = true;      # Use systemd-boot as the bootloader
+  boot.loader.efi.canTouchEfiVariables = true; # Allow modifying EFI variables
 
   # ===========================================================================
   # NETWORKING
@@ -56,22 +56,22 @@
   # ===========================================================================
   # Time zone, language, and regional settings
 
-  time.timeZone = "Europe/Prague";      # System timezone
-  i18n.defaultLocale = "cs_CZ.UTF-8";   # Default system locale (Czech)
+  time.timeZone = "Europe/Prague";    # System timezone
+  i18n.defaultLocale = "cs_CZ.UTF-8"; # Default system locale (Czech)
 
   # ===========================================================================
   # HARDWARE
   # ===========================================================================
   # Hardware-specific configuration
 
-  hardware.bluetooth.enable = true;  # Enable Bluetooth support
+  hardware.bluetooth.enable = true; # Enable Bluetooth support
 
   # ===========================================================================
   # VIRTUALISATION
   # ===========================================================================
   # Container and VM configuration
 
-  virtualisation.docker.enable = true;  # Enable Docker container runtime
+  virtualisation.docker.enable = true; # Enable Docker container runtime
 
   # ===========================================================================
   # USER ACCOUNTS
@@ -129,8 +129,8 @@
   # DankGreeter - Material Design styled login/display manager
   programs.dankMaterialShell.greeter = {
     enable = true;
-    compositor.name = "niri";       # Use Niri as the greeter compositor
-    configHome = "/home/petr";      # Path to DMS config for theme sync
+    compositor.name = "niri";  # Use Niri as the greeter compositor
+    configHome = "/home/petr"; # Path to DMS config for theme sync
   };
 
   # ===========================================================================
@@ -187,7 +187,7 @@
     qt6.qtmultimedia # Media controls and system sounds
 
     # --- Web Browser ---
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default  # Zen Browser (Firefox-based)
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
   ];
 
   # ===========================================================================
