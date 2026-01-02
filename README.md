@@ -35,14 +35,16 @@ Then you need connection to the internet. Before proceeding, ensure you have int
 ### 2. Partition the root Disk
 
 ```bash
-# Enter root shell with tools
-sudo -i
-nix-shell -p git disko
+# Enter root shell with tools:
+#   git   - for cloning the repo
+#   disko - for declarative disk partitioning
+#   yazi  - for navigating the file system from the terminal
+nix-shell -p git disko yazi
+
 # Clone repo
 git clone https://github.com/xfusek08/dotfiles-niri
 cd dotfiles-niri
 git checkout nixos
-
 ```
 
 #### ⚠️ Ensure that you will format the correct disk!
@@ -98,21 +100,27 @@ lsblk
 cp v-box-hardware-configuration.nix hardware-configuration.nix
 ```
 
-#### _OR_; B. Installing on New Hardware (Generate hardware-configuration.nix)
+#### _or_; B. Installing on New Hardware (Generate hardware-configuration.nix)
 
 ```bash
 # Copy hardware config to the repo for later use. We will later rename it to create a machine-specific hardware config which will be tracked by git when authenticated to your GitHub account via SSH keys.
-sudo nixos-generate-config --show-hardware-config > hardware-configuration.nix
+sudo nixos-generate-config --no-filesystems --root /mnt
+cp /mnt/etc/nixos/hardware-configuration.nix ./hardware-configuration.nix
 ```
 
 ### 4. Install the system
 
 ```bash
-# Installs NixOS directly from the flake
-sudo nixos-install --root /mnt --flake .
+# Stage all changes (hardware-configuration.nix, disk-config.nix) so that they are available during installation.
+git add .
+
+# Installs NixOS directly from the flake.
+# We use impure mode to allow using git-ignored files (hardware-configuration.nix) it will later not bee needed when the hw config is tracked.
+sudo nixos-install --root /mnt --flake .#nixos
+
 # Set user password.
 # (In the future the configuration will hold the password hash so this step won't be necessary.)
-nixos-enter --root /mnt -c 'passwd petr'
+sudo nixos-enter --root /mnt -c 'passwd petr'
 
 # Reboot
 reboot
