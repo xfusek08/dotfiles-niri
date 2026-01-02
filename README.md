@@ -17,7 +17,7 @@ cd dotfiles-niri
 git checkout nixos
 
 # ⚠️ ERASES ALL DATA - Partition disk declaratively
-disko --mode disko ./disk-config.nix
+disko --mode disko disk-config.nix
 
 # Verify partitions (should show boot, swap, root)
 lsblk
