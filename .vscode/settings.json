@@ -47,5 +47,9 @@
     ],
     "files.associations": {
         "*.css": "less"
-    }
+    },
+    "Lua.diagnostics.globals": [
+        "ps",
+        "cx"
+    ]
 }

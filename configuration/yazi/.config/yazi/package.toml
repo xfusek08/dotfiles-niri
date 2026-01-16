@@ -1,7 +1,5 @@
-[[plugin.deps]]
-use = "boydaihungst/pref-by-location"
-rev = "a2fbb05"
-hash = "b4e378df653fa211d22ed04d3c8c1c0a"
+[plugin]
+deps = []
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-mocha"
