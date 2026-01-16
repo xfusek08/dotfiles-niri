@@ -1,0 +1,94 @@
+/* DMS Matugen Zen Browser Theme */
+:root {
+  --zen-primary-color: #4d6045 !important;
+  --toolbarbutton-icon-fill: #b7cdac !important;
+  --toolbar-field-color: #e4e2de !important;
+  --tab-selected-textcolor: #b7cdac !important;
+  --toolbar-color: #e4e2de !important;
+  --arrowpanel-color: #e4e2de !important;
+  --arrowpanel-background: #1f201d !important;
+  --sidebar-text-color: #e4e2de !important;
+/*  --zen-main-browser-background: #131411 !important; */
+}
+
+.sidebar-placesTree {
+  background-color: #1f201d !important;
+}
+
+#zen-workspaces-button {
+  background-color: #1f201d !important;
+}
+
+#TabsToolbar {
+  background-color: #131411 !important;
+}
+
+.urlbar-background {
+  background-color: #1f201d !important;
+}
+
+.urlbar-input::selection {
+  color: #23351d !important;
+  background-color: #b7cdac !important;
+}
+
+.urlbarView-url {
+  color: #c4c8be !important;
+}
+
+toolbar .toolbarbutton-1 {
+  &:not([disabled]) {
+    &:is([open], [checked])
+      > :is(
+        .toolbarbutton-icon,
+        .toolbarbutton-text,
+        .toolbarbutton-badge-stack
+      ) {
+      fill: #b7cdac
+    }
+  }
+}
+
+.identity-color-blue {
+  --identity-tab-color: #c4dbb8 !important;
+  --identity-icon-color: #c4dbb8 !important;
+}
+
+.identity-color-turquoise {
+  --identity-tab-color: #b7cdac !important;
+  --identity-icon-color: #b7cdac !important;
+}
+
+.identity-color-green {
+  --identity-tab-color: #9de086 !important;
+  --identity-icon-color: #9de086 !important;
+}
+
+.identity-color-yellow {
+  --identity-tab-color: #e8cd97 !important;
+  --identity-icon-color: #e8cd97 !important;
+}
+
+.identity-color-orange {
+  --identity-tab-color: #dbbb7b !important;
+  --identity-icon-color: #dbbb7b !important;
+}
+
+.identity-color-red {
+  --identity-tab-color: #e05f7d !important;
+  --identity-icon-color: #e05f7d !important;
+}
+
+.identity-color-pink {
+  --identity-tab-color: #618439 !important;
+  --identity-icon-color: #618439 !important;
+}
+
+.identity-color-purple {
+  --identity-tab-color: #8c9985 !important;
+  --identity-icon-color: #8c9985 !important;
+}
+
+#zen-appcontent-navbar-container {
+  background-color: #131411 !important;
+}
