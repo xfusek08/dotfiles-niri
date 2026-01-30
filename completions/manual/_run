@@ -7,23 +7,23 @@
 _run() {
     typeset -A opt_args
     local cwd="$(pwd)"
-    
+
     # Check if ./run exists and is executable in the current directory
     if [[ ! -x "./run" ]]; then
         _message "no executable ./run script in current directory"
         return 1
     fi
-    
+
     # Try to get dynamic completion data from bunner
     local completion_data=$(./run bunner-completions 2>/dev/null)
     local completion_exit_code=$?
-    
+
     # If bunner-completions succeeded and returned data, use it
     if [[ $completion_exit_code -eq 0 && -n "$completion_data" ]]; then
         eval "$completion_data" 2>/dev/null
         return 0
     fi
-    
+
     # Fall back to default file completion
     _files
     return 0
