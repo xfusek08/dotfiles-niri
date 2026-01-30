@@ -58,6 +58,7 @@
   "controlCenterShowMicPercent": false,
   "controlCenterShowBatteryIcon": false,
   "controlCenterShowPrinterIcon": false,
+  "controlCenterShowScreenSharingIcon": true,
   "showPrivacyButton": true,
   "privacyShowMicIcon": false,
   "privacyShowCameraIcon": false,
@@ -236,7 +237,9 @@
   "bluetoothDevicePins": {},
   "audioInputDevicePins": {},
   "audioOutputDevicePins": {
-    "preferredOutput": "alsa_output.pci-0000_c4_00.6.HiFi__Speaker__sink"
+    "preferredOutput": [
+      "bluez_output.00:A4:1C:2D:63:B4"
+    ]
   },
   "gtkThemingEnabled": false,
   "qtThemingEnabled": false,
