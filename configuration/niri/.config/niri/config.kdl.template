@@ -303,7 +303,7 @@ layout {
 spawn-at-startup "dms" "run"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "clipse" "-listen"
-spawn-at-startup "wakapi-start" "|" "stripcol" ">" "~/.log/wakapi.log" "2>&1"
+// spawn-at-startup "wakapi-start" "|" "stripcol" ">" "~/.log/wakapi.log" "2>&1"
 spawn-at-startup "swayidle" "-w" "-C" "~/.config/niri/swayidle.conf"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
