@@ -21,6 +21,13 @@ export default defineCommand({
             required: false,
         },
         {
+            short: 'u',
+            long: 'uninstall',
+            type: 'string',
+            description: 'Uninstall an AppImage application (provide app name)',
+            required: false,
+        },
+        {
             short: 's',
             long: 'source',
             type: 'path',
