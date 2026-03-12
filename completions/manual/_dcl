@@ -1,0 +1,10 @@
+#compdef dcl
+
+# Use the container names completion for dcl
+_dcl() {
+    local -a containers
+    containers=("${(@f)$(docker ps --format '{{.Names}}' 2>/dev/null)}")
+    _arguments "1:container:(${containers})"
+}
+
+compdef _dcl dcl

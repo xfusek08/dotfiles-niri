@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+set -e # Exit on any command failure
+
+local container_id=$1
+
+docker logs -f $container_id
