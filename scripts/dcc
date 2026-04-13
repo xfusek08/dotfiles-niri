@@ -12,7 +12,11 @@ if docker exec $container_id which bash > /dev/null 2>&1; then
 fi
 
 if [ -n "$init_command" ]; then
+    final_cmd="docker exec -it $container_id $shell_cmd -c \"$init_command && $shell_cmd\""
+    echo -e "\033[35m\$\033[0m $final_cmd"
     docker exec -it $container_id $shell_cmd -c "$init_command && $shell_cmd"
 else
+    final_cmd="docker exec -it $container_id $shell_cmd"
+    echo -e "\033[35m\$\033[0m $final_cmd"
     docker exec -it $container_id $shell_cmd
 fi
