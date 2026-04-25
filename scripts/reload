@@ -7,6 +7,9 @@ run_bash_tpl "$CONFIGURATION_DIR"
 
 dms restart
 
+echo "Reloading systemd user units..."
+systemctl --user daemon-reload
+
 echo "Setting all scripts in $SCRIPTS as executable..."
 find "$SCRIPTS" -type f -exec chmod +x {} \;
 
