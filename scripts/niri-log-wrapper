@@ -10,6 +10,11 @@ mkdir -p "$LOG_DIR"
 CMD_NAME="$(basename "$1")"
 LOG_FILE="$LOG_DIR/${CMD_NAME}.log"
 
+# Clean up old log file if it exists
+echo -n "" > "$LOG_FILE"
+
 "$@" 2>&1 | while IFS= read -r line; do
-    log -i "$line"
-done >> "$LOG_FILE" 2>&1
+    log -i "$line" >> "$LOG_FILE" 2>&1
+done
+
+log -i "Finished running: $*" >> "$LOG_FILE" 2>&1
