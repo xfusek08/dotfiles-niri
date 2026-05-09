@@ -303,6 +303,7 @@ layout {
 
 spawn-at-startup "dms" "run"
 spawn-at-startup "xwayland-satellite"
+spawn-at-startup "insync-start"
 spawn-at-startup "clipse" "-listen"
 // spawn-at-startup "wakapi-start" "|" "stripcol" ">" "~/.log/wakapi.log" "2>&1"
 spawn-at-startup "swayidle" "-w" "-C" "~/.config/niri/swayidle.conf"

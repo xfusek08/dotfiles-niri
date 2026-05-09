@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+max_retries=5
+retry=0
+
+until xdpyinfo -display :0 &>/dev/null; do
+    retry=$(( retry + 1 ))
+    if (( retry >= max_retries )); then
+        notify-send -u critical "Insync" "Failed to start: xwayland-satellite did not become ready after ${max_retries} retries."
+        exit 1
+    fi
+    sleep 1
+done
+
+exec insync start --qt-qpa-platform=xcb --no-daemon
