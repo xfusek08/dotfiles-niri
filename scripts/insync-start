@@ -1,19 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-max_retries=5
-retry=0
+source "$SCRIPT_FNS/log.zsh"
 
-echo "[$(date -Iseconds)] Waiting for Wayland display..."
-until [ -S "${XDG_RUNTIME_DIR}/wayland-1" ] || [ -S "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-1}" ]; do
-    retry=$(( retry + 1 ))
-    echo "[$(date -Iseconds)] Wayland display not ready (attempt ${retry}/${max_retries})"
-    if (( retry >= max_retries )); then
-        echo "[$(date -Iseconds)] ERROR: Wayland display did not become ready, giving up."
-        notify-send -u critical "Insync" "Failed to start: Wayland display not ready after ${max_retries} retries."
-        exit 1
-    fi
-    sleep 1
-done
-echo "[$(date -Iseconds)] Wayland display ready, starting insync..."
-
+log -i "Starting insync..."
 exec insync start --no-daemon

@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
-# Runs a command and appends its output to ~/.local/state/niri/logs/<cmd>.log
+#!/usr/bin/env zsh
+# Runs a command and appends its timestamped output to ~/.local/state/niri/logs/<cmd>.log
 # Usage: niri-log-wrapper <command> [args...]
+
+source "$SCRIPT_FNS/log.zsh"
 
 LOG_DIR="$HOME/.local/state/niri/logs"
 mkdir -p "$LOG_DIR"
@@ -8,4 +10,6 @@ mkdir -p "$LOG_DIR"
 CMD_NAME="$(basename "$1")"
 LOG_FILE="$LOG_DIR/${CMD_NAME}.log"
 
-exec "$@" >> "$LOG_FILE" 2>&1
+"$@" 2>&1 | while IFS= read -r line; do
+    log -i "$line"
+done >> "$LOG_FILE" 2>&1
