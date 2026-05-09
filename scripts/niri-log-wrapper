@@ -2,6 +2,7 @@
 # Runs a command and appends its timestamped output to ~/.local/state/niri/logs/<cmd>.log
 # Usage: niri-log-wrapper <command> [args...]
 
+source "$HOME/.zshrc"
 source "$SCRIPT_FNS/log.zsh"
 
 LOG_DIR="$HOME/.local/state/niri/logs"
@@ -14,7 +15,7 @@ LOG_FILE="$LOG_DIR/${CMD_NAME}.log"
 echo -n "" > "$LOG_FILE"
 
 "$@" 2>&1 | while IFS= read -r line; do
-    log -i "$line" >> "$LOG_FILE" 2>&1
+    log -i -f "$LOG_FILE" -- "$line"
 done
 
-log -i "Finished running: $*" >> "$LOG_FILE" 2>&1
+log -i -f "$LOG_FILE" -- "Finished running: $*"

@@ -1,6 +1,5 @@
 #!/usr/bin/env zsh
 
-source "$SCRIPT_FNS/log.zsh"
-
-log -i "Starting insync..."
+echo "Starting Insync..."
+export QT_QPA_PLATFORM=xcb
 exec insync start --no-daemon
