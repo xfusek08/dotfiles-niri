@@ -3,13 +3,17 @@
 max_retries=5
 retry=0
 
+echo "[$(date -Iseconds)] Waiting for xwayland-satellite..."
 until xdpyinfo -display :0 &>/dev/null; do
     retry=$(( retry + 1 ))
+    echo "[$(date -Iseconds)] xwayland-satellite not ready (attempt ${retry}/${max_retries})"
     if (( retry >= max_retries )); then
+        echo "[$(date -Iseconds)] ERROR: xwayland-satellite did not become ready, giving up."
         notify-send -u critical "Insync" "Failed to start: xwayland-satellite did not become ready after ${max_retries} retries."
         exit 1
     fi
     sleep 1
 done
+echo "[$(date -Iseconds)] xwayland-satellite ready, starting insync..."
 
 exec insync start --qt-qpa-platform=xcb --no-daemon
