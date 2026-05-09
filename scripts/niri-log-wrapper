@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Runs a command and appends its output to ~/.local/state/niri/logs/<cmd>.log
+# Usage: niri-log-wrapper <command> [args...]
+
+LOG_DIR="$HOME/.local/state/niri/logs"
+mkdir -p "$LOG_DIR"
+
+CMD_NAME="$(basename "$1")"
+LOG_FILE="$LOG_DIR/${CMD_NAME}.log"
+
+exec "$@" >> "$LOG_FILE" 2>&1

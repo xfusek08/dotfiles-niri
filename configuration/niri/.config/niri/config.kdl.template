@@ -301,12 +301,11 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-spawn-at-startup "dms" "run"
-spawn-at-startup "xwayland-satellite"
-spawn-at-startup "<%$SCRIPTS%>/insync-start"
-spawn-at-startup "clipse" "-listen"
-// spawn-at-startup "wakapi-start" "|" "stripcol" ">" "~/.log/wakapi.log" "2>&1"
-spawn-at-startup "swayidle" "-w" "-C" "~/.config/niri/swayidle.conf"
+spawn-sh-at-startup "<%$SCRIPTS%>/niri-log-wrapper dms run"
+spawn-sh-at-startup "<%$SCRIPTS%>/niri-log-wrapper xwayland-satellite"
+spawn-sh-at-startup "<%$SCRIPTS%>/niri-log-wrapper <%$SCRIPTS%>/insync-start"
+spawn-sh-at-startup "<%$SCRIPTS%>/niri-log-wrapper clipse -listen"
+spawn-sh-at-startup "<%$SCRIPTS%>/niri-log-wrapper swayidle -w -C ~/.config/niri/swayidle.conf"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
