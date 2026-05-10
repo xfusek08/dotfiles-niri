@@ -116,5 +116,3 @@ zstyle ':completion:*' group-name ''                    # Group options by categ
 
 local taken=$(printf "%.2f" $(( $EPOCHREALTIME - shell_start )))
 print -P "%B%F{green}󱐋 Shell loaded in ${taken}s%f%b"
-
-echo "ok"
