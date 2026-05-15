@@ -92,7 +92,7 @@
       "id": "brightnessSlider",
       "enabled": true,
       "width": 50,
-      "deviceName": "ddc:i2c-24"
+      "deviceName": "ddc:i2c-20"
     },
     {
       "id": "wifi",
@@ -415,10 +415,24 @@
   "updaterUseCustomCommand": false,
   "updaterCustomCommand": "",
   "updaterTerminalAdditionalParams": "",
-  "displayNameMode": "model",
+  "displayNameMode": "system",
   "screenPreferences": {},
   "showOnLastDisplay": {},
-  "niriOutputSettings": {},
+  "niriOutputSettings": {
+    "eDP-1": {
+      "vrrOnDemand": true
+    },
+    "DP-8": {
+      "vrrOnDemand": true,
+      "focusAtStartup": true,
+      "layout": {
+        "alwaysCenterSingleColumn": true
+      }
+    },
+    "DP-9": {
+      "vrrOnDemand": true
+    }
+  },
   "hyprlandOutputSettings": {},
   "displayProfiles": {},
   "activeDisplayProfile": {},
