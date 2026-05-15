@@ -92,7 +92,7 @@
       "id": "brightnessSlider",
       "enabled": true,
       "width": 50,
-      "deviceName": "backlight:amdgpu_bl1"
+      "deviceName": "ddc:i2c-24"
     },
     {
       "id": "wifi",
@@ -415,7 +415,7 @@
   "updaterUseCustomCommand": false,
   "updaterCustomCommand": "",
   "updaterTerminalAdditionalParams": "",
-  "displayNameMode": "system",
+  "displayNameMode": "model",
   "screenPreferences": {},
   "showOnLastDisplay": {},
   "niriOutputSettings": {},
