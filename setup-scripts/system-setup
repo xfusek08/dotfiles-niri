@@ -44,7 +44,7 @@ paru -S --noconfirm --needed \
     bfs \
     binutils \
     catdoc \
-    clipse-bin \
+    clipse \
     dbus \
     docx2txt \
     doublecmd \
