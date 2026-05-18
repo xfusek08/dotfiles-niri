@@ -64,3 +64,7 @@ theme = Ayu
 background-opacity = 0.85
 background-blur-radius = 10
 background = "#020103"
+
+shell-integration = zsh
+cursor-style = bar
+confirm-close-surface = false
