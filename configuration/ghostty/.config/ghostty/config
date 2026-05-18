@@ -60,3 +60,7 @@ gtk-single-instance = true
 # Dank color generation
 # theme = dankcolors
 theme = Ayu
+
+background-opacity = 0.85
+background-blur-radius = 10
+background = "#020103"
