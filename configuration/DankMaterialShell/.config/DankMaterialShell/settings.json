@@ -274,7 +274,7 @@
   "batterySuspendBehavior": 0,
   "batteryProfileName": "",
   "batteryChargeLimit": 100,
-  "lockBeforeSuspend": false,
+  "lockBeforeSuspend": true,
   "loginctlLockIntegration": true,
   "fadeToLockEnabled": false,
   "fadeToLockGracePeriod": 5,
@@ -358,7 +358,7 @@
   "lockScreenShowProfileImage": true,
   "lockScreenShowPasswordField": true,
   "lockScreenShowMediaPlayer": true,
-  "lockScreenPowerOffMonitorsOnLock": false,
+  "lockScreenPowerOffMonitorsOnLock": true,
   "lockAtStartup": false,
   "enableFprint": false,
   "maxFprintTries": 3,
@@ -424,13 +424,23 @@
     },
     "DP-8": {
       "vrrOnDemand": true,
-      "focusAtStartup": true,
+      "focusAtStartup": false,
       "layout": {
         "alwaysCenterSingleColumn": true
       }
     },
     "DP-9": {
       "vrrOnDemand": true
+    },
+    "DP-10": {
+      "layout": {
+        "defaultColumnWidth": {
+          "type": "proportion",
+          "value": 0.5
+        },
+        "alwaysCenterSingleColumn": true
+      },
+      "focusAtStartup": true
     }
   },
   "hyprlandOutputSettings": {},
