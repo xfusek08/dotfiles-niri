@@ -5,7 +5,11 @@
 # Location: /etc/nixos/configuration.nix (or in dotfiles repo)
 # =============================================================================
 
-{ config, lib, pkgs, inputs, ... }: {
+{ config, lib, pkgs, inputs, ... }:
+
+let
+  dmsPkg = inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.dms-shell;
+in {
 
   # ===========================================================================
   # IMPORTS
@@ -130,6 +134,38 @@
   };
 
   # ===========================================================================
+  # IDLE MANAGEMENT
+  # ===========================================================================
+  # DMS handles the lock screen UI; swayidle enforces timeouts
+  services.swayidle = {
+    enable = true;
+    events = [
+      { # Lock after 5 min inactivity
+        timeout = 300;
+        command = "${dmsPkg}/bin/dms ipc call lock lock";
+        resumeCommand = "${pkgs.coreutils}/bin/echo unlocked";
+      }
+      { # Power off monitors after 10 min
+        timeout = 600;
+        command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
+        resumeCommand = "${pkgs.coreutils}/bin/echo monitors-on";
+      }
+      { # Suspend after 15 min
+        timeout = 900;
+        command = "${pkgs.systemd}/bin/systemctl suspend";
+      }
+      { # Lock before sleep
+        event = "before-sleep";
+        command = "${dmsPkg}/bin/dms ipc call lock lock";
+      }
+      { # Lock on manual lock request
+        event = "lock";
+        command = "${dmsPkg}/bin/dms ipc call lock lock";
+      }
+    ];
+  };
+
+  # ===========================================================================
   # SERVICES
   # ===========================================================================
   # System services and daemons
@@ -154,8 +190,8 @@
     mesa-demos # OpenGL/Vulkan demos and utilities
 
     # --- Terminal & Shell ---
-    alacritty # Terminal emulator
-    wget      # CLI tool for downloading files
+    ghostty # GPU-accelerated terminal emulator
+    wget    # CLI tool for downloading files
 
     # --- Wayland Utilities ---
     grim               # Screenshot capture tool
@@ -169,14 +205,13 @@
     # --- Desktop Integration ---
     accountsservice  # User account info (for DMS user menu)
     brightnessctl    # Screen brightness control
-    cliphist         # Clipboard history manager
-    mako             # Lightweight notification daemon
-    mate.mate-polkit # PolicyKit authentication dialog
+    mate.mate-polkit # PolicyKit authentication dialog (used by DMS)
     playerctl        # MPRIS media player control (for media keys)
     libnotify        # Notification library (for various apps)
 
     # --- Theming & Appearance ---
     matugen # Material You color palette generator
+    qt6ct   # Qt6 configuration tool (for Matugen theming)
 
     # --- DMS (Dank Material Shell) Dependencies ---
     cava             # Audio visualizer

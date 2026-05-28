@@ -12,9 +12,8 @@
   # ===========================================================================
   # External Home Manager modules to include
   imports = [
-    # Note: Not us ing niri module - it requires niri-flake which has limitations with DMS
-    inputs.dms.homeModules.dankMaterialShell.default # Dank Material Shell module
-    ./zsh/zsh.nix                                    # Zsh shell configuration
+    inputs.dms.homeModules.dank-material-shell # Dank Material Shell module
+    ./zsh/zsh.nix                              # Zsh shell configuration
   ];
 
   # ===========================================================================
@@ -45,15 +44,11 @@
     };
 
     # --- Feature Toggles ---
-    enableSystemMonitoring = true;  # System resource widgets (CPU, RAM, etc.)
-    enableClipboard = true;         # Clipboard history manager
-    enableVPN = true;               # VPN connection management widget
-    enableBrightnessControl = true; # Screen brightness slider
-    enableColorPicker = true;       # Color picker tool
-    enableDynamicTheming = true;    # Auto-theme based on wallpaper (uses matugen)
-    enableAudioWavelength = true;   # Audio visualizer widget (uses cava)
-    enableCalendarEvents = true;    # Calendar integration (uses khal)
-    enableSystemSound = true;       # UI sound effects
+    enableSystemMonitoring = true; # System resource widgets (CPU, RAM, etc.)
+    enableVPN = true;              # VPN connection management widget
+    enableDynamicTheming = true;   # Auto-theme based on wallpaper (uses matugen)
+    enableAudioWavelength = true;  # Audio visualizer widget (uses cava)
+    enableCalendarEvents = true;   # Calendar integration (uses khal)
   };
 
   # ===========================================================================
@@ -112,15 +107,36 @@
 
     # --- GUI Applications ---
     vscode    # Visual Studio Code editor
+    insync    # Google Drive sync
     
     # --- yazi dependencies ---
     jq
     dragon-drop
     fd
-    ripgrep
     poppler
     imagemagick
   ];
+
+  # ===========================================================================
+  # SCRIPTS DIRECTORY
+  # ===========================================================================
+  # Drop scripts into scripts/ and they land in ~/.local/bin after rebuild
+  # Already in PATH via sessionPath below
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
+  home.file.".local/bin" = {
+    source = ./scripts;
+    recursive = true;
+  };
+
+  # ===========================================================================
+  # SHELL FUNCTIONS DIRECTORY
+  # ===========================================================================
+  # One file per function, autoloaded by zsh via fpath
+  home.file.".config/zsh/functions" = {
+    source = ./shell_functions;
+    recursive = true;
+  };
 
   # ===========================================================================
   # DOTFILES

@@ -167,7 +167,7 @@ keymap = [
 	{ on = "w", run = "tasks:show", desc = "Show task manager" },
 
 	# Terminal
-	{ on = "T", run = "shell --confirm --orphan 'alacritty --working-directory=\"$(pwd)\"'", desc = "Open the current directory in alacritty" },
+	{ on = "T", run = "shell --confirm --orphan 'ghostty --working-directory=\"$(pwd)\"'", desc = "Open the current directory in ghostty" },
 
 	# Help
 	{ on = "~",    run = "help", desc = "Open help" },

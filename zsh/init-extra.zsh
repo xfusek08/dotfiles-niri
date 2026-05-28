@@ -4,6 +4,18 @@
 # Loaded after .zshrc by Home Manager
 # =============================================================================
 
+# ~~~~~~~~~~~~~~~ Autoload Functions ~~~~~~~~~~~~~~~
+
+# Add shell_functions/ dir to fpath so zsh knows where to find functions
+fpath=("${XDG_CONFIG_HOME:-$HOME/.config}/zsh/functions" $fpath)
+
+# Autoload every file in that directory as a lazy-loaded function.
+# Breakdown: $fpath[1] is our directory, /* globs all entries inside,
+# (.:t) is a glob qualifier: . matches only regular files,
+# :t extracts just the filename (the function name).
+# So this picks up every file and tells zsh "lazy-load this as a function".
+autoload -Uz $fpath[1]/*(.:t)
+
 # ~~~~~~~~~~~~~~~ Zinit Setup ~~~~~~~~~~~~~~~
 
 ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
@@ -54,99 +66,6 @@ bindkey '^[[3~' delete-char
 # Ctrl+Backspace/Delete for word deletion
 bindkey '^H' backward-kill-word
 bindkey '^[[3;5~' kill-word
-
-# ~~~~~~~~~~~~~~~ Yazi Shell Wrapper ~~~~~~~~~~~~~~~
-
-# Change to directory when exiting yazi
-function y() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-    yazi "$@" --cwd-file="$tmp"
-    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-        builtin cd -- "$cwd"
-    fi
-    rm -f -- "$tmp"
-}
-
-# ~~~~~~~~~~~~~~~ Fuzzy Change Directory ~~~~~~~~~~~~~~~
-
-# fcd - fuzzy find and change to directory
-# Usage: fcd [OPTIONS] [DIRECTORY]
-# Options: -h help, -a include hidden, -p print only, -v verbose
-function fcd() {
-    local all=false
-    local prt=false
-    local help=false
-    local verbose=false
-    local searchDirectory
-
-    function log() {
-        local level="$1"
-        shift
-        if [[ $level = "DEBUG" && $verbose != "true" ]]; then
-            return
-        fi
-        printf "[%s] %s\n" $level "$@" >&2
-    }
-
-    local -A opts
-    zparseopts -D -A opts -- \
-        h=help -help=help \
-        a=all -all=all \
-        p=print -print=print \
-        v=verbose -verbose=verbose
-
-    [[ -n "${help}" ]] && help=true
-    [[ -n "${all}" ]] && all=true
-    [[ -n "${print}" ]] && prt=true
-    [[ -n "${verbose}" ]] && verbose=true
-
-    searchDirectory="${1:-$PWD}"
-
-    if [[ $help == "true" ]]; then
-        cat << 'EOF'
-Usage: fcd [OPTIONS] [DIRECTORY]
-
-Changes directory interactively using fzf.
-
-Options:
-    -h        Show this help message
-    -a        Include hidden directories in the search
-    -p        Print the selected directory instead of changing to it
-    -v        Verbose mode - print additional information
-
-Examples:
-    fcd ~/projects
-    fcd -a ~/projects
-    fcd -p
-EOF
-        return 0
-    fi
-
-    local bfs_args=""
-    [[ $all == "false" ]] && bfs_args="-nohidden"
-
-    local findResult="$(
-        bfs "$searchDirectory" $bfs_args \
-            | fzf --preview "eza -la --icons=auto --color=always {}"
-    )"
-
-    [[ -z "$findResult" ]] && return 0
-
-    log "DEBUG" "Extracting directory from findResult: $findResult"
-
-    if [[ -f $findResult ]]; then
-        findResult=$(dirname "$findResult")
-    fi
-
-    log "DEBUG" "Will navigate to $findResult"
-
-    if [[ $prt == "true" ]]; then
-        print -r -- "$findResult"
-    else
-        log "DEBUG" "Changing directory to: $findResult"
-        cd "$findResult"
-    fi
-}
 
 # ~~~~~~~~~~~~~~~ Performance measurement end ~~~~~~~~~~~~~~~
 

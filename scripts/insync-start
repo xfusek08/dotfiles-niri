@@ -1,0 +1,20 @@
+#!/bin/sh
+
+MAX_ATTEMPTS=40
+
+echo "Waiting for StatusNotifierWatcher (DMS tray)..."
+attempt=0
+while ! dbus-send --session --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus \
+        org.freedesktop.DBus.NameHasOwner string:org.kde.StatusNotifierWatcher 2>/dev/null | grep -q "true"; do
+    attempt=$(( attempt + 1 ))
+    if [ "$attempt" -gt "$MAX_ATTEMPTS" ]; then
+        echo "ERROR: StatusNotifierWatcher not available after ${MAX_ATTEMPTS} attempts (20s), aborting"
+        exit 1
+    fi
+    echo "Attempt ${attempt}/${MAX_ATTEMPTS}: StatusNotifierWatcher not ready yet..."
+    sleep 0.5
+done
+echo "StatusNotifierWatcher is ready"
+
+echo "Starting Insync..."
+exec insync start --qt-qpa-platform=xcb --no-daemon
