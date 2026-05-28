@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 #
 # Function:
 #     fcd (Fuzzy Change Directory)
@@ -48,16 +49,6 @@ function fcd() {
     local help=false
     local verbose=false
     local searchDirectory
-
-    # Add logging function
-    function log() {
-        local level="$1"
-        shift
-        if [[ $level = "DEBUG" && $verbose != "true" ]]; then
-            return
-        fi
-        printf "[%s] %s\n" $level "$@" >&2
-    }
 
     # Parse options using zsh's zparseopts
     local -A opts
@@ -124,19 +115,19 @@ EOF
     # If no result found (user cancelled), return quietly
     [[ -z "$findResult" ]] && return 0
 
-    log "DEBUG" "Extracting directory from findResult: $findResult"
+    [[ $verbose == "true" ]] && log -d "Extracting directory from: $findResult"
 
     if [[ -f $findResult ]]; then
         findResult=$(dirname "$findResult")
     fi
 
-    log "DEBUG" "Will navigate to $findResult"
+    [[ $verbose == "true" ]] && log -d "Will navigate to $findResult"
 
     # Print the selected directory if -p option is specified
     if [[ $prt == "true" ]]; then
         print -r -- "$findResult"
     else
-        log "DEBUG" "Changing directory to: $findResult"
+        [[ $verbose == "true" ]] && log -d "Changing directory to: $findResult"
         cd "$findResult"
     fi
 }
