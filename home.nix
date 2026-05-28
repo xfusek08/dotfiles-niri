@@ -73,6 +73,13 @@
   home.file.".config/starship.toml".source = ./starship/starship.toml;
 
   # ===========================================================================
+  # GHOSTTY TERMINAL
+  # ===========================================================================
+
+  home.file.".config/ghostty/config".source = ./ghostty/config;
+  home.file.".config/ghostty/themes/dankcolors".source = ./ghostty/themes/dankcolors;
+
+  # ===========================================================================
   # FZF FUZZY FINDER
   # ===========================================================================
 
