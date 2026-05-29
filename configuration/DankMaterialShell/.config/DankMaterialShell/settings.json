@@ -92,7 +92,7 @@
       "id": "brightnessSlider",
       "enabled": true,
       "width": 50,
-      "deviceName": "ddc:i2c-20"
+      "deviceName": "backlight:amdgpu_bl1"
     },
     {
       "id": "wifi",
@@ -441,6 +441,15 @@
         "alwaysCenterSingleColumn": true
       },
       "focusAtStartup": true
+    },
+    "DP-12": {
+      "layout": {
+        "alwaysCenterSingleColumn": true,
+        "defaultColumnWidth": {
+          "type": "proportion",
+          "value": 0.5
+        }
+      }
     }
   },
   "hyprlandOutputSettings": {},

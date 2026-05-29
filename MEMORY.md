@@ -126,3 +126,44 @@ Two actions in CachyOS Hello triggered a chain: **"Reset Keyrings"** changed the
 | `gcr-prompter` | Cannot open display | Has `WAYLAND_DISPLAY` |
 | Discord | Blank black screen | Prompts to re-login once |
 | Systemd user services | No Wayland context | `WAYLAND_DISPLAY` available from start |
+
+## NixOS Migration (2026-05-28)
+
+### Repo
+`~/Repo/dotfiles-nix` — NixOS flake with Niri + DMS
+
+### Changes made during review
+1. **`home.nix`**: Fixed deprecated flake module path (`dankMaterialShell.default` → `dank-material-shell`). Removed `enableClipboard`, `enableBrightnessControl`, `enableColorPicker`, `enableSystemSound` (all removed upstream — now built-in). Added `insync` package + systemd user service.
+2. **`configuration.nix`**: Added swayidle with same timeouts as current config. Added `ghostty`, `qt6ct` packages. Removed `alacritty`, `cliphist`, `mako` (DMS handles these). Added `let dmsPkg = inputs.dms.packages...` for swayidle path references.
+3. **`niri/niri-config.kdl`**: Changed `QT_QPA_PLATFORMTHEME` from `gtk3` to `qt6ct`. Added `SSH_AUTH_SOCK`. Set `TERMINAL=ghostty`. Removed `wl-paste --watch cliphist store` startup (DMS clipboard).
+4. **`.gitignore`**: Added `hardware-configuration.nix`.
+
+### DMS module paths (verified from upstream flake)
+- `homeModules.dank-material-shell` ✅ (current)
+- `homeModules.dankMaterialShell.default` ❌ (deprecated, works but warns)
+- `nixosModules.greeter` ✅ (not deprecated)
+- Options use `programs.dank-material-shell` but `dms-rename.nix` maps `dankMaterialShell` → `dank-material-shell`
+- Removed options: `enableClipboard`, `enableBrightnessControl`, `enableColorPicker`, `enableSystemSound`
+
+### Structure decisions
+- **`scripts/`**: Standalone executables, symlinked to `~/.local/bin` via `home.file`, added to PATH via `home.sessionPath`
+- **`shell_functions/`**: Functions that modify the calling shell's state (cd, etc.), one file per function, loaded via zsh `fpath` + `autoload -Uz`
+- **Insync**: Launched from niri `spawn-sh-at-startup` rather than a systemd service (user preference), with `--qt-qpa-platform=xcb` for tray integration
+- **Idle**: Handled by `services.swayidle` (NixOS systemd user service), not spawned from niri or configured in DMS settings
+
+### Zsh autoload convention
+- Files in `shell_functions/` named after the function (`fcd`, `y`, `log`)
+- Each file contains the full `function name() { ... }` definition
+- `init-extra.zsh` adds the directory to `fpath` and calls `autoload -Uz $fpath[1]/*(.:t)` via glob
+- Home-manager symlinks the directory via `home.file.".config/zsh/functions"`
+
+## Shell Functions Updates (2026-05-28)
+
+### Bug fixed: `.zsh` extension broke autoload
+Files were named `fcd.zsh`, `y.zsh`, `log.zsh` but `autoload -Uz fcd.zsh` registers `fcd.zsh` (not `fcd`) — calling `fcd` would get "command not found". Renamed to bare filenames (`fcd`, `y`, `log`) matching the function names.
+
+### Shared `log` function
+- Added `-d` (debug) level with dim (`\033[2m`) color to shared `log` in `shell_functions/log`
+- `fcd` now uses shared `log -d` instead of its own inline logger
+- Debug calls are gated: `[[ $verbose == "true" ]] && log -d "message"`
+- No behavior change from original — same verbose suppression, but prettier output (timestamp, dim text)
