@@ -133,6 +133,11 @@ reboot
 
 ```bash
 cd ~/dotfiles-nix
+
+# Update the flake.lock to update versions of installed packages.
+nix flake update
+
+# Applying changes from the config:
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
