@@ -45,15 +45,18 @@
 
     # --- Init Content ---
     initContent = lib.mkMerge [
-      # Performance measurement (runs first)
+      # Performance measurement start
       (lib.mkBefore ''
-        # Performance measurement start
         zmodload zsh/datetime
         zmodload zsh/terminfo
         typeset -F shell_start=$EPOCHREALTIME
       '')
-      # Main init (zinit, plugins, etc.)
       (builtins.readFile ./init-extra.zsh)
+      # Performance measurement end
+      (lib.mkAfter ''
+        local taken=$(printf "%.2f" $(( $EPOCHREALTIME - shell_start )))
+        print -P "%B%F{green}󱐋 Shell loaded in ''${taken}s%f%b"
+      '')
     ];
   };
 }

@@ -14,7 +14,7 @@ fpath=("${XDG_CONFIG_HOME:-$HOME/.config}/zsh/functions" $fpath)
 # (.:t) is a glob qualifier: . matches only regular files,
 # :t extracts just the filename (the function name).
 # So this picks up every file and tells zsh "lazy-load this as a function".
-autoload -Uz $fpath[1]/*(.:t)
+autoload -Uz $fpath[1]/*(-.:t)
 
 # ~~~~~~~~~~~~~~~ Zinit Setup ~~~~~~~~~~~~~~~
 
@@ -66,8 +66,3 @@ bindkey '^[[3~' delete-char
 # Ctrl+Backspace/Delete for word deletion
 bindkey '^H' backward-kill-word
 bindkey '^[[3;5~' kill-word
-
-# ~~~~~~~~~~~~~~~ Performance measurement end ~~~~~~~~~~~~~~~
-
-local taken=$(printf "%.2f" $(( $EPOCHREALTIME - shell_start )))
-print -P "%B%F{green}󱐋 Shell loaded in ${taken}s%f%b"
