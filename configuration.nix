@@ -133,37 +133,37 @@ in {
     configHome = "/home/petr"; # Path to DMS config for theme sync
   };
 
-  # ===========================================================================
-  # IDLE MANAGEMENT
-  # ===========================================================================
-  # DMS handles the lock screen UI; swayidle enforces timeouts
-  services.swayidle = {
-    enable = true;
-    events = [
-      { # Lock after 5 min inactivity
-        timeout = 300;
-        command = "${dmsPkg}/bin/dms ipc call lock lock";
-        resumeCommand = "${pkgs.coreutils}/bin/echo unlocked";
-      }
-      { # Power off monitors after 10 min
-        timeout = 600;
-        command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
-        resumeCommand = "${pkgs.coreutils}/bin/echo monitors-on";
-      }
-      { # Suspend after 15 min
-        timeout = 900;
-        command = "${pkgs.systemd}/bin/systemctl suspend";
-      }
-      { # Lock before sleep
-        event = "before-sleep";
-        command = "${dmsPkg}/bin/dms ipc call lock lock";
-      }
-      { # Lock on manual lock request
-        event = "lock";
-        command = "${dmsPkg}/bin/dms ipc call lock lock";
-      }
-    ];
-  };
+  # # ===========================================================================
+  # # IDLE MANAGEMENT
+  # # ===========================================================================
+  # # DMS handles the lock screen UI; swayidle enforces timeouts
+  # services.swayidle = {
+  #   enable = true;
+  #   events = [
+  #     { # Lock after 5 min inactivity
+  #       timeout = 300;
+  #       command = "${dmsPkg}/bin/dms ipc call lock lock";
+  #       resumeCommand = "${pkgs.coreutils}/bin/echo unlocked";
+  #     }
+  #     { # Power off monitors after 10 min
+  #       timeout = 600;
+  #       command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
+  #       resumeCommand = "${pkgs.coreutils}/bin/echo monitors-on";
+  #     }
+  #     { # Suspend after 15 min
+  #       timeout = 900;
+  #       command = "${pkgs.systemd}/bin/systemctl suspend";
+  #     }
+  #     { # Lock before sleep
+  #       event = "before-sleep";
+  #       command = "${dmsPkg}/bin/dms ipc call lock lock";
+  #     }
+  #     { # Lock on manual lock request
+  #       event = "lock";
+  #       command = "${dmsPkg}/bin/dms ipc call lock lock";
+  #     }
+  #   ];
+  # };
 
   # ===========================================================================
   # SERVICES
@@ -211,8 +211,8 @@ in {
     libnotify        # Notification library (for various apps)
 
     # --- Theming & Appearance ---
-    matugen # Material You color palette generator
-    qt6ct   # Qt6 configuration tool (for Matugen theming)
+    matugen           # Material You color palette generator
+    qt6Packages.qt6ct # Qt6 configuration tool (for Matugen theming)
 
     # --- DMS (Dank Material Shell) Dependencies ---
     cava             # Audio visualizer
