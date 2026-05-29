@@ -111,6 +111,7 @@
     fastfetch # System info display (neofetch alternative)
     ripgrep   # Fast grep alternative (rg)
     yazi      # Terminal file manager
+    opencode  # AI coding terminal tool.
 
     # --- GUI Applications ---
     vscode    # Visual Studio Code editor
