@@ -166,13 +166,14 @@
     after = [ "writeBoundary" ];
     before = [];
     data = ''
+      export PATH="${pkgs.git}/bin:$PATH"
       if [ ! -f "$HOME/.config/yazi/package.toml" ]; then
         mkdir -p "$HOME/.config/yazi"
         cp ${./yazi/package.toml} "$HOME/.config/yazi/package.toml"
         chmod 644 "$HOME/.config/yazi/package.toml"
       fi
-      ${pkgs.yazi}/bin/ya pkg install
-      ${pkgs.yazi}/bin/ya pkg upgrade
+      ${pkgs.yazi}/bin/ya pkg install 2>/dev/null || true
+      ${pkgs.yazi}/bin/ya pkg upgrade --discard 2>/dev/null || true
     '';
   };
 
