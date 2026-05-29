@@ -1,6 +1,7 @@
-# A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
-# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
-"$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
+# A TOML linter such as https://github.com/tombi-toml/tombi can use this schema to validate your config.
+# If you encounter any problems, please make an issue at https://github.com/yazi-rs/schemas.
+
+#:schema https://yazi-rs.github.io/schemas/keymap.json
 
 [mgr]
 
@@ -43,9 +44,9 @@ keymap = [
 	{ on = "L", run = "forward", desc = "Forward to next directory" },
 
 	# Toggle
-	{ on = "<Space>", run = [ "toggle", "arrow next" ], desc = "Toggle the current selection state" },
-	{ on = "<C-a>",   run = "toggle_all --state=on",    desc = "Select all files" },
-	{ on = "<C-r>",   run = "toggle_all",               desc = "Invert selection of all files" },
+	{ on = "<Space>", run = [ "toggle", "arrow 1" ], desc = "Toggle the current selection state" },
+	{ on = "<C-a>",   run = "toggle_all --state=on", desc = "Select all files" },
+	{ on = "<C-r>",   run = "toggle_all",            desc = "Invert selection of all files" },
 
 	# Visual mode
 	{ on = "v", run = "visual_mode",         desc = "Enter visual mode (selection mode)" },
@@ -86,32 +87,18 @@ keymap = [
 	{ on = "Z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
 
 	# Linemode
-	{ on = [ "m", "s" ], run = "linemode size",                desc = "Linemode: size" },
-	{ on = [ "m", "p" ], run = "linemode permissions",         desc = "Linemode: permissions" },
-	{ on = [ "m", "b" ], run = "linemode btime",               desc = "Linemode: btime" },
-	{ on = [ "m", "m" ], run = "linemode mtime",               desc = "Linemode: mtime" },
-	{ on = [ "m", "o" ], run = "linemode owner",               desc = "Linemode: owner" },
-	{ on = [ "m", "n" ], run = "linemode none",                desc = "Linemode: none" },
-    { on = [ "m", "a" ], run = "linemode permissions_size",    desc = "Linemode: {permissions} {size}" },
+	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },
+	{ on = [ "m", "p" ], run = "linemode permissions", desc = "Linemode: permissions" },
+	{ on = [ "m", "b" ], run = "linemode btime",       desc = "Linemode: btime" },
+	{ on = [ "m", "m" ], run = "linemode mtime",       desc = "Linemode: mtime" },
+	{ on = [ "m", "o" ], run = "linemode owner",       desc = "Linemode: owner" },
+	{ on = [ "m", "n" ], run = "linemode none",        desc = "Linemode: none" },
 
 	# Copy
-	{ on = [ "c", "c" ], run = "copy path",                       desc = "Copy the file path" },
-	{ on = [ "c", "d" ], run = "copy dirname",                    desc = "Copy the directory path" },
-	{ on = [ "c", "f" ], run = "copy filename",                   desc = "Copy the filename" },
-	{ on = [ "c", "n" ], run = "copy name_without_ext",           desc = "Copy the filename without extension" },
-    { on = [ "c", "m" ], run = "shell -- dragon-drop -x -T %s1" , desc = "🖼️ Copy file as image via Dragon Drop" },
-	{ on = [ "c", "t" ], run = """shell --block -- zsh -c '
-		fileName="$1"
-		fileType=$(file -b "$fileName")
-		if echo "$fileType" | grep -qi "text\\|json\\|xml\\|script\\|source\\|program\\|ascii\\|utf-8\\|html\\|stylesheet"; then
-			cat "$fileName" | wl-copy --type text/plain
-			notify-send "✓ Text Copied" "$fileName\n$fileType"
-		else
-			notify-send --urgency=critical "❌ Copy Failed" "Not a text file: $fileType"
-			exit 1
-		fi
-		' -- "$0"
-		""", desc = "📋 Copy full text-file contents via wl-copy" },
+	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy file URL" },
+	{ on = [ "c", "d" ], run = "copy dirname",          desc = "Copy directory URL" },
+	{ on = [ "c", "f" ], run = "copy filename",         desc = "Copy filename" },
+	{ on = [ "c", "n" ], run = "copy name_without_ext", desc = "Copy filename without extension" },
 
 	# Filter
 	{ on = "f", run = "filter --smart", desc = "Filter files" },
@@ -139,13 +126,14 @@ keymap = [
 
 	# Goto
 	{ on = [ "g", "h" ],       run = "cd ~",             desc = "Go home" },
-	{ on = [ "g", "d" ],       run = "cd ~/Stažené",     desc = "Go ~/Stažené" },
-	{ on = [ "g", "r" ],       run = "cd ~/Repo",        desc = "Go to ~/Repo" },
+	{ on = [ "g", "c" ],       run = "cd ~/.config",     desc = "Go ~/.config" },
+	{ on = [ "g", "d" ],       run = "cd ~/Downloads",   desc = "Go ~/Downloads" },
 	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "Jump interactively" },
 	{ on = [ "g", "f" ],       run = "follow",           desc = "Follow hovered symlink" },
 
 	# Tabs
-	{ on = "t", run = "tab_create --current", desc = "Create a new tab with CWD" },
+	{ on = [ "t", "t" ], run = "tab_create --current",     desc = "Create a new tab in CWD" },
+	{ on = [ "t", "r" ], run = "tab_rename --interactive", desc = "Rename current tab" },
 
 	{ on = "1", run = "tab_switch 0", desc = "Switch to first tab" },
 	{ on = "2", run = "tab_switch 1", desc = "Switch to second tab" },
@@ -165,9 +153,6 @@ keymap = [
 
 	# Tasks
 	{ on = "w", run = "tasks:show", desc = "Show task manager" },
-
-	# Terminal
-	{ on = "T", run = "shell --confirm --orphan 'ghostty --working-directory=\"$(pwd)\"'", desc = "Open the current directory in ghostty" },
 
 	# Help
 	{ on = "~",    run = "help", desc = "Open help" },

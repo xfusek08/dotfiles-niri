@@ -161,7 +161,7 @@
   home.file.".config/yazi/keymap.toml".source = ./yazi/keymap.toml;
   home.file.".config/yazi/theme.toml".source = ./yazi/theme.toml;
 
-  # Copy package.toml (not symlink) so yazi can write to it
+  # Copy package.toml (not symlink) so yazi can write to it, then install/upgrade packages
   home.activation.yaziPackageToml = {
     after = [ "writeBoundary" ];
     before = [];
@@ -171,6 +171,8 @@
         cp ${./yazi/package.toml} "$HOME/.config/yazi/package.toml"
         chmod 644 "$HOME/.config/yazi/package.toml"
       fi
+      ${pkgs.yazi}/bin/ya pkg install
+      ${pkgs.yazi}/bin/ya pkg upgrade
     '';
   };
 
