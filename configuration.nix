@@ -127,7 +127,7 @@ in {
   };
 
   # DankGreeter - Material Design styled login/display manager
-  programs.dankMaterialShell.greeter = {
+  programs."dank-material-shell".greeter = {
     enable = true;
     compositor.name = "niri";  # Use Niri as the greeter compositor
     configHome = "/home/petr"; # Path to DMS config for theme sync
@@ -206,7 +206,7 @@ in {
     # --- Desktop Integration ---
     accountsservice  # User account info (for DMS user menu)
     brightnessctl    # Screen brightness control
-    mate.mate-polkit # PolicyKit authentication dialog (used by DMS)
+    pkgs.mate-polkit # PolicyKit authentication dialog (used by DMS)
     playerctl        # MPRIS media player control (for media keys)
     libnotify        # Notification library (for various apps)
 

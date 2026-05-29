@@ -33,7 +33,7 @@
   # Material Design desktop shell configuration
   # Docs: https://danklinux.com/docs/dankmaterialshell
 
-  programs.dankMaterialShell = {
+  programs."dank-material-shell" = {
     enable = true;
 
     # --- Systemd Integration ---
