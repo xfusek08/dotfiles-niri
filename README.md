@@ -6,6 +6,10 @@ Declarative NixOS config with Niri compositor and DankMaterialShell.
 
 ### 0. Create an NIX OS Bootable USB
 
+Download a _GRAPHICAL_ live ISO:
+
+https://nixos.org/download/#nix-more
+
 ```bash
 sudo dd bs=4M if=<path-to-iso> of=/dev/sda status=progress oflag=sync
 ```

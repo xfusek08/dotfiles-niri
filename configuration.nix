@@ -133,6 +133,15 @@ in {
     configHome = "/home/petr"; # Path to DMS config for theme sync
   };
 
+  # ===========================================================================
+  # FILE MANAGER
+  # ===========================================================================
+  # Thunar is a lightweight GTK file manager.
+  # Provides: USB mount/unmount via right-click, trash browsing, file search
+
+  programs.thunar.enable = true;
+  programs.xfconf.enable = true; # Persist Thunar preferences
+
   # # ===========================================================================
   # # IDLE MANAGEMENT
   # # ===========================================================================
@@ -166,6 +175,13 @@ in {
   # };
 
   # ===========================================================================
+  # SECURITY
+  # ===========================================================================
+  # Authentication and authorization
+
+  security.polkit.enable = true; # Required by udisks2 for non-root mount/unmount
+
+  # ===========================================================================
   # SERVICES
   # ===========================================================================
   # System services and daemons
@@ -173,6 +189,8 @@ in {
   services.openssh.enable = true;               # SSH server for remote access
   services.power-profiles-daemon.enable = true; # Power management profiles
   services.upower.enable = true;                # Battery/power device monitoring
+  services.udisks2.enable = true;               # USB drive mounting backend
+  services.gvfs.enable = true;                  # Trash, volume listing, file manager integration
 
   # ===========================================================================
   # SYSTEM PACKAGES
