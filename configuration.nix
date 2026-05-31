@@ -114,6 +114,7 @@ in {
   # Using nixpkgs niri (25.11+) instead of niri-flake for DMS compatibility
   # niri-flake doesn't support 'include' directives needed for DMS theming
   programs.niri.enable = true;
+  programs.dsearch.enable = true;                # Fast filesystem search for DMS launcher
 
   # XDG Desktop Portal - Provides standardized desktop APIs for:
   # - Screen sharing/casting
@@ -152,6 +153,7 @@ in {
   services.gvfs.enable = true;                  # Trash, volume listing, file manager integration
   services.accounts-daemon.enable = true;       # AccountsService D-Bus for user info (needed by DMS)
   services.printing.enable = true;              # CUPS printing service
+  services.fprintd.enable = true;               # Fingerprint auth for lock screen
 
   # ===========================================================================
   # SYSTEM PACKAGES
