@@ -36,6 +36,10 @@ Boot from the created NixOS USB drive. Select "GNOME" desktop environment becaus
 
 Then you need connection to the internet. Before proceeding, ensure you have internet connectivity. You can check this by running:
 
+```bash
+ping -c 3 8.8.8.8
+```
+
 ### 2. Partition the root Disk
 
 ```bash
