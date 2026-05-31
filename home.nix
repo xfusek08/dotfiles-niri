@@ -216,6 +216,7 @@ in {
   # DMS will populate them with theme colors, layout, and keybinds
   home.file.".config/niri/dms/colors.kdl".text = "// Auto-populated by DMS\n";
   home.file.".config/niri/dms/layout.kdl".text = "// Auto-populated by DMS\n";
+  home.file.".config/niri/dms/outputs.kdl".text = "// Auto-populated by DMS\n";
   home.file.".config/niri/dms/alttab.kdl".text = "// Auto-populated by DMS\n";
   home.file.".config/niri/dms/binds.kdl".text = "// Auto-populated by DMS\n";
 }
