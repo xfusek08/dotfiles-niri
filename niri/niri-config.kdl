@@ -77,8 +77,6 @@ input {
 // Environment variables set for all spawned processes
 environment {
     XDG_CURRENT_DESKTOP "niri"          // Required for proper desktop detection
-    // XCURSOR_THEME "Adwaita"             // Cursor theme for spawned apps
-    // XCURSOR_SIZE "24"                   // Cursor size for spawned apps
     QT_QPA_PLATFORM "wayland"           // Force Qt apps to use Wayland
     XDG_SESSION_TYPE "wayland"          // Session type for apps
     ELECTRON_OZONE_PLATFORM_HINT "auto" // Electron apps auto-detect Wayland
