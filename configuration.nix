@@ -150,6 +150,8 @@ in {
   services.upower.enable = true;                # Battery/power device monitoring
   services.udisks2.enable = true;               # USB drive mounting backend
   services.gvfs.enable = true;                  # Trash, volume listing, file manager integration
+  services.accounts-daemon.enable = true;       # AccountsService D-Bus for user info (needed by DMS)
+  services.printing.enable = true;              # CUPS printing service
 
   # ===========================================================================
   # SYSTEM PACKAGES
@@ -165,6 +167,7 @@ in {
     wget              # CLI download tool
     wl-clipboard      # Clipboard utilities (wl-copy, wl-paste)
     xwayland-satellite # XWayland for running X11 apps on Wayland
+    cups-pk-helper    # PolicyKit helper for CUPS (needed by DMS)
   ];
 
   # ===========================================================================

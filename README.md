@@ -133,6 +133,12 @@ sudo nixos-install --root /mnt --flake .#nixos
 # (In the future the configuration will hold the password hash so this step won't be necessary.)
 sudo nixos-enter --root /mnt -c 'passwd petr'
 
+# Copy the repo (with HW config commit) to the installed system
+# so it's ready at ~/repo/dotfiles-niri after reboot without re-cloning.
+sudo mkdir -p /mnt/home/petr/repo
+sudo cp -a . /mnt/home/petr/repo/dotfiles-niri
+sudo nixos-enter --root /mnt -c 'chown -R petr:users /home/petr/repo'
+
 # Reboot
 reboot
 ```
