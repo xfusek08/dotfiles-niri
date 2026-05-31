@@ -222,7 +222,7 @@ in {
     before = [];
     data = ''
       mkdir -p "${homeDir}/.config/niri/dms"
-      for f in colors layout outputs alttab binds; do
+      for f in colors layout cursor outputs alttab binds; do
         [ -f "${homeDir}/.config/niri/dms/$f.kdl" ] || touch "${homeDir}/.config/niri/dms/$f.kdl"
       done
     '';
