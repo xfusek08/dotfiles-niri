@@ -31,7 +31,7 @@ in {
   home.homeDirectory = "/home/petr"; # User's home directory path
 
   # DO NOT CHANGE - Tracks Home Manager version for state compatibility
-  home.stateVersion = "25.05";
+  home.stateVersion = "26.05";
 
   # Canonical paths — scripts use these instead of assuming structure
   home.sessionVariables = {

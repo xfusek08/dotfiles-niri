@@ -172,5 +172,5 @@ in {
   # ===========================================================================
   # DO NOT CHANGE - Tracks the NixOS version for state compatibility
   # Only update when doing a full system upgrade with proper migration
-  system.stateVersion = "25.05";
+  system.stateVersion = "26.05";
 }
