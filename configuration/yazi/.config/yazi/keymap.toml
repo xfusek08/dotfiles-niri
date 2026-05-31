@@ -401,3 +401,15 @@ run = "plugin bunny"
 desc = "Start bunny.yazi fuzzy search"
 on = "'"
 run = "plugin bunny fuzzy"
+
+# Zip without password settings
+[[mgr.prepend_keymap]]
+on = ["c", "z", "z"]
+desc = "Zip without password"
+run = 'shell --block -- zip -r "$0.zip" "$0"'
+
+# Zip with password settings
+[[mgr.prepend_keymap]]
+on = ["c", "z", "p"]
+desc = "Zip with password"
+run = 'shell --block -- zip -er "$0.zip" "$0"'
