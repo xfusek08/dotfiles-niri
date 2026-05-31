@@ -170,6 +170,9 @@ in {
     wl-clipboard      # Clipboard utilities (wl-copy, wl-paste)
     xwayland-satellite # XWayland for running X11 apps on Wayland
     cups-pk-helper    # PolicyKit helper for CUPS (needed by DMS)
+    p7zip             # 7z archive utility
+    zip               # Zip compression
+    unzip             # Zip decompression
   ];
 
   # ===========================================================================
