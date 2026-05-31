@@ -157,45 +157,14 @@ in {
   # Packages installed system-wide for all users
 
   environment.systemPackages = with pkgs; [
-
-    # --- Development Tools ---
-    git    # Version control system
-    vscode # Visual Studio Code editor (unfree)
-    file   # File type identification utility
-    
-    # --- GPU Tools ---
-    mesa-demos # OpenGL/Vulkan demos and utilities
-
-    # --- Terminal & Shell ---
-    ghostty   # Terminal emulator
-    alacritty # Backup terminal in case ghostty encounters GPU issues.
-    wget      # CLI tool for downloading files
-
-    # --- Wayland Utilities ---
-    # grim               # Screenshot capture tool
-    # slurp              # Screen region selector (works with grim)
-    # swappy             # Screenshot annotation/editor
-    # swaybg             # Wallpaper setter for Wayland
-    # swayidle           # Idle management daemon (timeouts for lock/suspend)
-    # swaylock           # Screen locker for Wayland
-    wl-clipboard       # Clipboard utilities (wl-copy, wl-paste)
+    git               # Version control system
+    file              # File type identification utility
+    mesa-demos        # OpenGL/Vulkan demos and utilities
+    ghostty           # Terminal emulator
+    alacritty         # Backup terminal
+    wget              # CLI download tool
+    wl-clipboard      # Clipboard utilities (wl-copy, wl-paste)
     xwayland-satellite # XWayland for running X11 apps on Wayland
-
-    # --- Desktop Integration ---
-    # accountsservice  # User account info (for DMS user menu)
-    # brightnessctl    # Screen brightness control
-    # pkgs.mate-polkit # PolicyKit authentication dialog (used by DMS)
-    # playerctl        # MPRIS media player control (for media keys)
-    # libnotify        # Notification library (for various apps)
-
-    # --- Theming & Appearance ---
-    # matugen           # Material You color palette generator
-    # qt6Packages.qt6ct # Qt6 configuration tool (for Matugen theming)
-
-    # --- DMS (Dank Material Shell) Dependencies ---
-    # cava             # Audio visualizer
-    # qt6.qtmultimedia # Media controls and system sounds
-
   ];
 
   # ===========================================================================

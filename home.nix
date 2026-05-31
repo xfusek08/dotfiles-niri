@@ -62,10 +62,13 @@
   # ===========================================================================
   # XDG MIME associations — set Zen Browser as default
 
-  xdg.mime.defaultApplications = {
-    "text/html"                = "zen-browser.desktop";
-    "x-scheme-handler/http"    = "zen-browser.desktop";
-    "x-scheme-handler/https"   = "zen-browser.desktop";
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html"                = "zen-browser.desktop";
+      "x-scheme-handler/http"    = "zen-browser.desktop";
+      "x-scheme-handler/https"   = "zen-browser.desktop";
+    };
   };
 
   # ===========================================================================
@@ -130,9 +133,13 @@
     yazi      # Terminal file manager
     opencode  # AI coding terminal tool.
 
+    # --- ICON THemes ---
+    adwaita-icon-theme
+    hicolor-icon-theme 
+
     # --- GUI Applications ---
-    vscode    # Visual Studio Code editor
-    insync    # Google Drive sync
+    vscode # Visual Studio Code editor
+    insync # Google Drive sync
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
     
     # --- yazi dependencies ---
