@@ -58,6 +58,17 @@
   };
 
   # ===========================================================================
+  # DEFAULT APPLICATIONS
+  # ===========================================================================
+  # XDG MIME associations — set Zen Browser as default
+
+  xdg.mime.defaultApplications = {
+    "text/html"                = "zen-browser.desktop";
+    "x-scheme-handler/http"    = "zen-browser.desktop";
+    "x-scheme-handler/https"   = "zen-browser.desktop";
+  };
+
+  # ===========================================================================
   # GIT
   # ===========================================================================
   # Git version control configuration
