@@ -8,10 +8,10 @@
 { config, pkgs, inputs, ... }:
 
 let
-  homeDir   = config.home.homeDirectory;
-  xdgCfg    = "${homeDir}/.config";
-  repoDir   = "${homeDir}/repo";
-  nixCfg    = "${repoDir}/dotfiles-niri";
+  homeDir = config.home.homeDirectory;
+  xdgCfg  = "${homeDir}/.config";
+  repoDir = "${homeDir}/repo";
+  nixCfg  = "${repoDir}/dotfiles-niri";
 in {
   # ===========================================================================
   # IMPORTS

@@ -9,6 +9,7 @@
 #   git-set-me
 
 set -euo pipefail
+
 source "$SCRIPTS_FNS/log"
 
 log -i "Setting up git user configuration to: Petr Fusek | petr.fusek97@gmail.com"
