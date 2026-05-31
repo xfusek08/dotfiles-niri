@@ -134,15 +134,6 @@ in {
   };
 
   # ===========================================================================
-  # FILE MANAGER
-  # ===========================================================================
-  # Thunar is a lightweight GTK file manager.
-  # Provides: USB mount/unmount via right-click, trash browsing, file search
-
-  programs.thunar.enable = true;
-  programs.xfconf.enable = true; # Persist Thunar preferences
-
-  # ===========================================================================
   # SECURITY
   # ===========================================================================
   # Authentication and authorization
