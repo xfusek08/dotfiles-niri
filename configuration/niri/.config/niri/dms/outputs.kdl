@@ -14,6 +14,13 @@ output "DP-10" {
     focus-at-startup
     layout {
         default-column-width { proportion 0.5; }
+        preset-column-widths {
+            proportion 0.1
+            proportion 0.25
+            proportion 0.5
+            proportion 0.75
+            proportion 0.9
+        }
         always-center-single-column
     }
 }

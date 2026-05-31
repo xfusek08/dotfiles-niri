@@ -438,7 +438,29 @@
           "type": "proportion",
           "value": 0.5
         },
-        "alwaysCenterSingleColumn": true
+        "alwaysCenterSingleColumn": true,
+        "presetColumnWidths": [
+          {
+            "type": "proportion",
+            "value": 0.1
+          },
+          {
+            "type": "proportion",
+            "value": 0.25
+          },
+          {
+            "type": "proportion",
+            "value": 0.5
+          },
+          {
+            "type": "proportion",
+            "value": 0.75
+          },
+          {
+            "type": "proportion",
+            "value": 0.9
+          }
+        ]
       },
       "focusAtStartup": true
     },
