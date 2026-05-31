@@ -116,6 +116,7 @@
     # --- GUI Applications ---
     vscode    # Visual Studio Code editor
     insync    # Google Drive sync
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
     
     # --- yazi dependencies ---
     jq

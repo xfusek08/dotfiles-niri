@@ -196,8 +196,6 @@ in {
     # cava             # Audio visualizer
     # qt6.qtmultimedia # Media controls and system sounds
 
-    # --- Web Browser ---
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
   ];
 
   # ===========================================================================
