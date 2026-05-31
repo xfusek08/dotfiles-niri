@@ -27,6 +27,12 @@
   # DO NOT CHANGE - Tracks Home Manager version for state compatibility
   home.stateVersion = "25.05";
 
+  # Canonical paths — scripts use these instead of assuming structure
+  home.sessionVariables = {
+    REPO          = "/home/petr/repo";
+    NIXOS_CONFIG  = "/home/petr/repo/dotfiles-niri";
+  };
+
   # ===========================================================================
   # DANK MATERIAL SHELL (DMS)
   # ===========================================================================
