@@ -139,14 +139,15 @@ in {
     ripgrep   # Fast grep alternative (rg)
     tealdeer  # TLDR man page summaries (tldr)
     yazi      # Terminal file manager
-    opencode  # AI coding terminal tool.
+    opencode  # AI coding terminal tool
+    bun       # JavaScript runtime & toolkit
 
     # --- DE system ---
     libnotify # Desktop notifications (notify-send)
 
     # --- ICON THemes ---
     adwaita-icon-theme
-    hicolor-icon-theme 
+    hicolor-icon-theme
 
     # --- GUI Applications ---
     vscode    # Visual Studio Code editor
