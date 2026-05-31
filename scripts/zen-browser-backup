@@ -1,0 +1,81 @@
+#!/usr/bin/env zsh
+#
+# zen-browser-backup
+#
+# Creates a backup of Zen Browser profile data.
+# Excludes the install directory (handled by Nix), cached archives, and storage.
+#
+# Usage:
+#   zen-browser-backup [--backup-dir <dir>] [--name <name>] [--timestamp]
+#
+# Options:
+#   --backup-dir   Target directory for the backup archive
+#                  (default: $SYNCED_BACKUP_DIR or $HOME/backups)
+#   --name         Custom backup file base name (default: zen-browser-backup)
+#   --timestamp    Append timestamp to the backup filename
+#   --help         Show this help message
+#
+# Environment:
+#   SYNCED_BACKUP_DIR   Overrides the default backup directory
+
+set -euo pipefail
+SCRIPT_DIR="${0:A:h}"
+source "$SCRIPT_DIR/zen-browser-lib"
+
+BACKUP_DIR="${SYNCED_BACKUP_DIR:-$HOME/backups}"
+BACKUP_NAME="zen-browser-backup"
+USE_TIMESTAMP=false
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --backup-dir)
+            BACKUP_DIR="$2"
+            shift 2
+            ;;
+        --name)
+            BACKUP_NAME="$2"
+            shift 2
+            ;;
+        --timestamp)
+            USE_TIMESTAMP=true
+            shift
+            ;;
+        --help)
+            echo "Usage: zen-browser-backup [--backup-dir <dir>] [--name <name>] [--timestamp]"
+            echo ""
+            echo "Creates a backup of Zen Browser profile data."
+            echo "Excludes: install dir (zen/*), archives (*.tar.gz, *.zip), storage (*/storage/*)"
+            echo ""
+            echo "Environment:"
+            echo "  SYNCED_BACKUP_DIR   Overrides default backup directory ($HOME/backups)"
+            exit 0
+            ;;
+        *)
+            die "Unknown option: $1"
+            ;;
+    esac
+done
+
+PROFILE_DIR=$(zen_browser_detect_profile)
+
+mkdir -p "$BACKUP_DIR"
+
+FILENAME="$BACKUP_NAME"
+if [[ "$USE_TIMESTAMP" == "true" ]]; then
+    FILENAME="${FILENAME}-$(date +%Y%m%d-%H%M%S)"
+fi
+FILENAME="${FILENAME}.tar.gz"
+BACKUP_PATH="$BACKUP_DIR/$FILENAME"
+
+log -i "Backing up Zen Browser profile from: $PROFILE_DIR"
+log -i "Creating archive: $BACKUP_PATH"
+
+tar -czf "$BACKUP_PATH" \
+    --exclude='zen/*' \
+    --exclude='*.tar.gz' \
+    --exclude='*.zip' \
+    --exclude='*/storage/*' \
+    -C "$(dirname "$PROFILE_DIR")" \
+    "$(basename "$PROFILE_DIR")"
+
+log -s "Backup completed: $BACKUP_PATH ($(human_size "$BACKUP_PATH"))"

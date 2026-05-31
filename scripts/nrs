@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+#
+# nrs - NixOS Rebuild Switch
+#
+# Runs nix flake update, backs up Zen profile, then rebuilds.
+# Any arguments are forwarded to nixos-rebuild.
+#
+# Usage:
+#   nrs              # update + backup + rebuild
+#   nrs --upgrade    # same (also passed to nixos-rebuild)
+
+set -euo pipefail
+SCRIPT_DIR="${0:A:h}"
+source "$SCRIPT_DIR/zen-browser-lib"
+
+log -i "Updating flake inputs"
+nix flake update
+
+log -i "Creating Zen Browser backup"
+zen-browser-backup --timestamp
+
+log -i "Running nixos-rebuild switch"
+sudo nixos-rebuild switch --flake .#nixos "$@"

@@ -1,9 +1,8 @@
 #!/usr/bin/env zsh
-
+#
 # Simple logging utility with colored output
-# Usage: log [-d|-i|-w|-e|-s] [-f <file>] "message"
+# Usage: log [-i|-w|-e|-s] [-f <file>] "message"
 # Options:
-#   -d: debug (dim)
 #   -i: info (default, blue)
 #   -w: warning (yellow)
 #   -e: error (red)
@@ -13,7 +12,6 @@
 function log() {
     local OPTIND=1
     local color_reset="\033[0m"
-    local color_dim="\033[2m"
     local color_blue="\033[0;34m"
     local color_red="\033[0;31m"
     local color_yellow="\033[0;33m"
@@ -23,13 +21,8 @@ function log() {
     local color="$color_blue"
     local output_file=""
 
-    # Process options
-    while getopts "diwesf:" opt; do
+    while getopts "iwesf:" opt; do
         case "$opt" in
-            d)
-                type="DEBUG"
-                color="$color_dim"
-                ;;
             i)
                 type="INFO"
                 color="$color_blue"

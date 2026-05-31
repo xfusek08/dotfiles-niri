@@ -1,0 +1,34 @@
+#!/usr/bin/env zsh
+#
+# zen-browser-lib - Shared helpers for zen-browser-* scripts
+#
+# Source this file at the top of any zen-browser script:
+#   SCRIPT_DIR="${0:A:h}"
+#   source "$SCRIPT_DIR/zen-browser-lib"
+
+# Pull in the canonical log function from shell_functions
+source "$HOME/.config/zsh/functions/log"
+
+# --- Detect Zen profile directory ---
+function zen_browser_detect_profile() {
+    if [[ -d "$HOME/.zen" ]]; then
+        echo "$HOME/.zen"
+    elif [[ -d "$HOME/.config/zen" ]]; then
+        echo "$HOME/.config/zen"
+    else
+        log -e "No Zen profile directory found (~/.zen or ~/.config/zen)"
+        log -e "Create the target directory first, then retry."
+        exit 1
+    fi
+}
+
+# --- Human-readable file size ---
+function human_size() {
+    du -h "$1" | cut -f1
+}
+
+# --- Error helper ---
+function die() {
+    log -e "$*"
+    exit 1
+}
