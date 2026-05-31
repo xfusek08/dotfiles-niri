@@ -137,6 +137,7 @@ in {
     eza       # Modern ls replacement with icons
     fastfetch # System info display (neofetch alternative)
     ripgrep   # Fast grep alternative (rg)
+    tealdeer  # TLDR man page summaries (tldr)
     yazi      # Terminal file manager
     opencode  # AI coding terminal tool.
 
