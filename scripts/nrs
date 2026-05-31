@@ -10,9 +10,6 @@
 #   nrs --upgrade    # same (also passed to nixos-rebuild)
 
 set -euo pipefail
-NIXOS_CONFIG="${NIXOS_CONFIG:-.}"
-SCRIPT_DIR="${0:A:h}"
-source "$SCRIPT_DIR/zen-browser-lib"
 
 cd "$NIXOS_CONFIG"
 
