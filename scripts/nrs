@@ -10,12 +10,14 @@
 #   nrs --upgrade    # same (also passed to nixos-rebuild)
 
 set -euo pipefail
-: "${NIXOS_CONFIG:?NIXOS_CONFIG not set}"
+NIXOS_CONFIG="${NIXOS_CONFIG:-.}"
 SCRIPT_DIR="${0:A:h}"
 source "$SCRIPT_DIR/zen-browser-lib"
 
+cd "$NIXOS_CONFIG"
+
 log -i "Updating flake inputs"
-nix flake update "$NIXOS_CONFIG"
+nix flake update
 
 log -i "Creating Zen Browser backup"
 zen-browser-backup --timestamp

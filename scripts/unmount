@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+#
+# unmount - Safely unmount removable media
+#
+# Lists mounted removable drives under /run/media
+# and lets you select one to unmount via fzf.
+#
+# Usage:
+#   unmount
+#
+# Dependencies:
+#   findmnt (util-linux), fzf, udisksctl (udisks2)
+
+set -euo pipefail
+
+MOUNT_POINT=$(findmnt -nlo TARGET | grep ^/run/media | fzf --prompt="Unmount: ")
+
+if [[ -z "$MOUNT_POINT" ]]; then
+    exit 0
+fi
+
+DEVICE=$(findmnt -nlo SOURCE --target "$MOUNT_POINT")
+udisksctl unmount -b "$DEVICE"
