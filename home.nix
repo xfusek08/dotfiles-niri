@@ -213,10 +213,18 @@ in {
   };
 
   # DMS include files for niri - these MUST exist before niri starts
-  # DMS will populate them with theme colors, layout, and keybinds
-  home.file.".config/niri/dms/colors.kdl".text = "// Auto-populated by DMS\n";
-  home.file.".config/niri/dms/layout.kdl".text = "// Auto-populated by DMS\n";
-  home.file.".config/niri/dms/outputs.kdl".text = "// Auto-populated by DMS\n";
-  home.file.".config/niri/dms/alttab.kdl".text = "// Auto-populated by DMS\n";
-  home.file.".config/niri/dms/binds.kdl".text = "// Auto-populated by DMS\n";
+  # DMS will populate them with theme colors, layout, and keybinds.
+  # NOT managed via home.file (creates read-only nix-store symlinks, which
+  # prevents DMS from writing to them). Instead, created as regular files
+  # via home.activation so DMS can overwrite them.
+  home.activation.dmsPlaceholders = {
+    after = [ "writeBoundary" ];
+    before = [];
+    data = ''
+      mkdir -p "${homeDir}/.config/niri/dms"
+      for f in colors layout outputs alttab binds; do
+        [ -f "${homeDir}/.config/niri/dms/$f.kdl" ] || touch "${homeDir}/.config/niri/dms/$f.kdl"
+      done
+    '';
+  };
 }
