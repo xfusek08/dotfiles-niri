@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+source "$SCRIPTS_FNS/log"
+
 MAX_ATTEMPTS=40  # 40 * 0.5s = 20s
 
 log -i "Waiting for StatusNotifierWatcher (DMS tray)..."

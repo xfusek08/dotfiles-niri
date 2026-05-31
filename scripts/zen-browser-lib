@@ -7,7 +7,7 @@
 #   source "$SCRIPT_DIR/zen-browser-lib"
 
 # Pull in the canonical log function from shell_functions
-source "$HOME/.config/zsh/functions/log"
+source "$SCRIPTS_FNS/log"
 
 # --- Detect Zen profile directory ---
 function zen_browser_detect_profile() {

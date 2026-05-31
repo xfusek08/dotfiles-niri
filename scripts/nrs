@@ -11,6 +11,8 @@
 
 set -euo pipefail
 
+source "$SCRIPTS_FNS/log"
+
 cd "$NIXOS_CONFIG"
 
 log -i "Updating flake inputs"

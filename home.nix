@@ -5,8 +5,14 @@
 # This file configures user-specific packages, dotfiles, and programs
 # =============================================================================
 
-{ config, pkgs, inputs, ... }: {
+{ config, pkgs, inputs, ... }:
 
+let
+  homeDir   = config.home.homeDirectory;
+  xdgCfg    = "${homeDir}/.config";
+  repoDir   = "${homeDir}/repo";
+  nixCfg    = "${repoDir}/dotfiles-niri";
+in {
   # ===========================================================================
   # IMPORTS
   # ===========================================================================
@@ -29,8 +35,9 @@
 
   # Canonical paths — scripts use these instead of assuming structure
   home.sessionVariables = {
-    REPO          = "/home/petr/repo";
-    NIXOS_CONFIG  = "/home/petr/repo/dotfiles-niri";
+    REPO          = repoDir;
+    NIXOS_CONFIG  = nixCfg;
+    SCRIPTS_FNS   = "${xdgCfg}/zsh/functions";
   };
 
   # ===========================================================================
