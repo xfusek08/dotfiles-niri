@@ -142,38 +142,6 @@ in {
   programs.thunar.enable = true;
   programs.xfconf.enable = true; # Persist Thunar preferences
 
-  # # ===========================================================================
-  # # IDLE MANAGEMENT
-  # # ===========================================================================
-  # # DMS handles the lock screen UI; swayidle enforces timeouts
-  # services.swayidle = {
-  #   enable = true;
-  #   events = [
-  #     { # Lock after 5 min inactivity
-  #       timeout = 300;
-  #       command = "${dmsPkg}/bin/dms ipc call lock lock";
-  #       resumeCommand = "${pkgs.coreutils}/bin/echo unlocked";
-  #     }
-  #     { # Power off monitors after 10 min
-  #       timeout = 600;
-  #       command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
-  #       resumeCommand = "${pkgs.coreutils}/bin/echo monitors-on";
-  #     }
-  #     { # Suspend after 15 min
-  #       timeout = 900;
-  #       command = "${pkgs.systemd}/bin/systemctl suspend";
-  #     }
-  #     { # Lock before sleep
-  #       event = "before-sleep";
-  #       command = "${dmsPkg}/bin/dms ipc call lock lock";
-  #     }
-  #     { # Lock on manual lock request
-  #       event = "lock";
-  #       command = "${dmsPkg}/bin/dms ipc call lock lock";
-  #     }
-  #   ];
-  # };
-
   # ===========================================================================
   # SECURITY
   # ===========================================================================
@@ -213,28 +181,29 @@ in {
     wget      # CLI tool for downloading files
 
     # --- Wayland Utilities ---
-    grim               # Screenshot capture tool
-    slurp              # Screen region selector (works with grim)
-    swappy             # Screenshot annotation/editor
-    swaybg             # Wallpaper setter for Wayland
-    swaylock           # Screen locker for Wayland
+    # grim               # Screenshot capture tool
+    # slurp              # Screen region selector (works with grim)
+    # swappy             # Screenshot annotation/editor
+    # swaybg             # Wallpaper setter for Wayland
+    # swayidle           # Idle management daemon (timeouts for lock/suspend)
+    # swaylock           # Screen locker for Wayland
     wl-clipboard       # Clipboard utilities (wl-copy, wl-paste)
     xwayland-satellite # XWayland for running X11 apps on Wayland
 
     # --- Desktop Integration ---
-    accountsservice  # User account info (for DMS user menu)
-    brightnessctl    # Screen brightness control
-    pkgs.mate-polkit # PolicyKit authentication dialog (used by DMS)
-    playerctl        # MPRIS media player control (for media keys)
-    libnotify        # Notification library (for various apps)
+    # accountsservice  # User account info (for DMS user menu)
+    # brightnessctl    # Screen brightness control
+    # pkgs.mate-polkit # PolicyKit authentication dialog (used by DMS)
+    # playerctl        # MPRIS media player control (for media keys)
+    # libnotify        # Notification library (for various apps)
 
     # --- Theming & Appearance ---
-    matugen           # Material You color palette generator
-    qt6Packages.qt6ct # Qt6 configuration tool (for Matugen theming)
+    # matugen           # Material You color palette generator
+    # qt6Packages.qt6ct # Qt6 configuration tool (for Matugen theming)
 
     # --- DMS (Dank Material Shell) Dependencies ---
-    cava             # Audio visualizer
-    qt6.qtmultimedia # Media controls and system sounds
+    # cava             # Audio visualizer
+    # qt6.qtmultimedia # Media controls and system sounds
 
     # --- Web Browser ---
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
