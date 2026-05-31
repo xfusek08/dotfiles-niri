@@ -133,12 +133,15 @@
     yazi      # Terminal file manager
     opencode  # AI coding terminal tool.
 
+    # --- DE system ---
+    libnotify # Desktop notifications (notify-send)
+
     # --- ICON THemes ---
     adwaita-icon-theme
     hicolor-icon-theme 
 
     # --- GUI Applications ---
-    vscode # Visual Studio Code editor
+    vscode    # Visual Studio Code editor
     insync # Google Drive sync
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
     

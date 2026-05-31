@@ -20,4 +20,9 @@ if [[ -z "$MOUNT_POINT" ]]; then
 fi
 
 DEVICE=$(findmnt -nlo SOURCE --target "$MOUNT_POINT")
-udisksctl unmount -b "$DEVICE"
+
+if udisksctl unmount -b "$DEVICE"; then
+    notify-send "Unmounted" "$(basename "$MOUNT_POINT")"
+else
+    notify-send -u critical "Failed to unmount" "$(basename "$MOUNT_POINT")"
+fi
