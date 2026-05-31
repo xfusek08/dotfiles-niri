@@ -3,7 +3,7 @@
 # zen-browser-restore
 #
 # Restores Zen Browser profile data from a backup archive.
-# The archive must be a .tar.gz created by zen-browser-backup.
+# The archive must be a .zip created by zen-browser-backup.
 #
 # Usage:
 #   zen-browser-restore <backup-file>
@@ -27,7 +27,7 @@ fi
 BACKUP_FILE="$1"
 
 [[ -f "$BACKUP_FILE" ]] || die "Backup file not found: $BACKUP_FILE"
-[[ "$BACKUP_FILE" == *.tar.gz ]] || die "Expected a .tar.gz archive, got: $BACKUP_FILE"
+[[ "$BACKUP_FILE" == *.zip ]] || die "Expected a .zip archive, got: $BACKUP_FILE"
 
 PROFILE_DIR=$(zen_browser_detect_profile)
 
@@ -42,7 +42,7 @@ if [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
     exit 0
 fi
 
-tar -xzf "$BACKUP_FILE" -C "$(dirname "$PROFILE_DIR")"
+unzip -o "$BACKUP_FILE" -d "$(dirname "$PROFILE_DIR")"
 
 log -s "Restore completed to: $PROFILE_DIR"
 log -i "It is recommended to:"

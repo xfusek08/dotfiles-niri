@@ -44,7 +44,7 @@ while [[ $# -gt 0 ]]; do
             echo "Usage: zen-browser-backup [--backup-dir <dir>] [--name <name>] [--timestamp]"
             echo ""
             echo "Creates a backup of Zen Browser profile data."
-            echo "Excludes: install dir (zen/*), archives (*.tar.gz, *.zip), storage (*/storage/*)"
+            echo "Excludes: install dir (zen/*), archives (*.zip, *.tar.gz), storage (*/storage/*)"
             echo ""
             echo "Environment:"
             echo "  SYNCED_BACKUP_DIR   Overrides default backup directory ($HOME/backups)"
@@ -64,18 +64,16 @@ FILENAME="$BACKUP_NAME"
 if [[ "$USE_TIMESTAMP" == "true" ]]; then
     FILENAME="${FILENAME}-$(date +%Y%m%d-%H%M%S)"
 fi
-FILENAME="${FILENAME}.tar.gz"
+FILENAME="${FILENAME}.zip"
 BACKUP_PATH="$BACKUP_DIR/$FILENAME"
 
 log -i "Backing up Zen Browser profile from: $PROFILE_DIR"
 log -i "Creating archive: $BACKUP_PATH"
 
-tar -czf "$BACKUP_PATH" \
-    --exclude='zen/*' \
-    --exclude='*.tar.gz' \
-    --exclude='*.zip' \
-    --exclude='*/storage/*' \
-    -C "$(dirname "$PROFILE_DIR")" \
-    "$(basename "$PROFILE_DIR")"
+cd "$(dirname "$PROFILE_DIR")" && zip -r "$BACKUP_PATH" "$(basename "$PROFILE_DIR")" \
+    -x 'zen/*' \
+    -x '*.tar.gz' \
+    -x '*.zip' \
+    -x '*/storage/*'
 
 log -s "Backup completed: $BACKUP_PATH ($(human_size "$BACKUP_PATH"))"
