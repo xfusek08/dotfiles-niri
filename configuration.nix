@@ -146,8 +146,6 @@ in {
   # ===========================================================================
   # System services and daemons
 
-  services.gnome.gnome-keyring.enable = true;
-
   services.openssh.enable = true;               # SSH server for remote access
   services.power-profiles-daemon.enable = true; # Power management profiles
   services.upower.enable = true;                # Battery/power device monitoring
