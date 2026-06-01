@@ -146,10 +146,7 @@ in {
   # ===========================================================================
   # System services and daemons
 
-  services.gnome.gnome-keyring = {
-    enable = true;
-    components = [ "pkcs11" "secrets" ];  # NOT "ssh" — we use gcr-ssh-agent
-  };
+  services.gnome.gnome-keyring.enable = true;
 
   services.openssh.enable = true;               # SSH server for remote access
   services.power-profiles-daemon.enable = true; # Power management profiles
