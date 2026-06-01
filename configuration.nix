@@ -173,6 +173,7 @@ in {
     p7zip             # 7z archive utility
     zip               # Zip compression
     unzip             # Zip decompression
+    killall           # Kill processes by name
   ];
 
   # ===========================================================================
