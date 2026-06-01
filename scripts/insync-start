@@ -20,4 +20,4 @@ log -i "StatusNotifierWatcher is ready"
 
 log -i "Starting Insync..."
 
-insync start --no-daemon
+QT_QPA_PLATFORM=xcb insync start --no-daemon
