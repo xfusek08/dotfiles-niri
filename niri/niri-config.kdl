@@ -143,7 +143,7 @@ layout {
     //   together with the previously focused column.
     center-focused-column "never"
 
-    // You can customize the widths that "switch-preset-column-width" (Alt+R) toggles between.
+    // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
     preset-column-widths {
         // Proportion sets the width as a fraction of the output width, taking gaps into account.
         // For example, you can perfectly fit four windows sized "proportion 0.25" on an output.
@@ -151,6 +151,7 @@ layout {
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
+        proportion 0.9
 
         // Fixed sets the width in logical pixels exactly.
         // fixed 1920
@@ -160,7 +161,7 @@ layout {
     // preset-window-heights { }
 
     // You can change the default width of the new windows.
-    default-column-width { proportion 0.5; }
+    default-column-width { proportion 0.9; }
     // If you leave the brackets empty, the windows themselves will decide their initial width.
     // default-column-width {}
 
@@ -303,7 +304,7 @@ cursor {
 spawn-at-startup "xwayland-satellite"
 
 // Insync Google Drive sync - waits for DMS tray before starting
-spawn-sh-at-startup "~/.local/bin/insync-start"
+// spawn-sh-at-startup "~/.local/bin/insync-start"
 
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
@@ -397,6 +398,7 @@ layer-rule {
 }
 
 overview {
+    zoom 0.25
     workspace-shadow {
         off
     }
@@ -659,6 +661,11 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
 }
+
+hotkey-overlay {
+    skip-at-startup
+}
+
 
 // =============================================================================
 // DMS DYNAMIC CONFIGURATION INCLUDES
