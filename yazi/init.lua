@@ -180,3 +180,7 @@ function Linemode:permissions_size()
     local s = format_size(self._file:size())
     return ui.Line({ p, ' ', s })
 end
+
+-- Custom plugins
+
+require("folder-rules"):setup()

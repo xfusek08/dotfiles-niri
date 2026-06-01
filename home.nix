@@ -197,6 +197,7 @@ in {
   home.file.".config/yazi/yazi.toml".source = ./yazi/yazi.toml;
   home.file.".config/yazi/keymap.toml".source = ./yazi/keymap.toml;
   home.file.".config/yazi/theme.toml".source = ./yazi/theme.toml;
+  home.file.".config/yazi/plugins".source = ./yazi/plugins;
 
   # Copy package.toml (not symlink) so yazi can write to it, then install/upgrade packages
   home.activation.yaziPackageToml = {
