@@ -150,9 +150,10 @@ in {
     hicolor-icon-theme
 
     # --- GUI Applications ---
-    vscode    # Visual Studio Code editor
+    vscode # Visual Studio Code editor
     insync # Google Drive sync
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
+    brave # Brave Browser (Chromium-based) for development/testing (Zen is default for regular browsing)
     
     # --- yazi dependencies ---
     jq
