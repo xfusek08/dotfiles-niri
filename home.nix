@@ -39,6 +39,7 @@ in {
     NIXOS_CONFIG  = nixCfg;
     SCRIPTS_FNS   = "${xdgCfg}/zsh/functions";
     SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/gcr/ssh";
+    SSH_ASKPASS   = "${pkgs.ssh-askpass-fullscreen}/bin/ssh-askpass-fullscreen";
   };
   
   services.gnome-keyring = {
@@ -150,6 +151,7 @@ in {
 
     # --- DE system ---
     libnotify # Desktop notifications (notify-send)
+    ssh-askpass-fullscreen # Graphical SSH passphrase prompt (used by gcr-ssh-agent)
 
     # --- ICON THemes ---
     adwaita-icon-theme
