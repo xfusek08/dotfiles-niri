@@ -177,6 +177,7 @@ in {
     zip                # Zip compression
     unzip              # Zip decompression
     killall            # Kill processes by name
+    nodejs             # JavaScript runtime (needed for some tooling that cannot run solely in bun).
   ];
 
   # ===========================================================================
