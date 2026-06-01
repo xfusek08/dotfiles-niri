@@ -110,6 +110,9 @@ in {
   # ===========================================================================
   # Window manager, compositor, and desktop integration
 
+  # Dconf - Required by GTK apps for GSettings schema access (file chooser, etc.)
+  programs.dconf.enable = true;
+
   # Niri - Scrollable tiling Wayland compositor
   # Using nixpkgs niri (25.11+) instead of niri-flake for DMS compatibility
   # niri-flake doesn't support 'include' directives needed for DMS theming
@@ -154,6 +157,7 @@ in {
   services.accounts-daemon.enable = true;       # AccountsService D-Bus for user info (needed by DMS)
   services.printing.enable = true;              # CUPS printing service
   services.fprintd.enable = true;               # Fingerprint auth for lock screen
+  services.gnome.gcr-ssh-agent.enable = false;  # Disable gcr SSH agent; only use OpenSSH ssh-agent
 
   # ===========================================================================
   # SYSTEM PACKAGES
