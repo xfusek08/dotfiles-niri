@@ -87,7 +87,7 @@ keymap = [
 	{ on = "<C-s>",      run = "escape --search",                       desc = "Cancel the ongoing search" },
 	{ on = "z",          run = "plugin fzf",                            desc = "Jump to a file/directory via fzf" },
 	{ on = "Z",          run = "plugin zoxide",                         desc = "Jump to a directory via zoxide" },
-          
+
 	# Linemode
 	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },
 	{ on = [ "m", "p" ], run = "linemode permissions", desc = "Linemode: permissions" },
@@ -95,6 +95,7 @@ keymap = [
 	{ on = [ "m", "m" ], run = "linemode mtime",       desc = "Linemode: mtime" },
 	{ on = [ "m", "o" ], run = "linemode owner",       desc = "Linemode: owner" },
 	{ on = [ "m", "n" ], run = "linemode none",        desc = "Linemode: none" },
+    { on = [ "m", "a" ], run = "linemode permissions_size",    desc = "Linemode: {permissions} {size}" },
 
 	# Copy
 	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy file URL" },
