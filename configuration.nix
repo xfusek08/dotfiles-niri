@@ -33,6 +33,11 @@ in {
   # - flakes: Reproducible package management with flake.nix
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # Enable nix-ld to allow running pre-built binaries (e.g., Node/Bun native modules like sharp)
+  # that expect libraries in standard FHS locations.
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [ stdenv.cc.cc.lib ];
+
   # ===========================================================================
   # BOOT CONFIGURATION
   # ===========================================================================
