@@ -174,6 +174,7 @@ in {
     zip                # Zip compression
     unzip              # Zip decompression
     killall            # Kill processes by name
+    gtk3   # GTK schema for file chooser (needed by insync)
   ];
 
   # ===========================================================================
