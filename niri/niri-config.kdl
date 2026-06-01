@@ -305,7 +305,7 @@ cursor {
 spawn-at-startup "xwayland-satellite"
 
 // Insync Google Drive sync - waits for DMS tray before starting
-// spawn-sh-at-startup "~/.local/bin/insync-start"
+spawn-at-startup "zsh" "-l" "-c" "~/.local/bin/insync-start"
 
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.

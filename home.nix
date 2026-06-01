@@ -155,6 +155,7 @@ in {
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
     brave # Brave Browser (Chromium-based) for development/testing (Zen is default for regular browsing)
     logseq # Note-taking app
+    discord # Chat app for communities and gaming
     
     # --- yazi dependencies ---
     jq
@@ -170,6 +171,16 @@ in {
   # Drop scripts into scripts/ and they land in ~/.local/bin after rebuild
   # Already in PATH via sessionPath below
   home.sessionPath = [ "$HOME/.local/bin" ];
+
+  # Remove insync autostart desktop file — insync is launched exclusively
+  # from niri config via scripts/insync-start, not via systemd autostart.
+  home.activation.removeInsyncAutostart = {
+    after = [ "writeBoundary" ];
+    before = [];
+    data = ''
+      rm -f "${homeDir}/.config/autostart/insync.desktop"
+    '';
+  };
 
   home.file.".local/bin" = {
     source = ./scripts;
