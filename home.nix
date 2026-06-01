@@ -39,6 +39,8 @@ in {
     NIXOS_CONFIG  = nixCfg;
     SCRIPTS_FNS   = "${xdgCfg}/zsh/functions";
     SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/ssh-agent";
+    # Fix for Node/Bun native modules (e.g., sharp) that need libstdc++ at runtime
+    LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
   };
   
   services.gnome-keyring = {
