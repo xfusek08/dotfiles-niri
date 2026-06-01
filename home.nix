@@ -99,12 +99,7 @@ in {
   # SSH
   # ===========================================================================
 
-  programs.ssh = {
-    enable = true;
-    extraConfig = ''
-      AddKeysToAgent yes
-    '';
-  };
+  programs.ssh.enable = true;
   
   # ===========================================================================
   # STARSHIP PROMPT
