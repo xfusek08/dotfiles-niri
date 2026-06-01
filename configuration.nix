@@ -110,14 +110,11 @@ in {
   # ===========================================================================
   # Window manager, compositor, and desktop integration
 
-  # Dconf - Required by GTK apps for GSettings schema access (file chooser, etc.)
-  programs.dconf.enable = true;
-
   # Niri - Scrollable tiling Wayland compositor
   # Using nixpkgs niri (25.11+) instead of niri-flake for DMS compatibility
   # niri-flake doesn't support 'include' directives needed for DMS theming
   programs.niri.enable = true;
-  programs.dsearch.enable = true;                # Fast filesystem search for DMS launcher
+  programs.dsearch.enable = true; # Fast filesystem search for DMS launcher
 
   # XDG Desktop Portal - Provides standardized desktop APIs for:
   # - Screen sharing/casting
@@ -157,8 +154,10 @@ in {
   services.accounts-daemon.enable = true;       # AccountsService D-Bus for user info (needed by DMS)
   services.printing.enable = true;              # CUPS printing service
   services.fprintd.enable = true;               # Fingerprint auth for lock screen
-  services.gnome.gcr-ssh-agent.enable = true;   # Use gcr SSH agent (with gnome-keyring auto-unlock)
-  programs.ssh.startAgent = false;               # Disable OpenSSH ssh-agent to avoid conflict
+  services.gnome.gnome-keyring.enable = true;   # PAM auto-starts keyring; unlocks on login (needed by gcr)
+  services.gnome.gcr-ssh-agent.enable = false;  # Modern SSH agent; stores passphrases via gnome-keyring
+  programs.ssh.startAgent = false;              # Disable OpenSSH ssh-agent to avoid conflict
+
 
   # ===========================================================================
   # SYSTEM PACKAGES
@@ -179,7 +178,6 @@ in {
     zip                # Zip compression
     unzip              # Zip decompression
     killall            # Kill processes by name
-    gtk3   # GTK schema for file chooser (needed by insync)
   ];
 
   # ===========================================================================

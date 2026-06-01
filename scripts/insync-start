@@ -16,8 +16,8 @@ while ! dbus-send --session --print-reply --dest=org.freedesktop.DBus /org/freed
     log -i "Attempt ${attempt}/${MAX_ATTEMPTS}: StatusNotifierWatcher not ready yet..."
     sleep 0.5
 done
-log -i "StatusNotifierWatcher is ready"
 
+log -i "StatusNotifierWatcher is ready"
 log -i "Starting Insync..."
 
 QT_QPA_PLATFORM=xcb insync start --no-daemon
