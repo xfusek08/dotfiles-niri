@@ -35,6 +35,7 @@
         "libnotify",
         "libxkbcommon",
         "linemode",
+        "logseq",
         "matugen",
         "MPRIS",
         "neofetch",
