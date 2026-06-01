@@ -38,13 +38,12 @@ in {
     REPO          = repoDir;
     NIXOS_CONFIG  = nixCfg;
     SCRIPTS_FNS   = "${xdgCfg}/zsh/functions";
-    SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/gcr/ssh";
-    SSH_ASKPASS   = "${pkgs.ssh-askpass-fullscreen}/bin/ssh-askpass-fullscreen";
+    SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/ssh-agent";
   };
   
   services.gnome-keyring = {
     enable = true;
-    components = [ "pkcs11" "secrets" "ssh" ];
+    components = [ "pkcs11" "secrets" ];
   };
 
   # ===========================================================================
@@ -94,6 +93,17 @@ in {
     enable = true;
     settings.user.name = "Petr Fusek";              # Git commit author name
     settings.user.email = "petr.fusek97@gmail.com"; # Git commit author email
+  };
+
+  # ===========================================================================
+  # SSH
+  # ===========================================================================
+
+  programs.ssh = {
+    enable = true;
+    extraConfig = ''
+      AddKeysToAgent yes
+    '';
   };
   
   # ===========================================================================
@@ -151,7 +161,7 @@ in {
 
     # --- DE system ---
     libnotify # Desktop notifications (notify-send)
-    ssh-askpass-fullscreen # Graphical SSH passphrase prompt (used by gcr-ssh-agent)
+
 
     # --- ICON THemes ---
     adwaita-icon-theme
