@@ -139,8 +139,9 @@ in {
   # ===========================================================================
   # Authentication and authorization
 
-  security.polkit.enable = true; # Required by udisks2 for non-root mount/unmount
-
+  security.polkit.enable = true;              # Required by udisks2 for non-root mount/unmount
+  services.gnome.gnome-keyring.enable = true; # PAM auto-starts keyring; unlocks on login (needed by gcr)
+  
   # ===========================================================================
   # SERVICES
   # ===========================================================================
@@ -154,10 +155,6 @@ in {
   services.accounts-daemon.enable = true;       # AccountsService D-Bus for user info (needed by DMS)
   services.printing.enable = true;              # CUPS printing service
   services.fprintd.enable = true;               # Fingerprint auth for lock screen
-  services.gnome.gnome-keyring.enable = true;   # PAM auto-starts keyring; unlocks on login (needed by gcr)
-  services.gnome.gcr-ssh-agent.enable = false;  # Modern SSH agent; stores passphrases via gnome-keyring
-  programs.ssh.startAgent = false;              # Disable OpenSSH ssh-agent to avoid conflict
-
 
   # ===========================================================================
   # SYSTEM PACKAGES

@@ -38,6 +38,12 @@ in {
     REPO          = repoDir;
     NIXOS_CONFIG  = nixCfg;
     SCRIPTS_FNS   = "${xdgCfg}/zsh/functions";
+    SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/gcr/ssh";
+  };
+  
+  services.gnome-keyring = {
+    enable = true;
+    components = [ "pkcs11" "secrets" ];
   };
 
   # ===========================================================================
