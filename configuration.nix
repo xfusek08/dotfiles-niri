@@ -161,19 +161,19 @@ in {
   # Packages installed system-wide for all users
 
   environment.systemPackages = with pkgs; [
-    git               # Version control system
-    file              # File type identification utility
-    mesa-demos        # OpenGL/Vulkan demos and utilities
-    ghostty           # Terminal emulator
-    alacritty         # Backup terminal
-    wget              # CLI download tool
-    wl-clipboard      # Clipboard utilities (wl-copy, wl-paste)
+    git                # Version control system
+    file               # File type identification utility
+    mesa-demos         # OpenGL/Vulkan demos and utilities
+    ghostty            # Terminal emulator
+    alacritty          # Backup terminal
+    wget               # CLI download tool
+    wl-clipboard       # Clipboard utilities (wl-copy, wl-paste)
     xwayland-satellite # XWayland for running X11 apps on Wayland
-    cups-pk-helper    # PolicyKit helper for CUPS (needed by DMS)
-    p7zip             # 7z archive utility
-    zip               # Zip compression
-    unzip             # Zip decompression
-    killall           # Kill processes by name
+    cups-pk-helper     # PolicyKit helper for CUPS (needed by DMS)
+    p7zip              # 7z archive utility
+    zip                # Zip compression
+    unzip              # Zip decompression
+    killall            # Kill processes by name
   ];
 
   # ===========================================================================
