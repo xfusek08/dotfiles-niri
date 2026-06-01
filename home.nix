@@ -63,6 +63,11 @@ in {
     enableAudioWavelength = true;  # Audio visualizer widget (uses cava)
     enableCalendarEvents = true;   # Calendar integration (uses khal)
   };
+  
+  # ===========================================================================
+  # SSH AGENT
+  # ===========================================================================
+  services.gnome.gcr-ssh-agent.enable = false;
 
   # ===========================================================================
   # DEFAULT APPLICATIONS
@@ -164,14 +169,8 @@ in {
     poppler
     imagemagick
   ];
-
-  # ===========================================================================
-  # SCRIPTS DIRECTORY
-  # ===========================================================================
-  # Drop scripts into scripts/ and they land in ~/.local/bin after rebuild
-  # Already in PATH via sessionPath below
-  home.sessionPath = [ "$HOME/.local/bin" ];
-
+  
+  
   # Remove insync autostart desktop file — insync is launched exclusively
   # from niri config via scripts/insync-start, not via systemd autostart.
   home.activation.removeInsyncAutostart = {
@@ -181,6 +180,14 @@ in {
       rm -f "${homeDir}/.config/autostart/insync.desktop"
     '';
   };
+
+  # ===========================================================================
+  # SCRIPTS DIRECTORY
+  # ===========================================================================
+  # Drop scripts into scripts/ and they land in ~/.local/bin after rebuild
+  # Already in PATH via sessionPath below
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
 
   home.file.".local/bin" = {
     source = ./scripts;
