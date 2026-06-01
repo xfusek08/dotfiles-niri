@@ -157,7 +157,8 @@ in {
   services.accounts-daemon.enable = true;       # AccountsService D-Bus for user info (needed by DMS)
   services.printing.enable = true;              # CUPS printing service
   services.fprintd.enable = true;               # Fingerprint auth for lock screen
-  services.gnome.gcr-ssh-agent.enable = false;  # Disable gcr SSH agent; only use OpenSSH ssh-agent
+  services.gnome.gcr-ssh-agent.enable = true;   # Use gcr SSH agent (with gnome-keyring auto-unlock)
+  programs.ssh.startAgent = false;               # Disable OpenSSH ssh-agent to avoid conflict
 
   # ===========================================================================
   # SYSTEM PACKAGES

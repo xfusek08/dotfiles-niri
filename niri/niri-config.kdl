@@ -88,6 +88,7 @@ environment {
     QT_QPA_PLATFORMTHEME "gtk3"            // Qt theme integration with GTK
     QT_QPA_PLATFORMTHEME_QT6 "gtk3"        // Qt6 theme integration with GTK
     TERMINAL "ghostty"                     // Default terminal emulator
+    SSH_AUTH_SOCK "/run/user/1000/gcr/ssh" // gcr SSH agent socket (single agent, no conflict)
 }
 
 // You can configure outputs by their name, which you can find
