@@ -27,6 +27,11 @@ in {
 
   # Allow installation of proprietary/closed-source packages (e.g., VS Code)
   nixpkgs.config.allowUnfree = true;
+  
+  # Logseq stuck on electron_39 due to upstream incompatibility with newer electron
+  # https://github.com/logseq/logseq/issues/12493
+  # TODO: Remove this before nex flake update.
+  nixpkgs.config.permittedInsecurePackages = [ "electron-39.8.10" ];
 
   # Enable experimental Nix features:
   # - nix-command: New CLI commands (nix build, nix run, etc.)
