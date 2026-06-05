@@ -208,6 +208,15 @@ in {
   };
 
   # ===========================================================================
+  # MANUAL COMPLETIONS DIRECTORY
+  # ===========================================================================
+  # Zsh completions for custom scripts, autoloaded via fpath
+  home.file.".config/zsh/completions/manual" = {
+    source = ./completions/manual;
+    recursive = true;
+  };
+
+  # ===========================================================================
   # DOTFILES
   # ===========================================================================
   # Configuration files to symlink into home directory

@@ -9,12 +9,14 @@
 # Add shell_functions/ dir to fpath so zsh knows where to find functions
 fpath=("${XDG_CONFIG_HOME:-$HOME/.config}/zsh/functions" $fpath)
 
-# Autoload every file in that directory as a lazy-loaded function.
-# Breakdown: $fpath[1] is our directory, /* globs all entries inside,
-# (.:t) is a glob qualifier: . matches only regular files,
-# :t extracts just the filename (the function name).
-# So this picks up every file and tells zsh "lazy-load this as a function".
-autoload -Uz $fpath[1]/*(-.:t)
+# Add manual completions dir to fpath
+fpath=("${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions/manual" $fpath)
+
+# Autoload every file in shell_functions as a lazy-loaded function.
+local func_dir="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/functions"
+# Breakdown: /* globs all entries inside, (-.:t) is a glob qualifier:
+# - follows symlinks, . matches only regular files, :t extracts filename.
+autoload -Uz $func_dir/*(-.:t)
 
 # ~~~~~~~~~~~~~~~ Zinit Setup ~~~~~~~~~~~~~~~
 
