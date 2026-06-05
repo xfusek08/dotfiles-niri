@@ -81,7 +81,12 @@ in {
   # ===========================================================================
   # Container and VM configuration
 
-  virtualisation.docker.enable = true; # Enable Docker container runtime
+  virtualisation.docker = {
+    enable = true; # Enable Docker container runtime
+    daemon.settings = {
+      storage-driver = "overlay2";
+    };
+  };
 
   # ===========================================================================
   # USER ACCOUNTS
