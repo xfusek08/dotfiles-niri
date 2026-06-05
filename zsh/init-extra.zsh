@@ -4,13 +4,15 @@
 # Loaded after .zshrc by Home Manager
 # =============================================================================
 
+# ~~~~~~~~~~~~~~~ Completions ~~~~~~~~~~~~~~~
+
+# Add manual completions dir to fpath
+fpath=("${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions/manual" $fpath)
+
 # ~~~~~~~~~~~~~~~ Autoload Functions ~~~~~~~~~~~~~~~
 
 # Add shell_functions/ dir to fpath so zsh knows where to find functions
 fpath=("${XDG_CONFIG_HOME:-$HOME/.config}/zsh/functions" $fpath)
-
-# Add manual completions dir to fpath
-fpath=("${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions/manual" $fpath)
 
 # Autoload every file in shell_functions as a lazy-loaded function.
 local func_dir="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/functions"
@@ -36,6 +38,14 @@ zinit light zsh-users/zsh-completions
 zinit light jirutka/zsh-shift-select
 zinit light aloxaf/fzf-tab
 zinit snippet OMZP::dirhistory
+
+# ~~~~~~~~~~~~~~~ Recompile Completions ~~~~~~~~~~~~~~~
+
+# Home Manager's enableCompletion runs compinit before this file is sourced,
+# so fpath additions above (manual completions, zsh-users/zsh-completions)
+# would be missed without re-running compinit here.
+autoload -Uz compinit
+compinit
 
 # ~~~~~~~~~~~~~~~ Completion Styling ~~~~~~~~~~~~~~~
 
