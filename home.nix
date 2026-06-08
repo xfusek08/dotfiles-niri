@@ -65,6 +65,7 @@ in {
       "text/html"                = "zen.desktop";
       "x-scheme-handler/http"    = "zen.desktop";
       "x-scheme-handler/https"   = "zen.desktop";
+      "image/*"                  = "org.gnome.Loupe.desktop";
     };
   };
 
@@ -126,6 +127,7 @@ in {
     vscode # Visual Studio Code editor
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
     brave # Brave Browser (Chromium-based) for development/testing (Zen is default for regular browsing)
+    loupe # Image viewer with EXIF metadata and navigation
     logseq # Note-taking app
     discord # Chat app for communities and gaming
   ];
