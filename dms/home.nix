@@ -29,6 +29,17 @@ in {
     enableAudioWavelength = true;
     enableCalendarEvents = true;
     enableClipboardPaste = true;
+
+    # Declarative clipboard settings — managed by Nix, not the GUI
+    clipboardSettings = {
+      maxHistory = 5000;
+      maxEntrySize = 10485760;
+      autoClearDays = 30;
+      clearAtStartup = false;
+      disabled = false;
+      disableHistory = false;
+      disablePersist = false;
+    };
   };
 
   # --- Niri Include File Placeholders ---
