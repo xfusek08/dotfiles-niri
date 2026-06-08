@@ -72,6 +72,11 @@
 
   hardware.bluetooth.enable = true; # Enable Bluetooth support
 
+  # DDC/CI — external monitor brightness control via DMS
+  # ddcci-driver exposes DDC/CI-capable monitors as standard backlight devices
+  # (e.g., /sys/class/backlight/ddcci*), so DMS picks them up automatically.
+  services.ddccontrol.enable = true;
+
   # ===========================================================================
   # VIRTUALISATION
   # ===========================================================================
@@ -101,6 +106,7 @@
       "input"  # Access to input devices
       "render" # GPU rendering access
       "docker" # Docker access without sudo
+      "i2c"    # I2C access (required by services.ddccontrol for external monitor brightness)
     ];
     packages = with pkgs; [
       # User-specific packages can be added here
@@ -180,6 +186,7 @@
     killall            # Kill processes by name
     nodejs             # JavaScript runtime (needed for some tooling that cannot run solely in bun).
     bitwarden-desktop  # Password manager — in systemPackages so polkit daemon finds com.bitwarden.Bitwarden.policy for biometric unlock
+    ddcutil            # DDC/CI monitor control (debug/verify external monitor brightness)
   ];
 
   # ===========================================================================
