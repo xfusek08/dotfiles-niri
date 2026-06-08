@@ -18,7 +18,7 @@ in {
   # ===========================================================================
   # External Home Manager modules to include
   imports = [
-    inputs.dms.homeModules.dank-material-shell # Dank Material Shell module
+    ./dms/home.nix                             # Dank Material Shell module
     ./zsh/zsh.nix                              # Zsh shell configuration
     ./bitwarden/bitwarden.nix                  # Bitwarden Desktop config
     ./ghostty/ghostty.nix                      # Ghostty terminal emulator
@@ -53,29 +53,6 @@ in {
     components = [ "pkcs11" "secrets" ];
   };
 
-  # ===========================================================================
-  # DANK MATERIAL SHELL (DMS)
-  # ===========================================================================
-  # Material Design desktop shell configuration
-  # Docs: https://danklinux.com/docs/dankmaterialshell
-
-  programs."dank-material-shell" = {
-    enable = true;
-
-    # --- Systemd Integration ---
-    # Run DMS as a systemd user service (auto-starts with niri.service)
-    systemd = {
-      enable = true;           # Enable systemd service for auto-start
-      restartIfChanged = true; # Auto-restart dms.service on config changes
-    };
-
-    # --- Feature Toggles ---
-    enableSystemMonitoring = true; # System resource widgets (CPU, RAM, etc.)
-    enableVPN = true;              # VPN connection management widget
-    enableDynamicTheming = true;   # Auto-theme based on wallpaper (uses matugen)
-    enableAudioWavelength = true;  # Audio visualizer widget (uses cava)
-    enableCalendarEvents = true;   # Calendar integration (uses khal)
-  };
   
   # ===========================================================================
   # DEFAULT APPLICATIONS
@@ -192,20 +169,4 @@ in {
 
   # Niri window manager config - symlink from this repo to ~/.config/niri/
   home.file.".config/niri/config.kdl".source = ./niri/niri-config.kdl;
-
-  # DMS include files for niri - these MUST exist before niri starts
-  # DMS will populate them with theme colors, layout, and keybinds.
-  # NOT managed via home.file (creates read-only nix-store symlinks, which
-  # prevents DMS from writing to them). Instead, created as regular files
-  # via home.activation so DMS can overwrite them.
-  home.activation.dmsPlaceholders = {
-    after = [ "writeBoundary" ];
-    before = [];
-    data = ''
-      mkdir -p "${homeDir}/.config/niri/dms"
-      for f in colors layout cursor outputs alttab binds; do
-        [ -f "${homeDir}/.config/niri/dms/$f.kdl" ] || touch "${homeDir}/.config/niri/dms/$f.kdl"
-      done
-    '';
-  };
 }

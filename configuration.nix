@@ -5,11 +5,7 @@
 # Location: /etc/nixos/configuration.nix (or in dotfiles repo)
 # =============================================================================
 
-{ config, lib, pkgs, inputs, ... }:
-
-let
-  dmsPkg = inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.dms-shell;
-in {
+{ config, lib, pkgs, inputs, ... }: {
 
   # ===========================================================================
   # IMPORTS
@@ -17,7 +13,7 @@ in {
   # External configuration modules to include
   imports = [
     ./hardware-configuration.nix # Auto-generated hardware-specific settings
-    inputs.dms.nixosModules.greeter    # DankGreeter - Material Design login screen module
+    ./dms/nixos.nix              # DankMaterialShell system module
   ];
 
   # ===========================================================================
@@ -129,8 +125,6 @@ in {
   # Using nixpkgs niri (25.11+) instead of niri-flake for DMS compatibility
   # niri-flake doesn't support 'include' directives needed for DMS theming
   programs.niri.enable = true;
-  programs.dsearch.enable = true; # Fast filesystem search for DMS launcher
-
   # XDG Desktop Portal - Provides standardized desktop APIs for:
   # - Screen sharing/casting
   # - File picker dialogs
@@ -142,13 +136,6 @@ in {
     config.common.default = "gtk";                  # Use GTK portal as default
   };
 
-  # DankGreeter - Material Design styled login/display manager
-  programs."dank-material-shell".greeter = {
-    enable = true;
-    compositor.name = "niri";  # Use Niri as the greeter compositor
-    configHome = "/home/petr"; # Path to DMS config for theme sync
-  };
-
   # ===========================================================================
   # SECURITY
   # ===========================================================================
@@ -156,7 +143,6 @@ in {
 
   security.polkit.enable = true;                         # Required by udisks2 for non-root mount/unmount
   services.gnome.gnome-keyring.enable = true;            # PAM auto-starts keyring; unlocks on login (needed by gcr)
-  security.pam.services.greetd.enableGnomeKeyring = true; # Unlock keyring via greetd PAM (greeter delegates auth to greetd)
   programs.ssh.startAgent = true;
   services.gnome.gcr-ssh-agent.enable = false;
   
@@ -170,7 +156,6 @@ in {
   services.upower.enable = true;                # Battery/power device monitoring
   services.udisks2.enable = true;               # USB drive mounting backend
   services.gvfs.enable = true;                  # Trash, volume listing, file manager integration
-  services.accounts-daemon.enable = true;       # AccountsService D-Bus for user info (needed by DMS)
   services.printing.enable = true;              # CUPS printing service
   services.fprintd.enable = true;               # Fingerprint auth for lock screen
 

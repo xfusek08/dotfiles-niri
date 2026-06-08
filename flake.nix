@@ -10,8 +10,7 @@
 
   inputs = {
     # --- NixOS Packages ---
-    # Using unstable for latest niri (25.11+) which is required for DMS
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     # --- Home Manager ---
     # User-level package and dotfile management
