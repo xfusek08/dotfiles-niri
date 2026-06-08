@@ -20,4 +20,4 @@ done
 log -i "StatusNotifierWatcher is ready"
 log -i "Starting Bitwarden Desktop..."
 
-bitwarden-desktop
+bitwarden
