@@ -20,6 +20,11 @@ in {
   imports = [
     inputs.dms.homeModules.dank-material-shell # Dank Material Shell module
     ./zsh/zsh.nix                              # Zsh shell configuration
+    ./bitwarden/bitwarden.nix                  # Bitwarden Desktop config
+    ./ghostty/ghostty.nix                      # Ghostty terminal emulator
+    ./insync/insync.nix                        # Insync Google Drive sync
+    ./starship/starship.nix                    # Starship prompt
+    ./yazi/yazi.nix                            # Yazi file manager config
   ];
 
   # ===========================================================================
@@ -98,23 +103,6 @@ in {
   };
 
   # ===========================================================================
-  # STARSHIP PROMPT
-  # ===========================================================================
-
-  programs.starship = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-  home.file.".config/starship.toml".source = ./starship/starship.toml;
-
-  # ===========================================================================
-  # GHOSTTY TERMINAL
-  # ===========================================================================
-
-  home.file.".config/ghostty/config".source = ./ghostty/config;
-  home.file.".config/ghostty/themes/dankcolors".source = ./ghostty/themes/dankcolors;
-
-  # ===========================================================================
   # FZF FUZZY FINDER
   # ===========================================================================
 
@@ -146,7 +134,6 @@ in {
     fastfetch # System info display (neofetch alternative)
     ripgrep   # Fast grep alternative (rg)
     tealdeer  # TLDR man page summaries (tldr)
-    yazi      # Terminal file manager
     opencode  # AI coding terminal tool
     bun       # JavaScript runtime & toolkit
 
@@ -160,31 +147,13 @@ in {
 
     # --- GUI Applications ---
     vscode # Visual Studio Code editor
-    insync # Google Drive sync
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
     brave # Brave Browser (Chromium-based) for development/testing (Zen is default for regular browsing)
     logseq # Note-taking app
     discord # Chat app for communities and gaming
-    
-    # --- yazi dependencies ---
-    jq
-    dragon-drop
-    fd
-    poppler
-    imagemagick
   ];
   
   
-  # Remove insync autostart desktop file — insync is launched exclusively
-  # from niri config via scripts/insync-start, not via systemd autostart.
-  home.activation.removeInsyncAutostart = {
-    after = [ "writeBoundary" ];
-    before = [];
-    data = ''
-      rm -f "${homeDir}/.config/autostart/insync.desktop"
-    '';
-  };
-
   # ===========================================================================
   # SCRIPTS DIRECTORY
   # ===========================================================================
@@ -223,30 +192,6 @@ in {
 
   # Niri window manager config - symlink from this repo to ~/.config/niri/
   home.file.".config/niri/config.kdl".source = ./niri/niri-config.kdl;
-
-  # Yazi file manager config
-  # Plugins/flavors managed by yazi: run `ya pkg i` to install, `ya pkg u` to update
-  home.file.".config/yazi/init.lua".source = ./yazi/init.lua;
-  home.file.".config/yazi/yazi.toml".source = ./yazi/yazi.toml;
-  home.file.".config/yazi/keymap.toml".source = ./yazi/keymap.toml;
-  home.file.".config/yazi/theme.toml".source = ./yazi/theme.toml;
-  home.file.".config/yazi/plugins".source = ./yazi/plugins;
-
-  # Copy package.toml (not symlink) so yazi can write to it, then install/upgrade packages
-  home.activation.yaziPackageToml = {
-    after = [ "writeBoundary" ];
-    before = [];
-    data = ''
-      export PATH="${pkgs.git}/bin:$PATH"
-      if [ ! -f "$HOME/.config/yazi/package.toml" ]; then
-        mkdir -p "$HOME/.config/yazi"
-        cp ${./yazi/package.toml} "$HOME/.config/yazi/package.toml"
-        chmod 644 "$HOME/.config/yazi/package.toml"
-      fi
-      ${pkgs.yazi}/bin/ya pkg install 2>/dev/null || true
-      ${pkgs.yazi}/bin/ya pkg upgrade --discard 2>/dev/null || true
-    '';
-  };
 
   # DMS include files for niri - these MUST exist before niri starts
   # DMS will populate them with theme colors, layout, and keybinds.
