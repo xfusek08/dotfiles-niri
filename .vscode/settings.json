@@ -41,6 +41,7 @@
         "libinput",
         "libliftoff",
         "libnotify",
+        "libstdc",
         "libxkbcommon",
         "linemode",
         "logseq",
