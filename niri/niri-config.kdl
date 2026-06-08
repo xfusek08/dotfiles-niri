@@ -307,8 +307,8 @@ spawn-at-startup "xwayland-satellite"
 // Insync Google Drive sync - waits for DMS tray before starting
 spawn-at-startup "zsh" "-l" "-c" "~/.local/bin/insync-start"
 
-// Bitwarden Desktop - password manager
-spawn-at-startup "bitwarden-desktop"
+// Bitwarden Desktop - password manager, waits for DMS tray before starting
+spawn-at-startup "zsh" "-l" "-c" "~/.local/bin/bitwarden-start"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
