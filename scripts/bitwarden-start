@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+
+source "$SCRIPTS_FNS/log"
+
+MAX_ATTEMPTS=40  # 40 * 0.5s = 20s
+
+log -i "Waiting for StatusNotifierWatcher (DMS tray)..."
+attempt=0
+while ! dbus-send --session --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus \
+        org.freedesktop.DBus.NameHasOwner string:org.kde.StatusNotifierWatcher 2>/dev/null | grep -q "true"; do
+    attempt=$(( attempt + 1 ))
+    if (( attempt > MAX_ATTEMPTS )); then
+        log -e "ERROR: StatusNotifierWatcher not available after ${MAX_ATTEMPTS} attempts (20s), aborting"
+        exit 1
+    fi
+    log -i "Attempt ${attempt}/${MAX_ATTEMPTS}: StatusNotifierWatcher not ready yet..."
+    sleep 0.5
+done
+
+log -i "StatusNotifierWatcher is ready"
+log -i "Starting Bitwarden Desktop..."
+
+bitwarden-desktop

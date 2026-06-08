@@ -193,6 +193,7 @@ in {
     unzip              # Zip decompression
     killall            # Kill processes by name
     nodejs             # JavaScript runtime (needed for some tooling that cannot run solely in bun).
+    bitwarden-desktop  # Password manager — in systemPackages so polkit daemon finds com.bitwarden.Bitwarden.policy for biometric unlock
   ];
 
   # ===========================================================================
