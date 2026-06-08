@@ -10,7 +10,7 @@
 
   inputs = {
     # --- NixOS Packages ---
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # --- Home Manager ---
     # User-level package and dotfile management
