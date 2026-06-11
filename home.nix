@@ -156,8 +156,9 @@ in {
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default # Zen Browser (Firefox-based)
     brave # Brave Browser (Chromium-based) for development/testing (Zen is default for regular browsing)
     loupe # Image viewer with EXIF metadata and navigation
-    logseq # Note-taking app
-    discord # Chat app for communities and gaming
+    logseq  # Note-taking app
+    discord  # Chat app for communities and gaming
+    vlc      # Media player (for audiobooks, video, etc.)
   ];
   
   
