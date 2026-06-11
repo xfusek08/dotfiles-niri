@@ -59,7 +59,7 @@ in {
       program_options = {
         automount = true;
         notify = true;
-        # file_manager = "${pkgs.ghostty}/bin/ghostty -e yazi";
+        file_manager = "${pkgs.ghostty}/bin/ghostty -e yazi";
       };
     };
   };
