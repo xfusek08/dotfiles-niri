@@ -161,6 +161,7 @@
   services.power-profiles-daemon.enable = true; # Power management profiles
   services.upower.enable = true;                # Battery/power device monitoring
   services.udisks2.enable = true;               # USB drive mounting backend
+  systemd.services.udisks2.wantedBy = [ "graphical.target" ]; # Ensure auto-start on boot
   services.gvfs.enable = true;                  # Trash, volume listing, file manager integration
   services.printing.enable = true;              # CUPS printing service
   services.fprintd.enable = true;               # Fingerprint auth for lock screen
