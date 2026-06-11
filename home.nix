@@ -57,9 +57,9 @@ in {
     enable = true;
     settings = {
       program_options = {
-        # udiskie will auto-mount removable media
         automount = true;
         notify = true;
+        file_manager = "${pkgs.ghostty}/bin/ghostty -e yazi";
       };
     };
   };
@@ -69,6 +69,14 @@ in {
   # DEFAULT APPLICATIONS
   # ===========================================================================
   # XDG MIME associations — set Zen Browser as default
+
+  xdg.desktopEntries."yazi" = {
+    name = "Yazi";
+    exec = "${pkgs.ghostty}/bin/ghostty -e yazi %f";
+    terminal = false;
+    categories = [ "Utility" "FileManager" ];
+    mimeType = [ "inode/directory" ];
+  };
 
   xdg.mimeApps = {
     enable = true;
@@ -85,6 +93,7 @@ in {
       "image/tiff"               = "org.gnome.Loupe.desktop";
       "image/avif"               = "org.gnome.Loupe.desktop";
       "image/heic"               = "org.gnome.Loupe.desktop";
+      "inode/directory"          = "yazi.desktop";
     };
   };
 
