@@ -53,6 +53,17 @@ in {
     components = [ "pkcs11" "secrets" ];
   };
 
+  services.udiskie = {
+    enable = true;
+    settings = {
+      program_options = {
+        # udiskie will auto-mount removable media
+        automount = true;
+        notify = true;
+      };
+    };
+  };
+
   
   # ===========================================================================
   # DEFAULT APPLICATIONS
