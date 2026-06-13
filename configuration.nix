@@ -149,7 +149,7 @@
 
   security.polkit.enable = true;                         # Required by udisks2 for non-root mount/unmount
   services.gnome.gnome-keyring.enable = true;            # PAM auto-starts keyring; unlocks on login (needed by gcr)
-  programs.ssh.startAgent = true;
+  programs.ssh.startAgent = false;
   services.gnome.gcr-ssh-agent.enable = false;
   
   # ===========================================================================
