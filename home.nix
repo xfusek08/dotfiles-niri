@@ -66,6 +66,23 @@ in {
 
   
   # ===========================================================================
+  # XDG USER DIRECTORIES
+  # ===========================================================================
+  # Force English directory names despite Czech locale
+
+  xdg.userDirs = {
+    enable = true;
+    download = "${config.home.homeDirectory}/Downloads";
+    desktop = "${config.home.homeDirectory}/Desktop";
+    documents = "${config.home.homeDirectory}/Documents";
+    music = "${config.home.homeDirectory}/Music";
+    pictures = "${config.home.homeDirectory}/Pictures";
+    videos = "${config.home.homeDirectory}/Videos";
+    templates = "${config.home.homeDirectory}/Templates";
+    publicShare = "${config.home.homeDirectory}/Public";
+  };
+
+  # ===========================================================================
   # DEFAULT APPLICATIONS
   # ===========================================================================
   # XDG MIME associations — set Zen Browser as default
