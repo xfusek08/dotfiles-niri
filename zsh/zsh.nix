@@ -41,6 +41,7 @@
       cd = "z";
       cdi = "zi";
       ff = "fastfetch";
+      yazi = "EDITOR='code --wait --new-window' yazi";
     };
 
     # --- Init Content ---
