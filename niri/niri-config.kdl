@@ -82,7 +82,7 @@ environment {
     ELECTRON_OZONE_PLATFORM_HINT "auto"    // Electron apps auto-detect Wayland
     GDK_BACKEND "wayland"                  // Force GTK apps to use Wayland
     CLUTTER_BACKEND "wayland"              // Force Clutter apps to use Wayland
-    EDITOR "code"                          // Default text editor
+    EDITOR "code --wait"                   // Default text editor
     GIT_EDITOR "code --wait"               // Git commit editor
     DISPLAY ":0"                           // XWayland display (for xwayland-satellite)
     QT_QPA_PLATFORMTHEME "gtk3"            // Qt theme integration with GTK
