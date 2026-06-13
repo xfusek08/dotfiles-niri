@@ -176,6 +176,7 @@ in {
     logseq  # Note-taking app
     discord  # Chat app for communities and gaming
     vlc      # Media player (for audiobooks, video, etc.)
+    baobab   # GNOME Disk Usage Analyzer
   ];
   
   
