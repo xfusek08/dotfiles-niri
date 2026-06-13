@@ -77,6 +77,7 @@ keymap = [
 	{ on = "D",          run = "remove --permanently",                  desc = "Permanently delete selected files" },
 	{ on = "U",          run = "shell 'unmount' --block",               desc = "Unmount a mounted drive" },
 	{ on = [ "T", "e" ], run = "shell 'gio trash --empty' --block",     desc = "Empty trash" },
+	{ on = [ "T", "r" ], run = "shell --block -- bash -c 'for f in \"$@\"; do gio trash --restore \"trash:///${f##*/}\"; done' --", desc = "Restore selected files from trash" },
 	{ on = "a",          run = "create",                                desc = "Create a file (ends with / for directories)" },
 	{ on = "r",          run = "rename --cursor=before_ext",            desc = "Rename selected file(s)" },
 	{ on = ";",          run = "shell --interactive",                   desc = "Run a shell command" },
